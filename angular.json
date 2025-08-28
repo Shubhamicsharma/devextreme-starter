@@ -54,6 +54,14 @@
               }
             ],
             "styles": [
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "src/themes/generated/theme.base.dark.css",
+              "src/themes/generated/theme.base.css",
+              "src/themes/generated/theme.additional.dark.css",
+              "src/themes/generated/theme.additional.css",
+              "src/dx-styles.scss",
+              "src/variables.scss",
+              "src/tailwind.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -63,8 +71,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "4mb",
+                  "maximumError": "7mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -113,6 +121,7 @@
               }
             ],
             "styles": [
+              "src/tailwind.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -120,5 +129,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "198dc7be-d08c-4567-9d28-574684520f35"
   }
 }
