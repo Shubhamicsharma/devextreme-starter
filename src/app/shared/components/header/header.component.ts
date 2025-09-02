@@ -1,24 +1,24 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { DxButtonModule } from 'devextreme-angular/ui/button';
+import { NgIf } from '@angular/common';
+
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
-import { AuthService, IUser } from '../../services';
-import { UserPanelComponent } from '../user-panel/user-panel.component';
+import { Router } from '@angular/router';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
-
+import { User } from 'devextreme/ui/chat';
+// import { AuthService } from '../../../core/auth/auth.service';
+import { DxButtonModule } from 'devextreme-angular';
+// import { ProfileViewerComponent } from '../profile-viewer/profile-viewer.component';
 @Component({
     selector: 'app-header',
     templateUrl: 'header.component.html',
     styleUrls: ['./header.component.scss'],
-    standalone: true,
     imports: [
-        CommonModule,
-        DxButtonModule,
-        UserPanelComponent,
         DxToolbarModule,
+        NgIf,
         ThemeSwitcherComponent,
+        DxButtonModule,
+        // ProfileViewerComponent,
     ],
 })
 export class HeaderComponent implements OnInit {
@@ -31,35 +31,28 @@ export class HeaderComponent implements OnInit {
     @Input()
     title!: string;
 
-    user: IUser | null = { email: '' };
+    user: any = {};
 
-    userMenuItems = [
-        {
-            text: 'Profile',
-            icon: 'user',
-            onClick: () => {
-                this.router.navigate(['/profile']);
-            },
-        },
-        {
-            text: 'Logout',
-            icon: 'runner',
-            onClick: () => {
-                this.authService.logOut();
-            },
-        },
-    ];
-
-    constructor(
-        private authService: AuthService,
-        private router: Router,
-    ) {}
+    constructor( private router: Router) {}
 
     ngOnInit() {
-        this.authService.getUser().then((e) => (this.user = e.data));
+        // this.authService.user$.subscribe((user: any) => {
+        //     this.user = user;
+        // });
     }
 
     toggleMenu = () => {
         this.menuToggle.emit();
     };
+
+    onLogout() {
+        // this.authService.signOut().subscribe(
+        //     () => {
+        //         this.router.navigate(['/auth/login']);
+        //     },
+        //     (error: Error) => {
+        //         console.error('Logout failed', error);
+        //     }
+        // );
+    }
 }

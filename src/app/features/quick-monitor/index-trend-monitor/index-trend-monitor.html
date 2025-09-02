@@ -1,0 +1,84 @@
+<div>
+    <div class="flex justify-between items-center">
+        <div class="mb-4">
+            <p class="text-3xl font-bold">Index Trend Monitor</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <dx-button
+                (click)="toggle()"
+                icon="colorlens"
+                text="Color Legend"
+                target="#popover"
+            ></dx-button>
+            <dx-popover
+                [(visible)]="overlayVisible"
+                target="#popover"
+                position="left"
+                [width]="300"
+            >
+                <div *dxTemplate="let data of 'content'">
+                    <div class="p-4">
+                        <p class="font-bold mb-2 text-xl">Gradient Reference</p>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div
+                                *ngFor="let legend of gradientLegend"
+                                class="border-b border-gray-200 pb-2"
+                            >
+                                <p class="text-base font-semibold">
+                                    {{ legend.title }}
+                                </p>
+                                <ul class="grid grid-cols-2 gap-3">
+                                    <li
+                                        *ngFor="let item of gradientConfig[legend.key]"
+                                        class="flex items-center"
+                                    >
+                                        <span
+                                            class="w-4 h-4 rounded-full mr-2"
+                                            [ngClass]="item.color"
+                                        ></span>
+                                        {{ item.label }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </dx-popover>
+            <div class="text-gray-700 dark:text-gray-400 font-semibold">
+                Last Updated: {{ lastModified | date:'dd/MM/yyyy, HH:mm:ss' }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="dx-card p-4">
+    <table class="w-full">
+        <thead>
+            <tr class="table-header !border-b-4">
+                <th
+                    *ngFor="let col of columns"
+                    [ngClass]="(col.headerBgClass ? col.headerBgClass : '') + (col.cellClass ? ' ' + col.cellClass : '')"
+                >
+                    {{col.header}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let rowData of data; let i = index">
+                <td
+                    *ngFor="let col of columns"
+                    [ngClass]="getGradientClass(col, rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
+                >
+                    <div class="flex items-center">
+                        {{ col.type !== 'number' ? rowData[col.field] :
+                        (rowData[col.field] | number:'1.2-2') }}
+                        <i
+                            *ngIf="col.showChange"
+                            [ngClass]="getChange(i, col.field)"
+                            class="ml-2"
+                        ></i>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

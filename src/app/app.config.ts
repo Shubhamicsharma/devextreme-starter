@@ -7,6 +7,8 @@ import {
     AuthService,
     ScreenService,
 } from './shared/services';
+import { provideHotToastConfig } from '@ngxpert/hot-toast';
+import { provideAuth } from './core/auth/auth.provider';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -15,6 +17,7 @@ export const appConfig: ApplicationConfig = {
         AuthGuardService,
         AuthService,
         ScreenService,
-        AppInfoService,
+        AppInfoService, provideHotToastConfig(),
+        provideAuth(),
     ],
 };

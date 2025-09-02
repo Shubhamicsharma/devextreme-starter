@@ -9,7 +9,7 @@ import { AuthGuardService } from './shared/services';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
-import { CDSOptionsComponent } from './pages/cdsOptions/cds-options.component';
+import { CDSOptionsComponent } from './features/cds/cdsOptions/cds-options.component';
 
 export const routes: Routes = [
     {
@@ -48,9 +48,20 @@ export const routes: Routes = [
         canActivate: [AuthGuardService],
     },
     {
-        path: 'cds-option',
-        component: CDSOptionsComponent,
+        path: 'cds',
         canActivate: [AuthGuardService],
+        loadChildren: () =>
+            import('./features/cds/cds.routes').then(
+                (m) => m.CDS_OPTION_ROUTES
+            ),
+    },
+    {
+      path: 'quick-monitor',
+      canActivate: [AuthGuardService],
+      loadChildren: () =>
+          import('./features/quick-monitor/quick-monitor.routes').then(
+              (m) => m.QUICK_MONITOR_ROUTES
+          ),
     },
     {
         path: '**',

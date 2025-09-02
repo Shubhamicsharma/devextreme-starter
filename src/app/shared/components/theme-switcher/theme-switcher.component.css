@@ -1,0 +1,36 @@
+.theme-switcher-container button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.theme-btn {
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    outline: none;
+    cursor: pointer;
+}
+.theme-btn:focus {
+    outline: 2px solid var(--dx-color-primary);
+}
+.theme-card {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s, border 0.2s;
+    position: relative;
+    cursor: pointer;
+    border-radius: 0.75rem;
+    border-width: 2px;
+    border-style: solid;
+    outline: none;
+}
+.theme-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    background: var(--dx-color-primary, #e0e0e0);
+    color: var(--text-color, #222);
+}
+.theme-card .theme-dot {
+    border: 1px solid #ccc;
+    margin-right: 0.5rem;
+}
+.theme-card .theme-check {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    color: var(--text-color, #222);
+}

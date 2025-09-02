@@ -9,7 +9,7 @@ import { AuthService } from '../auth.service';
 import { AuthUtils } from '../auth.utils';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 /**
  * Intercept

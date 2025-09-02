@@ -1,0 +1,70 @@
+<div class="relative theme-switcher-container inline-block">
+    <div
+        class="w-6 h-6 rounded-full flex items-center justify-center cursor-pointer shadow-md"
+        [style.background]="'var(--dx-color-primary)'"
+        (click)="toggleDropdown()"
+    >
+        <!-- <i class="fas fa-palette text-white"></i> -->
+        <fa-icon [icon]="faPalette" class="text-white"></fa-icon>
+    </div>
+
+    <div
+        *ngIf="showDropdown"
+        class="absolute mt-2 right-0 bg-[var(--base-bg)] border border-gray-300 dark:border-gray-700 rounded-xl p-4 shadow-xl w-64 z-50"
+    >
+        <div>
+            <p class="font-semibold mb-2">Primary Color</p>
+            <div class="grid grid-cols-4 gap-2">
+                <div
+                    *ngFor="let color of colors"
+                    class="w-7 h-7 rounded-full cursor-pointer border-2"
+                    [style.background]="color.rgba"
+                    [class.border-black]="color.key === selectedColor"
+                    (click)="selectColor(color.key)"
+                ></div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <p class="font-semibold mb-2">Mode</p>
+            <div class="flex gap-2">
+                <button
+                    class="flex-1 py-1 rounded-lg border"
+                    [class.bg-gray-300]="selectedMode === 'light'"
+                    (click)="selectMode('light')"
+                >
+                    Light
+                </button>
+                <button
+                    class="flex-1 py-1 rounded-lg border"
+                    [class.bg-gray-300]="selectedMode === 'dark'"
+                    [class.text-black]="selectedMode === 'dark'"
+                    (click)="selectMode('dark')"
+                >
+                    Dark
+                </button>
+            </div>
+        </div>
+
+        <!-- <div class="mt-4">
+            <p class="font-semibold mb-2">Density</p>
+            <div class="flex gap-2">
+                <button
+                    class="flex-1 py-1 rounded-lg border"
+                    [class.bg-gray-300]="selectedDensity === 'cozy'"
+                    (click)="selectDensity('cozy')"
+                >
+                    Cozy
+                </button>
+                <button
+                    class="flex-1 py-1 rounded-lg border"
+                    [class.bg-gray-300]="selectedDensity === 'compact'"
+                    [class.text-black]="selectedDensity === 'compact'"
+                    (click)="selectDensity('compact')"
+                >
+                    Compact
+                </button>
+            </div>
+        </div> -->
+    </div>
+</div>

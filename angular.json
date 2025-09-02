@@ -49,14 +49,25 @@
                             {
                                 "glob": "**/*",
                                 "input": "public"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "./node_modules/devextreme/dist/css/",
+                                "output": "assets"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "./src/themes/custom/",
+                                "output": "custom"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "assets",
+                                "output": "assets"
                             }
                         ],
                         "styles": [
                             "node_modules/devextreme/dist/css/dx.common.css",
-                            "src/themes/generated/theme.base.dark.css",
-                            "src/themes/generated/theme.base.css",
-                            "src/themes/generated/theme.additional.dark.css",
-                            "src/themes/generated/theme.additional.css",
                             "src/dx-styles.scss",
                             "src/variables.scss",
                             "src/tailwind.css",
@@ -121,7 +132,7 @@
                                 "input": "public"
                             }
                         ],
-                        "styles": ["src/tailwind.css", "src/styles.scss"],
+                        "styles": ["src/styles.scss"],
                         "scripts": []
                     }
                 }
