@@ -17,5 +17,10 @@ export const navigation = [
         path: '/tasks'
       }
     ]
-  }
+  },
+  {
+    text: 'CdsOptions',
+    path: '/cds-option',
+    icon: 'home'
+  },
 ];
