@@ -9,12 +9,12 @@ import {
 } from './shared/services';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withHashLocation()),
-    AuthGuardService,
-    AuthService,
-    ScreenService,
-    AppInfoService,
-  ]
+    providers: [
+        provideZoneChangeDetection({ eventCoalescing: true }),
+        provideRouter(routes, withHashLocation()),
+        AuthGuardService,
+        AuthService,
+        ScreenService,
+        AppInfoService,
+    ],
 };

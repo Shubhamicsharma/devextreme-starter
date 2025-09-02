@@ -7,10 +7,11 @@ import { licenseKey } from './devextreme-license'; // Import the license key
 import config from 'devextreme/core/config';
 
 config({
-    licenseKey: licenseKey
-})
+    licenseKey: licenseKey,
+});
 
 themes.initialized(() => {
-  bootstrapApplication(AppComponent, appConfig)
-    .catch((err) => console.error(err));
+    bootstrapApplication(AppComponent, appConfig).catch((err) =>
+        console.error(err),
+    );
 });

@@ -6,21 +6,21 @@ import { DxDropDownButtonModule } from 'devextreme-angular/ui/drop-down-button';
 import { DxContextMenuModule } from 'devextreme-angular/ui/context-menu';
 
 @Component({
-  selector: 'app-user-panel',
-  templateUrl: 'user-panel.component.html',
-  styleUrls: ['./user-panel.component.scss'],
-  standalone: true,
-  imports: [
-    DxListModule,
-    DxContextMenuModule,
-    DxDropDownButtonModule,
-    CommonModule
-  ]
+    selector: 'app-user-panel',
+    templateUrl: 'user-panel.component.html',
+    styleUrls: ['./user-panel.component.scss'],
+    standalone: true,
+    imports: [
+        DxListModule,
+        DxContextMenuModule,
+        DxDropDownButtonModule,
+        CommonModule,
+    ],
 })
 export class UserPanelComponent {
-  @Input()
-  menuItems: any;
+    @Input()
+    menuItems: any;
 
-  @Input()
-  menuMode = 'context';
+    @Input()
+    menuMode = 'context';
 }

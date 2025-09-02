@@ -19,12 +19,12 @@ import { environment } from '../../../environments/environment';
  */
 export const authInterceptor = (
     req: HttpRequest<unknown>,
-    next: HttpHandlerFn
+    next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    const blotterClientVersion = environment.blotterClientVersion
+    const blotterClientVersion = environment.blotterClientVersion;
 
     // Clone the request object
     let newReq = req.clone();
@@ -37,15 +37,16 @@ export const authInterceptor = (
     // for the protected API routes which our response interceptor will
     // catch and delete the access token from the local storage while logging
     // the user out from the app.
-    if (
-        authService.securityKey
-    ) {
+    if (authService.securityKey) {
         newReq = req.clone({
             headers: req.headers
-            // .set('Authorization', 'Bearer ' + authService.securityKey)
-            .set('Authorization', 'Bearer ' + "6Dt6leCsTQsS0h8Y5h4zrdXoNAlgHTXvi23")
-            .set('BlotterClientVersion', blotterClientVersion)
-            .set('Access-Control-Allow-Origin', '*'),
+                // .set('Authorization', 'Bearer ' + authService.securityKey)
+                .set(
+                    'Authorization',
+                    'Bearer ' + '6Dt6leCsTQsS0h8Y5h4zrdXoNAlgHTXvi23',
+                )
+                .set('BlotterClientVersion', blotterClientVersion)
+                .set('Access-Control-Allow-Origin', '*'),
         });
     }
 
@@ -64,7 +65,6 @@ export const authInterceptor = (
             }
 
             return throwError(error);
-        })
+        }),
     );
-
 };

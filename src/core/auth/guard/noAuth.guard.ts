@@ -3,7 +3,10 @@ import { CanActivateChildFn, CanActivateFn, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { of, switchMap } from 'rxjs';
 
-export const NoAuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
+export const NoAuthGuard: CanActivateFn | CanActivateChildFn = (
+    route,
+    state,
+) => {
     const router: Router = inject(Router);
 
     // Check the authentication status
