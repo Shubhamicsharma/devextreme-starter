@@ -46,12 +46,13 @@
         </div>
     </div>
 </div>
-<div class="card">
+<div class="card bg-[var(--dx-color-main-bg)] rounded-xl">
     <div class="card-body">
         <table class="w-full">
             <thead>
-                <tr class="table-header !border-b-4">
+                <tr class="table-header">
                     <th
+                        class="p-2 text-left"
                         *ngFor="let col of columns"
                         [ngClass]="(col.headerBgClass ? col.headerBgClass : '') + (col.cellClass ? ' ' + col.cellClass : '')"
                     >
@@ -62,6 +63,7 @@
             <tbody>
                 <tr *ngFor="let rowData of data; let i = index">
                     <td
+                        class="p-2"
                         *ngFor="let col of columns"
                         [ngClass]="getGradientClass(col, rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
                     >

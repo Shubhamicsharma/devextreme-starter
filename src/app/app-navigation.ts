@@ -1,26 +1,5 @@
 export const navigation = [
   {
-    text: 'Home',
-    path: '/home',
-    icon: 'home',
-  },
-  {
-    text: 'Examples',
-    icon: 'folder',
-    items: [
-      {
-        text: 'Profile',
-        path: '/profile',
-        // icon: 'user',
-      },
-      {
-        text: 'Tasks',
-        path: '/tasks',
-        // icon: 'check',
-      },
-    ],
-  },
-  {
     text: 'CdsOptions',
     path: '/cds/cds-option',
     icon: 'preferences',

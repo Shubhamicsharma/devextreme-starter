@@ -1,7 +1,164 @@
 /* You can add global styles to this file, and also import other style files */
 /* src/styles.css */
 
-/* Scope dark variant under dx-swatch-dark */
-.dx-swatch-dark {
-  @apply dark;
+// Custom Variables for All Themes
+/* Theme: Clay */
+body.material-clay-light {
+    --primary-bg: #ffffff;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
+    --text-color: #000;
+    --primary-text-color: #000;
+    --secondary-text-color: #1a1a1a;
+}
+
+body.material-clay-dark {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
+    --text-color: #fff;
+    --primary-text-color: #fff;
+    --secondary-text-color: #eeeeee;
+}
+
+/* Theme: Sage */
+body.material-sage-light {
+    --primary-bg: #ffffff;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
+    --text-color: #000;
+    --primary-text-color: #000;
+    --secondary-text-color: #1a1a1a;
+}
+
+body.material-sage-dark {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
+    --text-color: #fff;
+    --primary-text-color: #fff;
+    --secondary-text-color: #eeeeee;
+}
+
+/* Theme: Amberwood */
+body.material-amberwood-light {
+    --primary-bg: #ffffff;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
+    --text-color: #000;
+    --primary-text-color: #000;
+    --secondary-text-color: #1a1a1a;
+}
+
+body.material-amberwood-dark {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
+    --text-color: #fff;
+    --primary-text-color: #fff;
+    --secondary-text-color: #eeeeee;
+}
+
+/* Theme: Storm */
+body.material-storm-light {
+    --primary-bg: #ffffff;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
+    --text-color: #000;
+    --primary-text-color: #000;
+    --secondary-text-color: #1a1a1a;
+}
+
+body.material-storm-dark {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
+    --text-color: #fff;
+    --primary-text-color: #fff;
+    --secondary-text-color: #eeeeee;
+}
+
+/* Theme: Mulberry */
+body.material-mulberry-light {
+    --primary-bg: #ffffff;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
+    --text-color: #000;
+    --primary-text-color: #000;
+    --secondary-text-color: #1a1a1a;
+}
+
+body.material-mulberry-dark {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
+    --text-color: #fff;
+    --primary-text-color: #fff;
+    --secondary-text-color: #eeeeee;
+}
+
+/* Theme: Tealstone */
+body.material-tealstone-light {
+    --primary-bg: #ffffff;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
+    --text-color: #000;
+    --primary-text-color: #000;
+    --secondary-text-color: #1a1a1a;
+}
+
+body.material-tealstone-dark {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
+    --text-color: #fff;
+    --primary-text-color: #fff;
+    --secondary-text-color: #eeeeee;
+}
+
+/* Theme: Ochre */
+body.material-ochre-light {
+    --primary-bg: #ffffff;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
+    --text-color: #000;
+    --primary-text-color: #000;
+    --secondary-text-color: #1a1a1a;
+}
+
+body.material-ochre-dark {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
+    --text-color: #fff;
+    --primary-text-color: #fff;
+    --secondary-text-color: #eeeeee;
+}
+
+/* Theme: Slate Rose */
+body.material-slaterose-light {
+    --primary-bg: #ffffff;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
+    --text-color: #000;
+    --primary-text-color: #000;
+    --secondary-text-color: #1a1a1a;
+}
+
+body.material-slaterose-dark {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
+    --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
+    --text-color: #fff;
+    --primary-text-color: #fff;
+    --secondary-text-color: #eeeeee;
+}
+
+
+.zero-padding-overlay .dx-popup-content {
+    padding: 0 !important;
+}
+
+.zero-border-overlay .dx-popup-content .dx-card {
+    border: none !important;
 }

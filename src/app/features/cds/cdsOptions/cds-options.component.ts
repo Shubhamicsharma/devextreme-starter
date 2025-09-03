@@ -37,7 +37,7 @@ import { CommonModule } from '@angular/common';
         DxLoadIndicatorModule,
     ],
     templateUrl: './cds-options.component.html',
-    styleUrls: ['./cds-options.component.scss'],
+    styleUrl: './cds-options.component.scss',
 })
 export class CDSOptionsComponent {
     showModal = false;

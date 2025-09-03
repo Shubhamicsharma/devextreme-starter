@@ -1,4 +1,10 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    AfterViewInit,
+    Input,
+    ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 
@@ -28,7 +34,7 @@ import { ScreenService, ThemeService } from '../../shared/services';
         DxScrollViewModule,
     ],
 })
-export class SideNavOuterToolbarComponent implements OnInit {
+export class SideNavOuterToolbarComponent implements OnInit, AfterViewInit {
     @ViewChild(DxScrollViewComponent, { static: true })
     scrollView!: DxScrollViewComponent;
     selectedRoute = '';
@@ -48,7 +54,7 @@ export class SideNavOuterToolbarComponent implements OnInit {
     constructor(
         protected themeService: ThemeService,
         private screen: ScreenService,
-        private router: Router,
+        private router: Router
     ) {
         themeService.isDark.subscribe((isDark) => {
             this.swatchClassName =
@@ -68,6 +74,48 @@ export class SideNavOuterToolbarComponent implements OnInit {
         this.screen.changed.subscribe(() => this.updateDrawer());
 
         this.updateDrawer();
+    }
+
+    ngAfterViewInit() {
+        // Trigger a screen resize to force layout recalculation
+        setTimeout(() => {
+            const originalWidth = window.innerWidth;
+            const originalHeight = window.innerHeight;
+
+            // Temporarily resize by 1px
+            Object.defineProperty(window, 'innerWidth', {
+                writable: true,
+                configurable: true,
+                value: originalWidth - 1,
+            });
+
+            Object.defineProperty(window, 'innerHeight', {
+                writable: true,
+                configurable: true,
+                value: originalHeight - 1,
+            });
+
+            // Dispatch resize event
+            window.dispatchEvent(new Event('resize'));
+
+            // Restore original size immediately
+            setTimeout(() => {
+                Object.defineProperty(window, 'innerWidth', {
+                    writable: true,
+                    configurable: true,
+                    value: originalWidth,
+                });
+
+                Object.defineProperty(window, 'innerHeight', {
+                    writable: true,
+                    configurable: true,
+                    value: originalHeight,
+                });
+
+                // Dispatch final resize event
+                window.dispatchEvent(new Event('resize'));
+            }, 1);
+        }, 100);
     }
 
     updateDrawer() {

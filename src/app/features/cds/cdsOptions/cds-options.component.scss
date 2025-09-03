@@ -1,3 +1,8 @@
 .cds-options-form {
     /* Add custom styles here */
 }
+
+
+:host ::ng-deep .custom-popup-wrapper .dx-overlay-content .dx-popup-content {
+  padding: 0 !important;
+}

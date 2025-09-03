@@ -17,9 +17,11 @@
             <div class="grid grid-cols-4 gap-2">
                 <div
                     *ngFor="let color of colors"
-                    class="w-7 h-7 rounded-full cursor-pointer border-2"
+                    class="w-7 h-7 rounded-full cursor-pointer"
                     [style.background]="color.rgba"
-                    [class.border-black]="color.key === selectedColor"
+                    [class.outline]="color.key === selectedColor"
+                    [class.outline]="color.key === selectedColor"
+                    [class.outline-offset-2]="color.key === selectedColor"
                     (click)="selectColor(color.key)"
                 ></div>
             </div>
@@ -45,26 +47,5 @@
                 </button>
             </div>
         </div>
-
-        <!-- <div class="mt-4">
-            <p class="font-semibold mb-2">Density</p>
-            <div class="flex gap-2">
-                <button
-                    class="flex-1 py-1 rounded-lg border"
-                    [class.bg-gray-300]="selectedDensity === 'cozy'"
-                    (click)="selectDensity('cozy')"
-                >
-                    Cozy
-                </button>
-                <button
-                    class="flex-1 py-1 rounded-lg border"
-                    [class.bg-gray-300]="selectedDensity === 'compact'"
-                    [class.text-black]="selectedDensity === 'compact'"
-                    (click)="selectDensity('compact')"
-                >
-                    Compact
-                </button>
-            </div>
-        </div> -->
     </div>
 </div>
