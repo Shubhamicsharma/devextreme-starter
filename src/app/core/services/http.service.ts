@@ -5,6 +5,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { Credentials } from '../auth/auth.service';
 import { CommonCacheEnum } from '../../shared/core/cache/cache.enum';
+import { RatesTrendMonitor } from '../../features/quick-monitor/rates-trend-monitor/rates-trend-monitor';
 
 @Injectable({
     providedIn: 'root',
@@ -19,7 +20,7 @@ export class RVHttpService {
     public login(credentials: Credentials): Observable<ApiResponse<any>> {
         return this.http.post<ApiResponse<any>>(
             `${this.baseUrl}/Auth/Login`,
-            credentials,
+            credentials
         );
     }
 
@@ -29,10 +30,10 @@ export class RVHttpService {
         if (!Array.isArray(params)) {
             console.error(
                 'Invalid params: Expected an array, but got:',
-                params,
+                params
             );
             return throwError(
-                () => new Error('Invalid params: Expected an array.'),
+                () => new Error('Invalid params: Expected an array.')
             );
         }
 
@@ -47,7 +48,17 @@ export class RVHttpService {
             .join(',');
 
         return this.http.get<ApiResponse<any>>(
-            `${this.baseUrl}/Cache/CommonLookupData?cacheTypes=${cacheEnumValues}`,
+            `${this.baseUrl}/Cache/CommonLookupData?cacheTypes=${cacheEnumValues}`
+        );
+    }
+
+    // Quick Monitor
+    // Get rates trend monitor with date
+    public getQuickMonitorData<T>(date: Date, type: string): Observable<
+        ApiResponse<T[]>
+    > {
+        return this.http.get<ApiResponse<T[]>>(
+            `${this.baseUrl}/MarketData/GetQuickMonitorData?date=${date.toISOString()}&type=${type}`
         );
     }
 }

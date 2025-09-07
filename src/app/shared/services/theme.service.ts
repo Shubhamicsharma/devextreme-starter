@@ -11,22 +11,22 @@ export class ThemeService {
 
   // ✅ List of available themes
   readonly allThemes = [
-    'clay.light',
-    'clay.dark',
-    'sage.light',
-    'sage.dark',
-    'amberwood.light',
-    'amberwood.dark',
-    'storm.light',
-    'storm.dark',
-    'mulberry.light',
-    'mulberry.dark',
-    'tealstone.light',
-    'tealstone.dark',
-    'ochre.light',
-    'ochre.dark',
-    'slaterose.light',
-    'slaterose.dark',
+    'indigo-night.light',
+    'indigo-night.dark',
+    'sunset-ember.light',
+    'sunset-ember.dark',
+    'emerald-depths.light',
+    'emerald-depths.dark',
+    'royal-amethyst.light',
+    'royal-amethyst.dark',
+    'crimson-flame.light',
+    'crimson-flame.dark',
+    'amber-glow.light',
+    'amber-glow.dark',
+    'teal-abyss.light',
+    'teal-abyss.dark',
+    'coral-blush.light',
+    'coral-blush.dark',
   ];
 
   // ✅ Theme-specific CSS variable overrides
@@ -34,22 +34,22 @@ export class ThemeService {
     string,
     Partial<Record<string, string>>
   > = {
-    'clay.light': { '--text-color': '#000000' },
-    'clay.dark': { '--text-color': '#ffffff' },
-    'sage.light': { '--text-color': '#000000' },
-    'sage.dark': { '--text-color': '#ffffff' },
-    'amberwood.light': { '--text-color': '#000000' },
-    'amberwood.dark': { '--text-color': '#ffffff' },
-    'storm.light': { '--text-color': '#000000' },
-    'storm.dark': { '--text-color': '#ffffff' },
-    'mulberry.light': { '--text-color': '#000000' },
-    'mulberry.dark': { '--text-color': '#ffffff' },
-    'tealstone.light': { '--text-color': '#000000' },
-    'tealstone.dark': { '--text-color': '#ffffff' },
-    'ochre.light': { '--text-color': '#000000' },
-    'ochre.dark': { '--text-color': '#ffffff' },
-    'slaterose.light': { '--text-color': '#000000' },
-    'slaterose.dark': { '--text-color': '#ffffff' },
+    'indigo-night.light': { '--text-color': '#000000' },
+    'indigo-night.dark': { '--text-color': '#ffffff' },
+    'sunset-ember.light': { '--text-color': '#000000' },
+    'sunset-ember.dark': { '--text-color': '#ffffff' },
+    'emerald-depths.light': { '--text-color': '#000000' },
+    'emerald-depths.dark': { '--text-color': '#ffffff' },
+    'royal-amethyst.light': { '--text-color': '#000000' },
+    'royal-amethyst.dark': { '--text-color': '#ffffff' },
+    'crimson-flame.light': { '--text-color': '#000000' },
+    'crimson-flame.dark': { '--text-color': '#ffffff' },
+    'amber-glow.light': { '--text-color': '#000000' },
+    'amber-glow.dark': { '--text-color': '#ffffff' },
+    'teal-abyss.light': { '--text-color': '#000000' },
+    'teal-abyss.dark': { '--text-color': '#ffffff' },
+    'coral-blush.light': { '--text-color': '#000000' },
+    'coral-blush.dark': { '--text-color': '#ffffff' },
   };
 
   currentTheme: string;
@@ -114,6 +114,7 @@ export class ThemeService {
 
     try {
       const prevTheme = this.currentTheme;
+      console.log(`Switching theme from ${prevTheme} to ${theme}`);
       themes.current(theme);
       this.applySwatchTheme(theme, prevTheme);
       this.currentTheme = theme;

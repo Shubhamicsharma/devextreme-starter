@@ -1,0 +1,18 @@
+{
+    "items": [
+        {
+            "key": "$base-accent",
+            "value": "rgba(255, 112, 67, 1)"
+        },
+        {
+            "key": "$base-border-radius",
+            "value": "8px"
+        }
+    ],
+    "baseTheme": "fluent.blue.light",
+    "outputColorScheme": "custom-scheme",
+    "makeSwatch": false,
+    "version": "25.1.4",
+    "widgets": [],
+    "removeExternalResources": false
+}

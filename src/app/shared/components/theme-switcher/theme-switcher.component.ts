@@ -26,18 +26,14 @@ export class ThemeSwitcherComponent implements OnInit {
     faPalette = faPalette;
 
     colors: ThemeColor[] = [
-        { name: 'Clay', key: 'clay', rgba: 'rgba(203, 128, 97, 1)' },
-        { name: 'Sage', key: 'sage', rgba: 'rgba(134, 168, 143, 1)' },
-        { name: 'Amberwood', key: 'amberwood', rgba: 'rgba(201, 151, 90, 1)' },
-        { name: 'Storm', key: 'storm', rgba: 'rgba(112, 128, 144, 1)' },
-        { name: 'Mulberry', key: 'mulberry', rgba: 'rgba(154, 101, 139, 1)' },
-        { name: 'Tealstone', key: 'tealstone', rgba: 'rgba(85, 139, 123, 1)' },
-        { name: 'Ochre', key: 'ochre', rgba: 'rgba(191, 134, 66, 1)' },
-        {
-            name: 'Slate Rose',
-            key: 'slaterose',
-            rgba: 'rgba(146, 120, 130, 1)',
-        },
+      { name: 'Indigo Night 🌌', key: 'indigo-night', rgba: 'rgba(75, 61, 191, 1)' },      // Light: #4B3DBF
+      { name: 'Sunset Ember 🌅', key: 'sunset-ember', rgba: 'rgba(255, 112, 67, 1)' },     // Light: #FF7043
+      { name: 'Emerald Depths 🍃', key: 'emerald-depths', rgba: 'rgba(52, 199, 89, 1)' },  // Light: #34C759
+      { name: 'Royal Amethyst 👑', key: 'royal-amethyst', rgba: 'rgba(155, 81, 224, 1)' }, // Light: #9B51E0
+      { name: 'Crimson Flame 🔴', key: 'crimson-flame', rgba: 'rgba(235, 87, 87, 1)' },    // Light: #EB5757
+      { name: 'Amber Glow 🌟', key: 'amber-glow', rgba: 'rgba(242, 201, 76, 1)' },         // Light: #F2C94C
+      { name: 'Teal Abyss 🌀', key: 'teal-abyss', rgba: 'rgba(45, 156, 219, 1)' },         // Light: #2D9CDB
+      { name: 'Coral Blush 🌸', key: 'coral-blush', rgba: 'rgba(255, 111, 145, 1)' },      // Light: #FF6F91
     ];
 
     selectedColor = 'sage';

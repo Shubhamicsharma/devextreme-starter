@@ -1,6 +1,9 @@
 <ng-content></ng-content>
 
-<div class="menu-container">
+<div class="menu-container shadow">
+    <div class="logo-container p-0 flex justify-center items-center h-[48px]" [ngClass]="{'w-[60px]': _compactMode}">
+        <img [src]="logoUrl" alt="Logo" class="logo h-3/5" />
+    </div>
     <dx-tree-view
         [items]="items"
         keyExpr="path"

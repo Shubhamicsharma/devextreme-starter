@@ -4,11 +4,16 @@
             <p class="text-3xl font-bold">FX Trend Monitor</p>
         </div>
         <div class="flex items-center space-x-4">
-            <dx-button text="Color Legend" icon="palette" (onClick)="toggle()">
-            </dx-button>
+            <div #buttonWrapper>
+                <dx-button
+                    text="Color Legend"
+                    icon="palette"
+                    (onClick)="toggle()"
+                ></dx-button>
+            </div>
             <dx-popover
                 [(visible)]="overlayVisible"
-                target=".dx-button"
+                [target]="buttonWrapper"
                 position="bottom"
                 width="300"
             >
@@ -46,7 +51,7 @@
         </div>
     </div>
 </div>
-<div class="card bg-[var(--dx-color-main-bg)] rounded-xl">
+<div class="card bg-[var(--base-bg)] rounded-xl">
     <div class="card-body">
         <table class="w-full">
             <thead>
@@ -61,8 +66,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let rowData of data; let i = index">
-                    <td
+                <tr
+                    *ngFor="let rowData of data; let i = index"
+                    class="hover:bg-[var(--ternary-bg)]"
+                >
+                    <!-- <td
                         class="p-2"
                         *ngFor="let col of columns"
                         [ngClass]="getGradientClass(col, rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
@@ -70,6 +78,33 @@
                         <div class="flex items-center">
                             {{ col.type !== 'number' ? rowData[col.field] :
                             (rowData[col.field] | number:'1.2-2') }}
+                            <i
+                                *ngIf="col.showChange"
+                                [ngClass]="getChange(i, col.field)"
+                                class="ml-2"
+                            ></i>
+                        </div>
+                    </td> -->
+
+                    <td
+                        class="p-2"
+                        *ngFor="let col of columns"
+                        [ngClass]="getGradientClass(col, rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
+                    >
+                        <div class="flex items-center">
+                            <!-- Custom decimal formatting for Spot/Fwd -->
+                            <ng-container
+                                *ngIf="col.field === 'Spot/Fwd'; else normalCell"
+                            >
+                                {{ rowData[col.field] | number:'1.' +
+                                getDecimalsForCurrency(rowData['Currency']) +
+                                '-' +
+                                getDecimalsForCurrency(rowData['Currency']) }}
+                            </ng-container>
+                            <ng-template #normalCell>
+                                {{ col.type !== 'number' ? rowData[col.field] :
+                                (rowData[col.field] | number:'1.2-2') }}
+                            </ng-template>
                             <i
                                 *ngIf="col.showChange"
                                 [ngClass]="getChange(i, col.field)"

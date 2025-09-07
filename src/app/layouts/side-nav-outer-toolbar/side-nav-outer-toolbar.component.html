@@ -1,11 +1,3 @@
-<app-header
-    class="layout-header"
-    [menuToggleEnabled]="true"
-    (menuToggle)="menuOpened = !menuOpened"
-    [title]="title"
->
-</app-header>
-
 <dx-drawer
     class="layout-body"
     position="before"
@@ -16,6 +8,13 @@
     [shading]="shaderEnabled"
     [(opened)]="menuOpened"
 >
+    <app-header
+        class="layout-header"
+        [menuToggleEnabled]="true"
+        (menuToggle)="menuOpened = !menuOpened"
+        [title]="title"
+    >
+    </app-header>
     <app-side-navigation-menu
         [compactMode]="!menuOpened"
         [selectedItem]="selectedRoute"

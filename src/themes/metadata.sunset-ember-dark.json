@@ -1,0 +1,22 @@
+{
+    "items": [
+        {
+            "key": "$base-border-radius",
+            "value": "8px"
+        },
+        {
+            "key": "$button-default-color",
+            "value": "rgba(238, 238, 238, 1)"
+        },
+        {
+            "key": "$base-accent",
+            "value": "rgba(191, 59, 20, 1)"
+        }
+    ],
+    "baseTheme": "fluent.blue.dark",
+    "outputColorScheme": "custom-scheme",
+    "makeSwatch": false,
+    "version": "25.1.4",
+    "widgets": [],
+    "removeExternalResources": false
+}

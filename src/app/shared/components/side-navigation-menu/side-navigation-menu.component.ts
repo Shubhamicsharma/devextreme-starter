@@ -16,17 +16,20 @@ import {
 import { navigation } from '../../../app-navigation';
 
 import * as events from 'devextreme-angular/common/core/events';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-side-navigation-menu',
     templateUrl: './side-navigation-menu.component.html',
     styleUrls: ['./side-navigation-menu.component.scss'],
     standalone: true,
-    imports: [DxTreeViewModule],
+    imports: [DxTreeViewModule, CommonModule],
 })
 export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
     @ViewChild(DxTreeViewComponent, { static: true })
     menu!: DxTreeViewComponent;
+    // Logo Url
+    logoUrl: string = 'assets/images/logo/rv-capital-logo.svg';
 
     @Output()
     selectedItemChanged = new EventEmitter<DxTreeViewTypes.ItemClickEvent>();
@@ -59,13 +62,20 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
         return this._items;
     }
 
-    private _compactMode = false;
+    _compactMode = false;
     @Input()
     get compactMode() {
         return this._compactMode;
     }
     set compactMode(val) {
         this._compactMode = val;
+
+        // If compact mode is on, show small logo, else show large logo
+        if (this._compactMode) {
+            this.logoUrl = 'assets/images/logo/rv-logo-small.png';
+        } else {
+            this.logoUrl = 'assets/images/logo/rv-capital-logo.svg';
+        }
 
         if (!this.menu.instance) {
             return;
