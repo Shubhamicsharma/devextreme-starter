@@ -93,3 +93,8 @@ export interface TradarAccounts {
     Name: string;
     Id: number;
 }
+
+export interface DayCounts {
+    Name: string;
+    Id: number;
+}

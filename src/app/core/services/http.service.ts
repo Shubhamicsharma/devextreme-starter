@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { catchError, Observable, tap, throwError } from 'rxjs';
@@ -47,7 +47,7 @@ export class RVHttpService {
             .join(',');
 
         return this.http.get<ApiResponse<any>>(
-            `${this.baseUrl}/Cache/CommonLookupData?cacheTypes=${cacheEnumValues}`,
+            `${this.baseUrl}/Cache/CommonLookupData?cacheTypes=${cacheEnumValues}`
         );
     }
 }

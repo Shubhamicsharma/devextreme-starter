@@ -1,285 +1,201 @@
-<dx-button
-    stylingMode="contained"
-    text="Open CDS Options Form"
-    type="default"
-    (onClick)="openModal()"
-    [width]="200"
-    icon="folder"
-    class="mb-4"
->
+<dx-button stylingMode="contained" text="Open CDS Options Form" type="default" (onClick)="openModal()" [width]="200"
+    icon="folder" class="mb-4">
 </dx-button>
 
-<p class="custom">Custom</p>
 
-<dx-popup
-    [visible]="showModal"
-    [showTitle]="true"
-    title="CDS Options Form"
-    [hideOnOutsideClick]="false"
-    [showCloseButton]="true"
-    [width]="1000"
-    [height]="'90vh'"
-    (onHiding)="closeModal()"
-    [dragEnabled]="true"
-    [resizeEnabled]="true"
-    [wrapperAttr]="{ class: 'zero-padding-overlay zero-border-overlay' }"
->
+<dx-popup [visible]="showModal" [showTitle]="true" title="CDS Options Form" [hideOnOutsideClick]="false"
+    [showCloseButton]="true" [width]="1000" [height]="'90vh'" (onHiding)="closeModal()" [dragEnabled]="true"
+    [resizeEnabled]="true" [wrapperAttr]="{ class: 'zero-padding-overlay zero-border-overlay' }">
     <dx-scroll-view [height]="'80vh'" [scrollByContent]="true" [scrollByThumb]="true" class="p-3">
-      <div class="dx-card p-3">
-          <div class="flex-1 overflow-y-auto">
-              <form
-                  [formGroup]="tradeForm"
-                  (ngSubmit)="onSubmit()"
-                  class="space-y-3"
-              >
-                  <!-- basic details -->
-                  <section>
-                      <div class="flex items-center gap-0.5 mb-2">
-                          <span class="text-green-600">📊</span>
-                          <span class="text-md font-semibold text-gray-900"
-                              >Basic Information</span
-                          >
-                      </div>
-                      <div
-                          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1"
-                      >
-                          <div
-                              *ngFor="let field of basicFields"
-                              class="relative"
-                              [class.lg:col-span-2]="field.colSpan === 2"
-                              [class.lg:col-span-3]="field.colSpan === 3"
-                          >
-                              <label
-                                  class="block text-xs font-semibold text-gray-700 mb-1"
-                              >
-                                  {{ field.label
-                                  }}<span class="text-red-500">*</span>
-                              </label>
-                              <ng-container [ngSwitch]="field.type">
-                                  <dx-text-box
-                                      *ngSwitchCase="'text'"
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-text-box>
+        <div class="dx-card p-3">
+            <div class="flex-1 overflow-y-auto">
+                <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()" class="space-y-3">
+                    <!-- basic details -->
+                    <section>
+                        <div class="flex items-center gap-0.5 mb-2">
+                            <span class="text-green-600">📊</span>
+                            <span class="text-md font-semibold ">Basic Information</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
+                            <div *ngFor="let field of basicFields" class="relative"
+                                [class.lg:col-span-2]="field.colSpan === 2" [class.lg:col-span-3]="field.colSpan === 3">
+                                <label class="block text-xs font-semibold mb-1">
+                                    {{ field.label
+                                    }}<span class="text-red-500">*</span>
+                                </label>
+                                <ng-container [ngSwitch]="field.type">
+                                    <dx-text-box *ngSwitchCase="'text'" [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [stylingMode]="'outlined'" [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-text-box>
+                                    <ng-container [ngSwitch]="field.type">
+                                        <div *ngSwitchCase="'radio'"
+                                            class="flex justify-start items-center p-1 rounded-lg w-full">
 
-                                  <dx-select-box
-                                      *ngSwitchCase="'select'"
-                                      [formControlName]="field.name"
-                                      [dataSource]="field.options || []"
-                                      [searchEnabled]="true"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-select-box>
+                                            <dx-radio-group [items]="field.options ?? []" displayExpr="name"
+                                                valueExpr="id" layout="horizontal" [width]="'100%'">
+                                            </dx-radio-group>
 
-                                  <dx-date-box
-                                      *ngSwitchCase="'date'"
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                      type="date"
-                                      displayFormat="yyyy-MM-dd"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-date-box>
+                                            <div *dxTemplate="let item of 'radioItem'"
+                                                style="flex:1; text-align:center; min-width:0; display:flex; align-items:center; justify-content:center;">
+                                                {{ item.name }}
+                                            </div>
+                                        </div>
+                                    </ng-container>
 
-                                  <dx-text-area
-                                      *ngSwitchCase="'textarea'"
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [height]="33"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-text-area>
-                              </ng-container>
-                          </div>
-                      </div>
-                  </section>
 
-                  <!-- Section: Options Details -->
-                  <section>
-                      <div class="flex items-center gap-0.5 mb-2">
-                          <span class="text-green-600">📊</span>
-                          <span class="text-md font-semibold text-gray-900"
-                              >Options Details</span
-                          >
-                      </div>
-                      <div
-                          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1"
-                      >
-                          <div
-                              *ngFor="let field of optionFields"
-                              class="relative"
-                          >
-                              <label
-                                  class="block text-xs font-semibold text-gray-700 mb-1"
-                              >
-                                  {{ field.label
-                                  }}<span class="text-red-500">*</span>
-                              </label>
-                              <ng-container [ngSwitch]="field.type">
-                                  <dx-date-box
-                                      *ngSwitchCase="'date'"
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                      type="date"
-                                      displayFormat="yyyy-MM-dd"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-date-box>
+                                    <dx-select-box *ngSwitchCase="'select'" [formControlName]="field.name"
+                                        [dataSource]="field.options ? field.options : (field.dataSource ?? [])"
+                                        [valueExpr]="field.options ? 'this' : (field.valueExpr ?? 'id')"
+                                        [displayExpr]="field.options ? 'this' : (field.displayExpr ?? 'name')"
+                                        [searchEnabled]="true" [showClearButton]="true" [stylingMode]="'outlined'"
+                                        [width]="'100%'" [searchEnabled]="true">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
 
-                                  <dx-text-box
-                                      *ngSwitchDefault
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-text-box>
-                              </ng-container>
-                          </div>
-                      </div>
-                  </section>
+                                    <dx-date-box *ngSwitchCase="'date'" [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [stylingMode]="'outlined'" [width]="'100%'" type="date"
+                                        displayFormat="dd-MMM-yyyy">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-date-box>
 
-                  <!-- Section: Swap Details -->
-                  <section>
-                      <div class="flex items-center gap-0.5 mb-2">
-                          <span class="text-purple-600">🔄</span>
-                          <span class="text-md font-semibold text-gray-900"
-                              >CDS Details</span
-                          >
-                      </div>
-                      <div
-                          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1"
-                      >
-                          <div *ngFor="let field of cdsFields" class="relative">
-                              <label
-                                  class="block text-xs font-semibold text-gray-700 mb-1"
-                              >
-                                  {{ field.label
-                                  }}<span class="text-red-500">*</span>
-                              </label>
-                              <ng-container [ngSwitch]="field.type">
-                                  <dx-date-box
-                                      *ngSwitchCase="'date'"
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                      type="date"
-                                      displayFormat="yyyy-MM-dd"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-date-box>
+                                    <dx-text-area *ngSwitchCase="'textarea'" [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [height]="33" [stylingMode]="'outlined'"
+                                        [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-text-area>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </section>
 
-                                  <dx-select-box
-                                      *ngSwitchCase="'select'"
-                                      [formControlName]="field.name"
-                                      [dataSource]="field.options || []"
-                                      [searchEnabled]="true"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-select-box>
+                    <!-- Section: Options Details -->
+                    <section>
+                        <div class="flex items-center gap-0.5 mb-2">
+                            <span class="text-green-600">📊</span>
+                            <span class="text-md font-semibold ">Options Details</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
+                            <div *ngFor="let field of optionFields" class="relative"
+                                [class.lg:col-span-2]="field.colSpan === 2" [class.lg:col-span-3]="field.colSpan === 3">
+                                <label class="block text-xs font-semibold mb-1">
+                                    {{ field.label
+                                    }}<span class="text-red-500">*</span>
+                                </label>
+                                <ng-container [ngSwitch]="field.type">
+                                    <dx-date-box *ngSwitchCase="'date'" [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [stylingMode]="'outlined'" [width]="'100%'" type="date"
+                                        displayFormat="dd-MMM-yyyy">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-date-box>
 
-                                  <dx-number-box
-                                      *ngSwitchCase="'number'"
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [showSpinButtons]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-number-box>
 
-                                  <dx-text-box
-                                      *ngSwitchDefault
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-text-box>
-                              </ng-container>
-                          </div>
-                      </div>
-                      <div class="mt-1">
+
+                                    <dx-select-box *ngSwitchCase="'select'" [formControlName]="field.name"
+                                        [dataSource]="field.options ? field.options : (field.dataSource ?? [])"
+                                        [valueExpr]="field.options ? 'this' : (field.valueExpr ?? 'id')"
+                                        [displayExpr]="field.options ? 'this' : (field.displayExpr ?? 'name')"
+                                        [searchEnabled]="true" [showClearButton]="true" [stylingMode]="'outlined'"
+                                        [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
+                                    <dx-number-box *ngSwitchCase="'number'"
+                                        [inputAttr]="{ 'aria-label': 'With Spin And Buttons' }"></dx-number-box>
+
+                                    <dx-text-box *ngSwitchDefault [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [stylingMode]="'outlined'" [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-text-box>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section: CDS Details -->
+                    <section>
+                        <div class="flex items-center gap-0.5 mb-2">
+                            <span class="text-purple-600">🔄</span>
+                            <span class="text-md font-semibold ">CDS Details</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
+                            <div *ngFor="let field of cdsFields" class="relative"
+                                [class.lg:col-span-2]="field.colSpan === 2" [class.lg:col-span-3]="field.colSpan === 3">
+                                <label class="block text-xs font-semibold mb-1">
+                                    {{ field.label
+                                    }}<span class="text-red-500">*</span>
+                                </label>
+                                <ng-container [ngSwitch]="field.type">
+                                    <dx-date-box *ngSwitchCase="'date'" [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [stylingMode]="'outlined'" [width]="'100%'" type="date"
+                                        displayFormat="dd-MMM-yyyy">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-date-box>
+
+                                    <dx-select-box *ngSwitchCase="'select'" [formControlName]="field.name"
+                                        [dataSource]="field.options ? field.options : (field.dataSource ?? [])"
+                                        [valueExpr]="field.options ? 'this' : (field.valueExpr ?? 'id')"
+                                        [displayExpr]="field.options ? 'this' : (field.displayExpr ?? 'name')"
+                                        [searchEnabled]="true" [showClearButton]="true" [stylingMode]="'outlined'"
+                                        [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
+
+                                    <dx-number-box *ngSwitchCase="'number'" [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [showSpinButtons]="true" [stylingMode]="'outlined'" [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-number-box>
+
+                                    <dx-text-box *ngSwitchDefault [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [stylingMode]="'outlined'" [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-text-box>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <!-- <div class="mt-1">
                           <div class="mt-1 relative">
                               <label
-                                  class="block text-xs font-semibold text-gray-700 mb-1"
+                                  class="block text-xs font-semibold mb-1"
                               >
                                   Trade Rationale<span class="text-red-500"
                                       >*</span
@@ -299,135 +215,82 @@
                                       ></dxi-validation-rule> </dx-validator
                               ></dx-text-area>
                           </div>
-                      </div>
-                  </section>
+                      </div> -->
+                    </section>
 
-                  <!-- Section: Trade Operations -->
+                    <!-- Section: Trade Operations -->
 
-                  <section>
-                      <div class="flex items-center gap-0.5 mb-2">
-                          <span class="text-orange-500">⚙️</span>
-                          <span class="text-md font-semibold text-gray-900"
-                              >Trade Operations</span
-                          >
-                      </div>
-                      <div
-                          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1"
-                      >
-                          <div
-                              *ngFor="let field of tradeOpFields"
-                              class="relative"
-                          >
-                              <label
-                                  class="block text-xs font-semibold text-gray-700 mb-1"
-                              >
-                                  {{ field.label
-                                  }}<span class="text-red-500">*</span>
-                              </label>
-                              <ng-container [ngSwitch]="field.type">
-                                  <!-- For number inputs -->
-                                  <dx-number-box
-                                      *ngSwitchCase="'number'"
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [showSpinButtons]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-number-box>
+                    <section>
+                        <div class="flex items-center gap-0.5 mb-2">
+                            <span class="text-orange-500">⚙️</span>
+                            <span class="text-md font-semibold ">Trade Operations</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
+                            <div *ngFor="let field of tradeOpFields" class="relative"
+                                [class.lg:col-span-2]="field.colSpan === 2" [class.lg:col-span-3]="field.colSpan === 3">
+                                <label class="block text-xs font-semibold mb-1">
+                                    {{ field.label
+                                    }}<span class="text-red-500">*</span>
+                                </label>
+                                <ng-container [ngSwitch]="field.type">
+                                    <!-- For number inputs -->
+                                    <dx-number-box *ngSwitchCase="'number'" [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [showSpinButtons]="true" [stylingMode]="'outlined'" [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-number-box>
 
-                                  <!-- For select/dropdown inputs -->
-                                  <dx-select-box
-                                      *ngSwitchCase="'select'"
-                                      [formControlName]="field.name"
-                                      [dataSource]="field.options || []"
-                                      [searchEnabled]="true"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-select-box>
+                                    <!-- For select/dropdown inputs -->
+                                    <dx-select-box *ngSwitchCase="'select'" [formControlName]="field.name"
+                                        [dataSource]="field.options ? field.options : (field.dataSource ?? [])"
+                                        [valueExpr]="field.options ? 'this' : (field.valueExpr ?? 'id')"
+                                        [displayExpr]="field.options ? 'this' : (field.displayExpr ?? 'name')"
+                                        [searchEnabled]="true" [showClearButton]="true" [stylingMode]="'outlined'"
+                                        [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-select-box>
 
-                                  <!-- Default text input -->
-                                  <dx-text-box
-                                      *ngSwitchDefault
-                                      [formControlName]="field.name"
-                                      [placeholder]="field.placeholder"
-                                      [showClearButton]="true"
-                                      [stylingMode]="'outlined'"
-                                      [width]="'100%'"
-                                  >
-                                      <dx-validator>
-                                          <dxi-validation-rule
-                                              type="required"
-                                              message="This field is required"
-                                          ></dxi-validation-rule>
-                                      </dx-validator>
-                                  </dx-text-box>
-                              </ng-container>
-                          </div>
-                      </div>
-                  </section>
-                  <!-- Action Buttons -->
-                  <div class="flex justify-end gap-2 mt-4">
-                      <dx-button
-                          text="Reset"
-                          stylingMode="outlined"
-                          type="normal"
-                          [width]="100"
-                          icon="refresh"
-                          (onClick)="tradeForm.reset()"
-                      >
-                      </dx-button>
+                                    <!-- Default text input -->
+                                    <dx-text-box *ngSwitchDefault [formControlName]="field.name"
+                                        [placeholder]="field.placeholder" [showClearButton]="true"
+                                        [stylingMode]="'outlined'" [width]="'100%'">
+                                        <dx-validator>
+                                            <dxi-validation-rule type="required"
+                                                message="This field is required"></dxi-validation-rule>
+                                        </dx-validator>
+                                    </dx-text-box>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end gap-2 mt-4">
+                        <dx-button text="Reset" stylingMode="outlined" type="normal" [width]="100" icon="refresh"
+                            (onClick)="tradeForm.reset()">
+                        </dx-button>
 
-                      <dx-button
-                          text="Save"
-                          stylingMode="contained"
-                          type="success"
-                          [width]="100"
-                          icon="save"
-                          (onClick)="onSave()"
-                      >
-                      </dx-button>
+                        <dx-button text="Save" stylingMode="contained" type="success" [width]="100" icon="save"
+                            (onClick)="onSave()">
+                        </dx-button>
 
-                      <dx-button
-                          text="Preview"
-                          stylingMode="contained"
-                          type="default"
-                          [width]="120"
-                          icon="check"
-                          (onClick)="onPreview()"
-                      >
-                      </dx-button>
+                        <dx-button text="Preview" stylingMode="contained" type="default" [width]="120" icon="eyeopen"
+                            (onClick)="onPreview()">
+                        </dx-button>
 
-                      <dx-button
-                          text="Submit"
-                          stylingMode="contained"
-                          type="default"
-                          [width]="100"
-                          icon="check"
-                          (onClick)="onSubmit()"
-                          [useSubmitBehavior]="true"
-                      >
-                      </dx-button>
-                  </div>
+                        <dx-button text="Submit" stylingMode="contained" type="default" [width]="100" icon="check"
+                            (onClick)="onSubmit()" [useSubmitBehavior]="true">
+                        </dx-button>
+                    </div>
 
-                  <dx-validation-summary></dx-validation-summary>
-              </form>
-          </div>
-      </div>
+                    <dx-validation-summary></dx-validation-summary>
+                </form>
+            </div>
+        </div>
     </dx-scroll-view>
 </dx-popup>

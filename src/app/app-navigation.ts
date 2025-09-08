@@ -1,6 +1,6 @@
 export const navigation = [
   {
-    text: 'CdsOptions',
+    text: 'CDS-Options Ticket',
     path: '/cds/cds-option',
     icon: 'preferences',
   },

@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://192.168.1.9:4020/',
+    apiUrl: 'https://localhost:44354',
     blotterClientVersion: '7.9.0',
 };

@@ -37,18 +37,18 @@ export const authInterceptor = (
     // for the protected API routes which our response interceptor will
     // catch and delete the access token from the local storage while logging
     // the user out from the app.
-    if (authService.securityKey) {
+    // if (authService.securityKey) {
         newReq = req.clone({
             headers: req.headers
                 // .set('Authorization', 'Bearer ' + authService.securityKey)
                 .set(
                     'Authorization',
-                    'Bearer ' + '6Dt6leCsTQsS0h8Y5h4zrdXoNAlgHTXvi23',
+                    'Bearer ' + 'ibwSfDlTyBOOuZwPIDjQUiW6UEQ9dUjoVOg',
                 )
                 .set('BlotterClientVersion', blotterClientVersion)
                 .set('Access-Control-Allow-Origin', '*'),
         });
-    }
+    // }
 
     // Response
     return next(newReq).pipe(
