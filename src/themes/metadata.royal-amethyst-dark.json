@@ -11,6 +11,10 @@
         {
             "key": "$base-accent",
             "value": "rgba(74, 29, 128, 1)"
+        },
+        {
+            "key": "$texteditor-border-bottom-color",
+            "value": "rgba(224, 224, 224, 1)"
         }
     ],
     "baseTheme": "fluent.blue.dark",

@@ -7,6 +7,10 @@
         {
             "key": "$base-border-radius",
             "value": "8px"
+        },
+        {
+            "key": "$texteditor-border-bottom-color",
+            "value": "rgba(224, 224, 224, 1)"
         }
     ],
     "baseTheme": "fluent.blue.light",
