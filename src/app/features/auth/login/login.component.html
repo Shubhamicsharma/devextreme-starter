@@ -1,0 +1,81 @@
+<div class="login-container">
+    <div class="left-pane">
+        <div class="logo-container">
+            <img
+                src="assets/images/logo/rv-capital-logo.svg"
+                alt="RV Capital Logo"
+            />
+            <h1>Welcome Back</h1>
+            <p>Enter your credentials to access your account.</p>
+        </div>
+        <div class="background-shape"></div>
+    </div>
+    <div class="right-pane">
+        <div class="login-form-container">
+            <h2>Login</h2>
+            <form (submit)="onLoginClick($event)">
+                <dx-validation-group>
+                    <div class="form-field">
+                        <label for="email">Email</label>
+                        <dx-text-box
+                            mode="email"
+                            placeholder="Enter your email"
+                            [showClearButton]="true"
+                            stylingMode="filled"
+                        >
+                            <dx-validator>
+                                <dxi-validation-rule
+                                    type="required"
+                                    message="Email is required"
+                                ></dxi-validation-rule>
+                                <dxi-validation-rule
+                                    type="email"
+                                    message="Email is invalid"
+                                ></dxi-validation-rule>
+                            </dx-validator>
+                        </dx-text-box>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="password">Password</label>
+                        <dx-text-box
+                            mode="password"
+                            placeholder="Enter your password"
+                            [showClearButton]="true"
+                            stylingMode="filled"
+                        >
+                            <dx-validator>
+                                <dxi-validation-rule
+                                    type="required"
+                                    message="Password is required"
+                                ></dxi-validation-rule>
+                            </dx-validator>
+                        </dx-text-box>
+                    </div>
+
+                    <div class="options">
+                        <dx-check-box
+                            text="Remember me"
+                            [value]="true"
+                        ></dx-check-box>
+                        <a routerLink="/forgot-password" class="forgot-password"
+                            >Forgot password?</a
+                        >
+                    </div>
+
+                    <dx-button
+                        text="Login"
+                        type="default"
+                        [useSubmitBehavior]="true"
+                        width="100%"
+                        height="48px"
+                        stylingMode="contained"
+                        class="login-button"
+                    >
+                    </dx-button>
+                </dx-validation-group>
+            </form>
+            
+        </div>
+    </div>
+</div>

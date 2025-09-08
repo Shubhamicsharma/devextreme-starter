@@ -1,0 +1,198 @@
+@use "../../../../variables.scss" as *;
+
+:host {
+    display: block;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.login-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background: var(--base-bg, #fff);
+
+    .left-pane {
+        width: 45%;
+        background: linear-gradient(
+            135deg,
+            var(--dx-color-primary),
+            rgba(0, 0, 0, 0.2)
+        );
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+
+        .logo-container {
+            z-index: 2;
+            img {
+                max-width: 250px;
+                margin-bottom: 20px;
+            }
+            h1 {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+            p {
+                font-size: 1.1rem;
+                opacity: 0.9;
+            }
+        }
+
+        .background-shape {
+            position: absolute;
+            bottom: -150px;
+            left: -150px;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+
+        &:hover .background-shape {
+            transform: scale(1.2) rotate(45deg);
+        }
+    }
+
+    .right-pane {
+        width: 55%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+
+        .login-form-container {
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.8s ease-in-out;
+
+            h2 {
+                font-size: 2rem;
+                font-weight: 600;
+                margin-bottom: 30px;
+                color: var(--base-text-color, #333);
+            }
+
+            .form-field {
+                margin-bottom: 20px;
+                label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                    color: var(--base-text-color-secondary, #666);
+                }
+            }
+
+            .options {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+
+                .forgot-password {
+                    color: var(--dx-color-primary);
+                    text-decoration: none;
+                    font-weight: 500;
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            .login-button {
+                background-color: var(--dx-color-primary);
+                color: #fff;
+                border: none;
+                &:hover {
+                    filter: brightness(90%);
+                }
+            }
+
+            .separator {
+                text-align: center;
+                margin: 30px 0;
+                color: var(--base-border-color, #ccc);
+                position: relative;
+                span {
+                    background: var(--base-bg, #fff);
+                    padding: 0 10px;
+                    position: relative;
+                    z-index: 1;
+                }
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    right: 0;
+                    height: 1px;
+                    background: var(--base-border-color, #ccc);
+                    z-index: 0;
+                }
+            }
+
+            .social-login {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                .dx-button {
+                    .dx-button-content {
+                        justify-content: center;
+                    }
+                    .dx-icon {
+                        margin-right: 10px;
+                    }
+                }
+            }
+
+            .signup-link {
+                text-align: center;
+                margin-top: 30px;
+                p {
+                    color: var(--base-text-color-secondary, #666);
+                    a {
+                        color: var(--dx-color-primary);
+                        text-decoration: none;
+                        font-weight: 600;
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// ✅ Dark theme adjustments (fixed with color-mix)
+:host-context(.dx-theme-generic-dark) {
+    .login-container {
+        .left-pane {
+            background: linear-gradient(
+                135deg,
+                var(--dx-color-primary),
+                color-mix(in srgb, var(--dx-color-primary) 80%, black)
+            );
+        }
+    }
+}
