@@ -14,7 +14,7 @@
         },
         {
             "key": "$texteditor-border-bottom-color",
-            "value": "rgba(224, 224, 224, 1)"
+            "value": "rgba(97, 97, 97, 1)"
         }
     ],
     "baseTheme": "fluent.blue.dark",

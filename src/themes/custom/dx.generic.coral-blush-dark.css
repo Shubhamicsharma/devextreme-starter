@@ -5421,13 +5421,13 @@
   border-radius: 0;
 }
 .dx-texteditor.dx-editor-underlined::after {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #616161;
 }
 .dx-texteditor.dx-editor-underlined.dx-state-hover {
   background-color: transparent;
 }
 .dx-texteditor.dx-editor-underlined.dx-state-hover::after {
-  border-bottom-color: #f0f0f0;
+  border-bottom-color: #717171;
 }
 .dx-texteditor.dx-editor-underlined.dx-state-active,
 .dx-texteditor.dx-editor-underlined.dx-state-focused {
@@ -5456,7 +5456,7 @@
   border-radius: 8px;
   border-width: 1px;
   border-style: solid;
-  border-color: #616161 #616161 #e0e0e0;
+  border-color: #616161;
 }
 .dx-texteditor.dx-editor-outlined::before {
   box-sizing: border-box;
@@ -5503,12 +5503,12 @@
 }
 .dx-texteditor.dx-editor-outlined.dx-state-hover {
   background-color: #292929;
-  border-color: #757575 #757575 #f0f0f0;
+  border-color: #757575 #757575 #717171;
 }
 .dx-texteditor.dx-editor-outlined.dx-state-active,
 .dx-texteditor.dx-editor-outlined.dx-state-focused {
   background-color: #292929;
-  border-color: #6b6b6b #6b6b6b #fafafa;
+  border-color: #6b6b6b #6b6b6b #7b7b7b;
 }
 .dx-texteditor.dx-editor-outlined.dx-state-active::before,
 .dx-texteditor.dx-editor-outlined.dx-state-focused::before {
@@ -5639,7 +5639,7 @@
   border-inline-width: 0;
   border-style: solid;
   border-top-color: #616161;
-  border-bottom-color: #e0e0e0;
+  border-bottom-color: #616161;
   margin-left: -2px;
   margin-right: -2px;
   border-radius: 1px;
@@ -5661,7 +5661,7 @@
   border-inline-end-width: 0;
   border-style: solid;
   border-top-color: #616161;
-  border-bottom-color: #e0e0e0;
+  border-bottom-color: #616161;
   border-inline-start-color: rgb(97,97,97);
   border-start-start-radius: 8px;
   border-end-start-radius: 8px;
@@ -5677,7 +5677,7 @@
   border-inline-start-width: 0;
   border-style: solid;
   border-top-color: #616161;
-  border-bottom-color: #e0e0e0;
+  border-bottom-color: #616161;
   border-inline-end-color: rgb(97,97,97);
   border-start-end-radius: 8px;
   border-end-end-radius: 8px;
@@ -5767,7 +5767,7 @@
 .dx-editor-outlined.dx-texteditor-with-label.dx-state-hover .dx-label,
 .dx-editor-outlined.dx-texteditor-with-label.dx-state-hover .dx-label-after,
 .dx-editor-outlined.dx-texteditor-with-label.dx-state-hover .dx-label-before {
-  border-color: #757575 #757575 #f0f0f0;
+  border-color: #757575 #757575 #717171;
 }
 .dx-editor-outlined.dx-texteditor-with-floating-label.dx-state-focused .dx-label,
 .dx-editor-outlined.dx-texteditor-with-floating-label.dx-state-focused .dx-label-after,
@@ -5775,7 +5775,7 @@
 .dx-editor-outlined.dx-texteditor-with-label.dx-state-focused .dx-label,
 .dx-editor-outlined.dx-texteditor-with-label.dx-state-focused .dx-label-after,
 .dx-editor-outlined.dx-texteditor-with-label.dx-state-focused .dx-label-before {
-  border-color: #6b6b6b #6b6b6b #fafafa;
+  border-color: #6b6b6b #6b6b6b #7b7b7b;
 }
 .dx-editor-outlined.dx-texteditor-with-floating-label.dx-state-focused .dx-label,
 .dx-editor-outlined.dx-texteditor-with-label.dx-state-focused .dx-label {
@@ -21677,7 +21677,7 @@ input.dx-hidden {
   border-radius: 8px;
   border-width: 1px;
   border-style: solid;
-  border-color: #616161 #616161 #e0e0e0;
+  border-color: #616161;
 }
 .dx-htmleditor.dx-htmleditor-outlined::before {
   box-sizing: border-box;
@@ -21724,12 +21724,12 @@ input.dx-hidden {
 }
 .dx-htmleditor.dx-htmleditor-outlined.dx-state-hover {
   background-color: #292929;
-  border-color: #757575 #757575 #f0f0f0;
+  border-color: #757575 #757575 #717171;
 }
 .dx-htmleditor.dx-htmleditor-outlined.dx-state-active,
 .dx-htmleditor.dx-htmleditor-outlined.dx-state-focused {
   background-color: #292929;
-  border-color: #6b6b6b #6b6b6b #fafafa;
+  border-color: #6b6b6b #6b6b6b #7b7b7b;
 }
 .dx-htmleditor.dx-htmleditor-outlined.dx-state-active::before,
 .dx-htmleditor.dx-htmleditor-outlined.dx-state-focused::before {
@@ -21797,13 +21797,13 @@ input.dx-hidden {
   width: 100%;
   content: "";
   position: absolute;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #616161;
 }
 .dx-htmleditor.dx-htmleditor-underlined.dx-state-hover {
   background-color: transparent;
 }
 .dx-htmleditor.dx-htmleditor-underlined.dx-state-hover::after {
-  border-bottom-color: #f0f0f0;
+  border-bottom-color: #717171;
 }
 .dx-htmleditor.dx-htmleditor-underlined.dx-state-active,
 .dx-htmleditor.dx-htmleditor-underlined.dx-state-focused {
