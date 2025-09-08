@@ -1,11 +1,39 @@
 @use "sass:meta";
 @use "sass:color";
 @use "sass:map";
-@use "./themes/generated/variables.base.scss" as variablesBase;
-@use "./themes/generated/variables.base.dark.scss" as variablesBaseDark;
-@use "./themes/generated/variables.additional.scss" as variablesAdditional;
-@use "./themes/generated/variables.additional.dark.scss" as
-    variablesAdditionalDark;
+
+@use "./themes/generated/variables.indigo-night-light.scss" as
+    variablesIndigoNightLight;
+@use "./themes/generated/variables.indigo-night-dark.scss" as
+    variablesIndigoNightDark;
+@use "./themes/generated/variables.sunset-ember-light.scss" as
+    variablesSunsetEmberLight;
+@use "./themes/generated/variables.sunset-ember-dark.scss" as
+    variablesSunsetEmberDark;
+@use "./themes/generated/variables.emerald-depths-light.scss" as
+    variablesEmeraldDepthsLight;
+@use "./themes/generated/variables.emerald-depths-dark.scss" as
+    variablesEmeraldDepthsDark;
+@use "./themes/generated/variables.royal-amethyst-light.scss" as
+    variablesRoyalAmethystLight;
+@use "./themes/generated/variables.royal-amethyst-dark.scss" as
+    variablesRoyalAmethystDark;
+@use "./themes/generated/variables.crimson-flame-light.scss" as
+    variablesCrimsonFlameLight;
+@use "./themes/generated/variables.crimson-flame-dark.scss" as
+    variablesCrimsonFlameDark;
+@use "./themes/generated/variables.amber-glow-light.scss" as
+    variablesAmberGlowLight;
+@use "./themes/generated/variables.amber-glow-dark.scss" as
+    variablesAmberGlowDark;
+@use "./themes/generated/variables.teal-abyss-light.scss" as
+    variablesTealAbyssLight;
+@use "./themes/generated/variables.teal-abyss-dark.scss" as
+    variablesTealAbyssDark;
+@use "./themes/generated/variables.coral-blush-light.scss" as
+    variablesCoralBlushLight;
+@use "./themes/generated/variables.coral-blush-dark.scss" as
+    variablesCoralBlushDark;
 
 @mixin theme-variables($theme-name) {
     $theme: meta.module-variables($theme-name);
@@ -24,34 +52,66 @@
 
 :root {
     body {
-        @include theme-variables("variablesBase");
-
-        --footer-border-color: rgba(224, 224, 224, 1);
-        --plus-icon-color: #242424;
-        --devextreme-logo-color: #596c7d;
-        --vue-logo-text-color: #35495e;
-
-        --shadow-color-first: rgba(0, 0, 0, 0.06);
-        --shadow-color-second: rgba(0, 0, 0, 0.12);
-    }
-
-    .dx-swatch-additional {
-        @include theme-variables("variablesAdditional");
+        @include theme-variables("variablesIndigoNightLight");
     }
 
     .dx-swatch-dark {
-        @include theme-variables("variablesBaseDark");
-
-        --plus-icon-color: #fff;
-        --devextreme-logo-color: #fff;
-        --vue-logo-text-color: #fff;
-
-        --shadow-color-first: rgba(0, 0, 0, 0.12);
-        --shadow-color-second: rgba(0, 0, 0, 0.24);
-        --footer-border-color: rgba(97, 97, 97, 1);
+        @include theme-variables("variablesIndigoNightDark");
     }
 
-    .dx-swatch-additional-dark {
-        @include theme-variables("variablesAdditionalDark");
+    .dx-swatch-sunset-ember {
+        @include theme-variables("variablesSunsetEmberLight");
+    }
+
+    .dx-swatch-sunset-ember-dark {
+        @include theme-variables("variablesSunsetEmberDark");
+    }
+
+    .dx-swatch-emerald-depths {
+        @include theme-variables("variablesEmeraldDepthsLight");
+    }
+
+    .dx-swatch-emerald-depths-dark {
+        @include theme-variables("variablesEmeraldDepthsDark");
+    }
+
+    .dx-swatch-royal-amethyst {
+        @include theme-variables("variablesRoyalAmethystLight");
+    }
+
+    .dx-swatch-royal-amethyst-dark {
+        @include theme-variables("variablesRoyalAmethystDark");
+    }
+
+    .dx-swatch-crimson-flame {
+        @include theme-variables("variablesCrimsonFlameLight");
+    }
+
+    .dx-swatch-crimson-flame-dark {
+        @include theme-variables("variablesCrimsonFlameDark");
+    }
+
+    .dx-swatch-amber-glow {
+        @include theme-variables("variablesAmberGlowLight");
+    }
+
+    .dx-swatch-amber-glow-dark {
+        @include theme-variables("variablesAmberGlowDark");
+    }
+
+    .dx-swatch-teal-abyss {
+        @include theme-variables("variablesTealAbyssLight");
+    }
+
+    .dx-swatch-teal-abyss-dark {
+        @include theme-variables("variablesTealAbyssDark");
+    }
+
+    .dx-swatch-coral-blush {
+        @include theme-variables("variablesCoralBlushLight");
+    }
+
+    .dx-swatch-coral-blush-dark {
+        @include theme-variables("variablesCoralBlushDark");
     }
 }

@@ -5,57 +5,232 @@
             {
                 "command": "build-theme",
                 "options": {
-                    "inputFile": "src/themes/metadata.base.json",
-                    "outputFile": "src/themes/generated/theme.base.css"
+                    "inputFile": "src/themes/metadata.indigo-night-light.json",
+                    "outputFile": "src/themes/custom/dx.generic.indigo-night-light.css"
                 }
             },
             {
                 "command": "build-theme",
                 "options": {
-                    "inputFile": "src/themes/metadata.base.dark.json",
-                    "outputFile": "src/themes/generated/theme.base.dark.css"
+                    "inputFile": "src/themes/metadata.indigo-night-dark.json",
+                    "outputFile": "src/themes/custom/dx.generic.indigo-night-dark.css"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.indigo-night-light.json",
+                    "outputFile": "src/themes/generated/variables.indigo-night-light.scss"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.indigo-night-dark.json",
+                    "outputFile": "src/themes/generated/variables.indigo-night-dark.scss"
+                }
+            },
+
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.sunset-ember-light.json",
+                    "outputFile": "src/themes/custom/dx.generic.sunset-ember-light.css"
                 }
             },
             {
                 "command": "build-theme",
                 "options": {
-                    "inputFile": "src/themes/metadata.additional.json",
-                    "outputFile": "src/themes/generated/theme.additional.css"
+                    "inputFile": "src/themes/metadata.sunset-ember-dark.json",
+                    "outputFile": "src/themes/custom/dx.generic.sunset-ember-dark.css"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.sunset-ember-light.json",
+                    "outputFile": "src/themes/generated/variables.sunset-ember-light.scss"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.sunset-ember-dark.json",
+                    "outputFile": "src/themes/generated/variables.sunset-ember-dark.scss"
+                }
+            },
+
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.emerald-depths-light.json",
+                    "outputFile": "src/themes/custom/dx.generic.emerald-depths-light.css"
                 }
             },
             {
                 "command": "build-theme",
                 "options": {
-                    "inputFile": "src/themes/metadata.additional.dark.json",
-                    "outputFile": "src/themes/generated/theme.additional.dark.css"
+                    "inputFile": "src/themes/metadata.emerald-depths-dark.json",
+                    "outputFile": "src/themes/custom/dx.generic.emerald-depths-dark.css"
                 }
             },
             {
                 "command": "export-theme-vars",
                 "options": {
-                    "inputFile": "src/themes/metadata.base.json",
-                    "outputFile": "src/themes/generated/variables.base.scss"
+                    "inputFile": "src/themes/metadata.emerald-depths-light.json",
+                    "outputFile": "src/themes/generated/variables.emerald-depths-light.scss"
                 }
             },
             {
                 "command": "export-theme-vars",
                 "options": {
-                    "inputFile": "src/themes/metadata.base.dark.json",
-                    "outputFile": "src/themes/generated/variables.base.dark.scss"
+                    "inputFile": "src/themes/metadata.emerald-depths-dark.json",
+                    "outputFile": "src/themes/generated/variables.emerald-depths-dark.scss"
+                }
+            },
+
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.royal-amethyst-light.json",
+                    "outputFile": "src/themes/custom/dx.generic.royal-amethyst-light.css"
+                }
+            },
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.royal-amethyst-dark.json",
+                    "outputFile": "src/themes/custom/dx.generic.royal-amethyst-dark.css"
                 }
             },
             {
                 "command": "export-theme-vars",
                 "options": {
-                    "inputFile": "src/themes/metadata.additional.json",
-                    "outputFile": "src/themes/generated/variables.additional.scss"
+                    "inputFile": "src/themes/metadata.royal-amethyst-light.json",
+                    "outputFile": "src/themes/generated/variables.royal-amethyst-light.scss"
                 }
             },
             {
                 "command": "export-theme-vars",
                 "options": {
-                    "inputFile": "src/themes/metadata.additional.dark.json",
-                    "outputFile": "src/themes/generated/variables.additional.dark.scss"
+                    "inputFile": "src/themes/metadata.royal-amethyst-dark.json",
+                    "outputFile": "src/themes/generated/variables.royal-amethyst-dark.scss"
+                }
+            },
+
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.crimson-flame-light.json",
+                    "outputFile": "src/themes/custom/dx.generic.crimson-flame-light.css"
+                }
+            },
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.crimson-flame-dark.json",
+                    "outputFile": "src/themes/custom/dx.generic.crimson-flame-dark.css"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.crimson-flame-light.json",
+                    "outputFile": "src/themes/generated/variables.crimson-flame-light.scss"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.crimson-flame-dark.json",
+                    "outputFile": "src/themes/generated/variables.crimson-flame-dark.scss"
+                }
+            },
+
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.amber-glow-light.json",
+                    "outputFile": "src/themes/custom/dx.generic.amber-glow-light.css"
+                }
+            },
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.amber-glow-dark.json",
+                    "outputFile": "src/themes/custom/dx.generic.amber-glow-dark.css"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.amber-glow-light.json",
+                    "outputFile": "src/themes/generated/variables.amber-glow-light.scss"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.amber-glow-dark.json",
+                    "outputFile": "src/themes/generated/variables.amber-glow-dark.scss"
+                }
+            },
+
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.teal-abyss-light.json",
+                    "outputFile": "src/themes/custom/dx.generic.teal-abyss-light.css"
+                }
+            },
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.teal-abyss-dark.json",
+                    "outputFile": "src/themes/custom/dx.generic.teal-abyss-dark.css"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.teal-abyss-light.json",
+                    "outputFile": "src/themes/generated/variables.teal-abyss-light.scss"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.teal-abyss-dark.json",
+                    "outputFile": "src/themes/generated/variables.teal-abyss-dark.scss"
+                }
+            },
+
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.coral-blush-light.json",
+                    "outputFile": "src/themes/custom/dx.generic.coral-blush-light.css"
+                }
+            },
+            {
+                "command": "build-theme",
+                "options": {
+                    "inputFile": "src/themes/metadata.coral-blush-dark.json",
+                    "outputFile": "src/themes/custom/dx.generic.coral-blush-dark.css"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.coral-blush-light.json",
+                    "outputFile": "src/themes/generated/variables.coral-blush-light.scss"
+                }
+            },
+            {
+                "command": "export-theme-vars",
+                "options": {
+                    "inputFile": "src/themes/metadata.coral-blush-dark.json",
+                    "outputFile": "src/themes/generated/variables.coral-blush-dark.scss"
                 }
             }
         ]

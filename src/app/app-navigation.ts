@@ -1,33 +1,33 @@
 export const navigation = [
-  {
-    text: 'CDS-Options Ticket',
-    path: '/cds/cds-option',
-    icon: 'preferences',
-  },
-  {
-    text: 'Quick Monitor',
-    icon: 'preferences',
-    items: [
-      {
-        text: 'Currency',
-        path: '/quick-monitor/currency',
-        // icon: 'user',
-      },
-      {
-        text: 'Rates',
-        path: '/quick-monitor/rates',
-        // icon: 'check',
-      },
-      {
-        text: 'Index',
-        path: '/quick-monitor/index',
-        // icon: 'check',
-      },
-      {
-        text: 'Commodity',
-        path: '/quick-monitor/commodity',
-        // icon: 'check',
-      }
-    ],
-  },
+    {
+        text: 'CdsOptions',
+        path: '/cds/cds-option',
+        icon: 'fas fa-cog',
+    },
+    {
+        text: 'Quick Monitor',
+        icon: 'fas fa-chart-line',
+        items: [
+            {
+                text: 'Currency',
+                path: '/quick-monitor/currency',
+                icon: 'fas fa-dollar-sign',
+            },
+            {
+                text: 'Rates',
+                path: '/quick-monitor/rates',
+                icon: 'fas fa-percentage',
+            },
+            {
+                text: 'Index',
+                path: '/quick-monitor/index',
+                icon: 'fas fa-stream',
+            },
+            {
+                text: 'Commodity',
+                path: '/quick-monitor/commodity',
+                icon: 'fas fa-cubes',
+            },
+        ],
+    },
 ];

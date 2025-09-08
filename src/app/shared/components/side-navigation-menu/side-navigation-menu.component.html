@@ -1,14 +1,41 @@
 <ng-content></ng-content>
 
-<div class="menu-container">
-    <dx-tree-view
-        [items]="items"
-        keyExpr="path"
-        selectionMode="single"
-        [focusStateEnabled]="false"
-        expandEvent="click"
-        (onItemClick)="onItemClick($event)"
-        width="100%"
-    >
-    </dx-tree-view>
+<div class="menu-container shadow">
+    <div class="logo-container py-0 px-6 flex justify-start items-center h-[48px]" [ngClass]="{'w-[60px] !p-0 !justify-center': _compactMode}">
+        <img [src]="logoUrl" alt="Logo" class="logo h-3/5" />
+    </div>
+
+    <nav class="custom-sidebar">
+        <div class="selection-indicator" [style.transform]="'translateY(' + selectionIndicatorPosition + 'px)'"></div>
+
+        <div class="nav-item"
+             *ngFor="let item of items; let i = index"
+             [class.selected]="selectedIndex === i"
+             [class.expanded]="$any(item).expanded"
+             (click)="onNavItemClick(item, i)">
+
+            <!-- Parent item -->
+            <div class="nav-item-content"
+                 [class.has-children]="$any(item).items && $any(item).items.length > 0"
+                 [class.compact]="_compactMode">
+                <i class="nav-icon" [class]="getIconClass($any(item).icon || 'fas fa-circle')"></i>
+                <span class="nav-text" [class.hidden]="_compactMode">{{ $any(item).text }}</span>
+                <i class="expand-icon fas fa-chevron-right"
+                   *ngIf="$any(item).items && $any(item).items.length > 0 && !_compactMode"
+                   [class.rotated]="$any(item).expanded"></i>
+            </div>
+
+            <!-- Child items -->
+            <div class="nav-children" *ngIf="$any(item).items && $any(item).items.length > 0"
+                 [class.expanded]="$any(item).expanded && !_compactMode">
+                <div class="nav-child-item"
+                     *ngFor="let child of $any(item).items"
+                     [class.selected]="selectedPath === $any(child).path"
+                     (click)="onChildItemClick(child, $event)">
+                    <i class="nav-icon" [class]="getIconClass($any(child).icon || 'fas fa-dot-circle')"></i>
+                    <span class="nav-text">{{ $any(child).text }}</span>
+                </div>
+            </div>
+        </div>
+    </nav>
 </div>

@@ -58,7 +58,7 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             header: '',
             gradientConfigKey: 'default',
             cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--surface-ground)]',
+                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
             type: 'string',
             showChange: false,
         },
@@ -93,7 +93,7 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             header: '',
             gradientConfigKey: 'default',
             cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--surface-ground)]',
+                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
             type: 'string',
             showChange: false,
         },
@@ -120,7 +120,7 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             header: '',
             gradientConfigKey: 'default',
             cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--surface-ground)]',
+                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
             type: 'string',
             showChange: false,
         },
@@ -147,7 +147,7 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             header: '',
             gradientConfigKey: 'default',
             cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--surface-ground)]',
+                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
             type: 'string',
             showChange: false,
         },

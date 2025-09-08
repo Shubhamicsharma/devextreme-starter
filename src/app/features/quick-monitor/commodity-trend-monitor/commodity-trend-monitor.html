@@ -4,11 +4,16 @@
             <p class="text-3xl font-bold">Commodity Trend Monitor</p>
         </div>
         <div class="flex items-center space-x-4">
-            <dx-button text="Color Legend" icon="palette" (onClick)="toggle()">
-            </dx-button>
+            <div #buttonWrapper>
+                <dx-button
+                    text="Color Legend"
+                    icon="palette"
+                    (onClick)="toggle()"
+                ></dx-button>
+            </div>
             <dx-popover
                 [(visible)]="overlayVisible"
-                target=".dx-button"
+                [target]="buttonWrapper"
                 position="bottom"
                 width="300"
             >
@@ -46,12 +51,13 @@
         </div>
     </div>
 </div>
-<div class="card">
+<div class="card bg-[var(--dx-color-main-bg)] rounded-xl">
     <div class="card-body">
         <table class="w-full">
             <thead>
-                <tr class="table-header !border-b-4">
+                <tr class="table-header">
                     <th
+                        class="p-2 text-left"
                         *ngFor="let col of columns"
                         [ngClass]="(col.headerBgClass ? col.headerBgClass : '') + (col.cellClass ? ' ' + col.cellClass : '')"
                     >
@@ -60,8 +66,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let rowData of data; let i = index">
+                <tr *ngFor="let rowData of data; let i = index" class="hover:bg-[var(--ternary-bg)]">
                     <td
+                        class="p-2"
                         *ngFor="let col of columns"
                         [ngClass]="getGradientClass(col, rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
                     >

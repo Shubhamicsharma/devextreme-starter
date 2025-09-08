@@ -1,17 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'xlsx';
 import { CommonModule } from '@angular/common';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxPopoverModule } from 'devextreme-angular/ui/popover';
-
-interface RateData {
-    [key: string]: any;
-}
+import { QuickMonitorService } from '../../../shared/core/quick-monitor/quick-monitor.service';
+import { RatesTrendMonitorModel } from '../../../shared/core/quick-monitor/quick-monitor.model';
 
 interface ColumnConfig {
-    field: string;
+    field: keyof RatesTrendMonitorModel | 'Empty';
     header: string;
     gradientConfigKey: string;
     group?: string;
@@ -31,15 +29,18 @@ interface ColumnConfig {
     styleUrl: './rates-trend-monitor.scss',
 })
 export class RatesTrendMonitor implements OnInit, OnDestroy {
-    data: RateData[] = [];
-    previousData: RateData[] = [];
+    // Angular Dependency Injection
+    private quickMonitorService = inject(QuickMonitorService);
+
+    data: RatesTrendMonitorModel[] = [];
+    previousData: RatesTrendMonitorModel[] = [];
     lastModified: string | null = null;
     private intervalId: any;
     overlayVisible: boolean = false;
 
     columns: ColumnConfig[] = [
         {
-            field: 'Rates(5y)',
+            field: 'Rates_5y',
             header: 'Rates(5y)',
             gradientConfigKey: 'default',
             type: 'string',
@@ -58,13 +59,13 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             header: '',
             gradientConfigKey: 'default',
             cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--surface-ground)]',
+                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
             type: 'string',
             showChange: false,
         },
 
         {
-            field: 'Z-Sc(1m)',
+            field: 'Z_Sc_1m',
             header: 'Z-Sc(1m)',
             gradientConfigKey: 'zScore',
             headerBgClass: '!bg-blue-100 dark:!bg-blue-900',
@@ -72,7 +73,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             showChange: true,
         },
         {
-            field: 'Z-Sc(3m)',
+            field: 'Z_Sc_3m',
             header: 'Z-Sc(3m)',
             gradientConfigKey: 'zScore',
             headerBgClass: '!bg-blue-100 dark:!bg-blue-900',
@@ -80,7 +81,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             showChange: true,
         },
         {
-            field: 'Z-Sc(1y)',
+            field: 'Z_Sc_1y',
             header: 'Z-Sc(1y)',
             gradientConfigKey: 'zScore',
             headerBgClass: '!bg-blue-100 dark:!bg-blue-900',
@@ -93,13 +94,13 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             header: '',
             gradientConfigKey: 'default',
             cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--surface-ground)]',
+                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
             type: 'string',
             showChange: false,
         },
 
         {
-            field: '1w Chg bps',
+            field: 'Chg_1w_bps',
             header: '1w Chg bps',
             gradientConfigKey: 'default',
             headerBgClass: '!bg-green-100 dark:!bg-green-900',
@@ -107,7 +108,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             showChange: false,
         },
         {
-            field: 'Z(1w chg)',
+            field: 'Z_1w_chg',
             header: 'Z(1w chg)',
             gradientConfigKey: 'zScore',
             headerBgClass: '!bg-green-100 dark:!bg-green-900',
@@ -120,13 +121,13 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             header: '',
             gradientConfigKey: 'default',
             cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--surface-ground)]',
+                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
             type: 'string',
             showChange: false,
         },
 
         {
-            field: '1m Chg bps',
+            field: 'Chg_1m_bps',
             header: '1m Chg bps',
             gradientConfigKey: 'default',
             headerBgClass: '!bg-yellow-100 dark:!bg-yellow-900',
@@ -134,7 +135,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             showChange: false,
         },
         {
-            field: 'Z(1m chg)',
+            field: 'Z_1m_chg',
             header: 'Z(1m chg)',
             gradientConfigKey: 'zScore',
             headerBgClass: '!bg-yellow-100 dark:!bg-yellow-900',
@@ -147,13 +148,13 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             header: '',
             gradientConfigKey: 'default',
             cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--surface-ground)]',
+                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
             type: 'string',
             showChange: false,
         },
 
         {
-            field: 'Short-Term',
+            field: 'Short_Term',
             header: 'Short Term',
             gradientConfigKey: 'default',
             headerBgClass: '!bg-purple-100 dark:!bg-purple-900',
@@ -161,7 +162,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             showChange: false,
         },
         {
-            field: 'Long-Term',
+            field: 'Long_Term',
             header: 'Long Term',
             gradientConfigKey: 'default',
             headerBgClass: '!bg-purple-100 dark:!bg-purple-900',
@@ -199,40 +200,19 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
     constructor(private http: HttpClient, private toast: HotToastService) {}
 
     ngOnInit(): void {
-        this.fetchExcel();
-        this.intervalId = setInterval(() => this.fetchExcel(), 5000);
+        this.fetchData();
+        this.intervalId = setInterval(() => this.fetchData(), 5000);
     }
 
-    fetchExcel(): void {
-        this.http
-            .get('assets/IRMomentum 1.xlsx', {
-                responseType: 'arraybuffer',
-                observe: 'response',
-            })
+    fetchData(): void {
+        this.quickMonitorService
+            .getQuickMonitorData<RatesTrendMonitorModel>(new Date('2025-09-04'), 'Rates')
             .subscribe({
                 next: (response) => {
-                    const lastModified = response.headers.get('Last-Modified');
-                    if (lastModified !== this.lastModified) {
-                        this.lastModified = lastModified;
-                        this.previousData = JSON.parse(
-                            JSON.stringify(this.data)
-                        );
-                        const data = new Uint8Array(
-                            response.body as ArrayBuffer
-                        );
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        const sheetName = workbook.SheetNames[0];
-                        const worksheet = workbook.Sheets[sheetName];
-                        const jsonData: any[] = (XLSX.utils.sheet_to_json as any)(
-                            worksheet,
-                            { defval: '' }
-                        );
-                        this.data = jsonData;
-                        this.toast.success('Successfully fetched latest data.');
-                    }
-                },
-                error: () => {
-                    this.toast.error('Error fetching Excel file.');
+                    this.data = response;
+                    this.previousData = response;
+                    this.lastModified = response.length > 0 ? response[0].Date  : null;
+                    this.toast.success('Successfully fetched latest data.');
                 },
             });
     }
@@ -259,15 +239,15 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
     }
 
     getChange(rowIndex: number, col: string): string {
-        if (this.previousData.length > rowIndex) {
-            const previousValue = this.previousData[rowIndex][col];
-            const currentValue = this.data[rowIndex][col];
-            if (previousValue < currentValue) {
-                return 'pi pi-arrow-up text-green-500';
-            } else if (previousValue > currentValue) {
-                return 'pi pi-arrow-down text-red-500';
-            }
-        }
+        // if (this.previousData.length > rowIndex) {
+        //     const previousValue = this.previousData[rowIndex][col];
+        //     const currentValue = this.data[rowIndex][col];
+        //     if (previousValue < currentValue) {
+        //         return 'pi pi-arrow-up text-green-500';
+        //     } else if (previousValue > currentValue) {
+        //         return 'pi pi-arrow-down text-red-500';
+        //     }
+        // }
         return '';
     }
 

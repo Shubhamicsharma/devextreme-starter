@@ -136,8 +136,8 @@ export class SideNavOuterToolbarComponent implements OnInit, AfterViewInit {
         return !this.menuOpened;
     }
 
-    navigationChanged(event: DxTreeViewTypes.ItemClickEvent) {
-        const path = (event.itemData as any).path;
+    navigationChanged(event: any) {
+        const path = event.itemData.path;
         const pointerEvent = event.event;
 
         if (path && this.menuOpened) {

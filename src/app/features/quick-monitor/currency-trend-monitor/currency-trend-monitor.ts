@@ -39,6 +39,23 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
     private intervalId: any;
     overlayVisible: boolean = false;
 
+    BBG_DIVISORS: Record<string, number> = {
+        AUD: 10000,
+        NZD: 10000,
+        JPY: 100,
+        KRW: 100,
+        TWD: 1000,
+        HKD: 10000,
+        CNY: 10000,
+        CNH: 10000,
+        INR: 100,
+        IDR: 1,
+        SGD: 10000,
+        MYR: 10000,
+        THB: 100,
+        PHP: 100,
+    };
+
     columns: ColumnConfig[] = [
         {
             field: 'Currency',
@@ -225,10 +242,9 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
                         const workbook = XLSX.read(data, { type: 'array' });
                         const sheetName = workbook.SheetNames[0];
                         const worksheet = workbook.Sheets[sheetName];
-                        const jsonData: any[] = (XLSX.utils.sheet_to_json as any)(
-                            worksheet,
-                            { defval: '' }
-                        );
+                        const jsonData: any[] = (
+                            XLSX.utils.sheet_to_json as any
+                        )(worksheet, { defval: '' });
                         this.data = jsonData;
                         this.toast.success('Successfully fetched latest data.');
                     }
@@ -276,5 +292,15 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
 
     toggle() {
         this.overlayVisible = !this.overlayVisible;
+    }
+
+    getDecimalsForCurrency(currencyPair: string): number {
+        for (const key of Object.keys(this.BBG_DIVISORS)) {
+            if (currencyPair.includes(key)) {
+                const divisor = this.BBG_DIVISORS[key];
+                return Math.log10(divisor);
+            }
+        }
+        return 2; // default
     }
 }
