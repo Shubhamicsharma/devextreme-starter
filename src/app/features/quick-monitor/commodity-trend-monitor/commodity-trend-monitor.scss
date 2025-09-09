@@ -1,0 +1,23 @@
+.live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+
+    .blinking-dot {
+        height: 10px;
+        width: 10px;
+        background-color: #22c55e; // green-500
+        border-radius: 50%;
+        animation: blinker 1.5s cubic-bezier(0.5, 0, 1, 1) infinite alternate;
+    }
+}
+
+@keyframes blinker {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.2;
+    }
+}

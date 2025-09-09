@@ -1,10 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import * as XLSX from 'xlsx';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxPopoverModule } from 'devextreme-angular/ui/popover';
+import { QuickMonitorService } from '../../../shared/core/quick-monitor/quick-monitor.service';
+import { QuickMonitorDataResponse } from '../../../shared/core/quick-monitor/quick-monitor.model';
+import { DxDateBoxModule } from 'devextreme-angular/ui/date-box';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 
 interface CurrencyData {
     [key: string]: any;
@@ -28,16 +31,29 @@ interface ColumnConfig {
 @Component({
     selector: 'app-currency-trend-monitor',
     standalone: true,
-    imports: [CommonModule, DxButtonModule, DxPopoverModule],
+    imports: [
+        CommonModule,
+        DxButtonModule,
+        DxPopoverModule,
+        DxDateBoxModule,
+        DxSelectBoxModule,
+    ],
     templateUrl: './currency-trend-monitor.html',
     styleUrl: './currency-trend-monitor.scss',
 })
 export class CurrencyTrendMonitor implements OnInit, OnDestroy {
+    private quickMonitorService = inject(QuickMonitorService);
     data: CurrencyData[] = [];
     previousData: CurrencyData[] = [];
+    pastData: QuickMonitorDataResponse<CurrencyData>['Data'] = [];
     lastModified: string | null = null;
     private intervalId: any;
     overlayVisible: boolean = false;
+
+    dataType: 'Live' | 'Past' = 'Live';
+    pastDataAvailableTimestamps: { display: string; value: string }[] = [];
+    selectedPastDate: Date = new Date('2025-09-05');
+    selectedTimestamp: string | null = null;
 
     BBG_DIVISORS: Record<string, number> = {
         AUD: 10000,
@@ -218,41 +234,108 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
     constructor(private http: HttpClient, private toast: HotToastService) {}
 
     ngOnInit(): void {
-        this.fetchExcel();
-        this.intervalId = setInterval(() => this.fetchExcel(), 5000);
+        this.fetchLiveData();
     }
 
-    fetchExcel(): void {
-        this.http
-            .get('assets/FXMomentum 1.xlsx', {
-                responseType: 'arraybuffer',
-                observe: 'response',
-            })
+    fetchPastData(): void {
+        const formattedDate = formatDate(
+            this.selectedPastDate,
+            'yyyy-MM-dd',
+            'en-US'
+        );
+        this.quickMonitorService
+            .getQuickMonitorData<QuickMonitorDataResponse<CurrencyData>>(
+                new Date(formattedDate),
+                'Past',
+                'currencymomentum'
+            )
             .subscribe({
                 next: (response) => {
-                    const lastModified = response.headers.get('Last-Modified');
-                    if (lastModified !== this.lastModified) {
-                        this.lastModified = lastModified;
-                        this.previousData = JSON.parse(
-                            JSON.stringify(this.data)
+                    this.dataType = 'Past';
+                    if (
+                        Array.isArray(response.Data) &&
+                        response.Data.length > 0
+                    ) {
+                        this.pastData = response.Data;
+                        this.pastDataAvailableTimestamps = response.Data.map(
+                            (item: { Time: string | number | Date }) => ({
+                                display: formatDate(
+                                    item.Time,
+                                    'hh:mm a',
+                                    'en-US'
+                                ),
+                                value: item.Time as string,
+                            })
+                        ).sort(
+                            (a: { value: string }, b: { value: string }) =>
+                                new Date(a.value).getTime() -
+                                new Date(b.value).getTime()
                         );
-                        const data = new Uint8Array(
-                            response.body as ArrayBuffer
+
+                        if (this.pastDataAvailableTimestamps.length > 0) {
+                            this.selectedTimestamp =
+                                this.pastDataAvailableTimestamps[0].value;
+                            const firstDataPoint = response.Data[0];
+                            this.data = firstDataPoint.Data;
+                            this.lastModified = new Date(
+                                firstDataPoint.Time
+                            ).toISOString();
+                        }
+                        this.toast.success('Successfully fetched past data.');
+                    } else {
+                        this.data = [];
+                        this.pastData = [];
+                        this.pastDataAvailableTimestamps = [];
+                        this.toast.info(
+                            'No past data available for this date.'
                         );
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        const sheetName = workbook.SheetNames[0];
-                        const worksheet = workbook.Sheets[sheetName];
-                        const jsonData: any[] = (
-                            XLSX.utils.sheet_to_json as any
-                        )(worksheet, { defval: '' });
-                        this.data = jsonData;
-                        this.toast.success('Successfully fetched latest data.');
                     }
                 },
                 error: () => {
-                    this.toast.error('Error fetching Excel file.');
+                    this.toast.error('Failed to fetch past data.');
                 },
             });
+    }
+
+    fetchLiveData(): void {
+        const toastId = 'live-data-toast';
+
+        this.quickMonitorService
+            .getQuickMonitorData<CurrencyData[]>(
+                new Date(),
+                'Live',
+                'currencymomentum'
+            )
+            .subscribe({
+                next: (response: any) => {
+                    this.dataType = 'Live';
+                    this.previousData = this.data;
+                    this.data = response.Data;
+                    this.lastModified = response.LastModified;
+                    this.toast.success('Successfully fetched live data.', {
+                        id: toastId,
+                    });
+                },
+                error: () => {
+                    this.toast.error('Failed to fetch live data.', {
+                        id: toastId,
+                    });
+                },
+            });
+    }
+
+    onPastDateChanged(): void {
+        this.fetchPastData();
+    }
+
+    onTimestampChanged(e: any): void {
+        const selectedData = this.pastData.find(
+            (item: any) => item.Time === e.value
+        );
+        if (selectedData) {
+            this.data = selectedData.Data;
+            this.lastModified = new Date(selectedData.Time).toISOString();
+        }
     }
 
     ngOnDestroy(): void {
@@ -278,7 +361,11 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
     }
 
     getChange(rowIndex: number, col: string): string {
-        if (this.previousData.length > rowIndex) {
+        if (
+            this.dataType === 'Live' &&
+            this.previousData.length > rowIndex &&
+            this.data.length > rowIndex
+        ) {
             const previousValue = this.previousData[rowIndex][col];
             const currentValue = this.data[rowIndex][col];
             if (previousValue < currentValue) {

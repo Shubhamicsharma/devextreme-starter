@@ -11,9 +11,17 @@ export class QuickMonitorService {
     private httpService = inject(RVHttpService);
 
     // Get rates trend monitor with date
-    public getQuickMonitorData<T>(date: Date, type: string): Observable<T[]> {
-        return this.httpService.getQuickMonitorData<T>(date, type).pipe(
-            switchMap((response: ApiResponse<T[]>) => {
+    public getQuickMonitorData<T>(
+        date: Date,
+        type: 'Past' | 'Live',
+        tableType:
+            | 'irmomentum'
+            | 'currencymomentum'
+            | 'commoditiesmomentum'
+            | 'cmdmomentum'
+    ): Observable<T> {
+        return this.httpService.getQuickMonitorData<T>(date, type, tableType).pipe(
+            switchMap((response: ApiResponse<T>) => {
                 return of(response.Model);
             })
         );

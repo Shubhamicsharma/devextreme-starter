@@ -22,6 +22,7 @@
     "@angular/router": "^19.2.0",
     "@auth0/angular-jwt": "^5.2.0",
     "@fortawesome/angular-fontawesome": "^1.0.0",
+    "@fortawesome/fontawesome-free": "^7.0.1",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@ngneat/overview": "6.1.1",
     "@ngxpert/hot-toast": "^4.2.0",

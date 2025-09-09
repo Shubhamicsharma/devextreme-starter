@@ -1,5 +1,6 @@
 @use "@ngxpert/hot-toast/styles";
 
+
 html,
 body {
     margin: 0;
@@ -63,6 +64,7 @@ body {
 
     .content-block {
         margin-top: 20px;
+        height: 25px;
     }
 
     .responsive-paddings {

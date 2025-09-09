@@ -1,7 +1,46 @@
 <div>
     <div class="flex justify-between items-center">
         <div class="mb-4">
-            <p class="text-3xl font-bold">Index Trend Monitor</p>
+            <p class="text-2xl font-semibold">Index Trend Monitor</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <dx-button
+                *ngIf="dataType === 'Past'"
+                text="Show Live"
+                type="default"
+                (onClick)="fetchLiveData()"
+            ></dx-button>
+            <ng-container *ngIf="dataType === 'Live'">
+                <div class="live-indicator">
+                    <span class="blinking-dot"></span>
+                    <span>Live</span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div class="flex justify-between items-center space-x-4 mb-4">
+        <div class="flex items-center space-x-4">
+            <dx-date-box
+                [(value)]="selectedPastDate"
+                [showClearButton]="true"
+                placeholder="Select a date"
+                width="150px"
+            ></dx-date-box>
+            <dx-button
+                text="Show Past Data"
+                type="default"
+                (onClick)="fetchPastData()"
+            ></dx-button>
+            <dx-select-box
+                *ngIf="dataType === 'Past' && pastDataAvailableTimestamps.length"
+                [dataSource]="pastDataAvailableTimestamps"
+                displayExpr="display"
+                valueExpr="value"
+                [(value)]="selectedTimestamp"
+                (onValueChanged)="onTimestampChanged($event)"
+                placeholder="Select time"
+                width="150px"
+            ></dx-select-box>
         </div>
         <div class="flex items-center space-x-4">
             <div #buttonWrapper>
@@ -45,7 +84,10 @@
                     </div>
                 </div>
             </dx-popover>
-            <div class="text-gray-700 dark:text-gray-400 font-semibold">
+            <div
+                *ngIf="dataType == 'Live'"
+                class="text-gray-700 dark:text-gray-400 font-semibold"
+            >
                 Last Updated: {{ lastModified | date:'dd/MM/yyyy, HH:mm:ss' }}
             </div>
         </div>
@@ -65,17 +107,21 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let rowData of data; let i = index" class="hover:bg-[var(--ternary-bg)]">
+            <tr
+                *ngFor="let rowData of data; let i = index"
+                class="hover:bg-[var(--ternary-bg)]"
+            >
                 <td
                     class="p-2"
                     *ngFor="let col of columns"
-                    [ngClass]="getGradientClass(col, rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
+                    [ngClass]="getGradientClass(col, col.field == 'Empty' ? '' : rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
                 >
                     <div class="flex items-center">
-                        {{ col.type !== 'number' ? rowData[col.field] :
-                        (rowData[col.field] | number:'1.2-2') }}
+                        {{ col.field === 'Empty' ? '' : (col.type !== 'number' ?
+                        rowData[col.field] : (rowData[col.field] |
+                        number:'1.2-2')) }}
                         <i
-                            *ngIf="col.showChange"
+                            *ngIf="col.showChange && dataType === 'Live'"
                             [ngClass]="getChange(i, col.field)"
                             class="ml-2"
                         ></i>
