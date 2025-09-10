@@ -1,131 +1,133 @@
 <div>
-  <div class="flex justify-between items-center">
-    <div class="mb-4">
-      <p class="text-2xl font-semibold">Commodity Trend Monitor</p>
-    </div>
-    <div class="flex items-center space-x-4">
-      <dx-button
-        *ngIf="dataType === 'Past'"
-        text="Show Live"
-        type="default"
-        (onClick)="fetchLiveData()"
-      ></dx-button>
-      <ng-container *ngIf="dataType === 'Live'">
-        <div class="live-indicator">
-          <span class="blinking-dot"></span>
-          <span>Live</span>
+    <div class="flex justify-between items-center">
+        <div class="mb-4">
+            <p class="text-2xl font-semibold">Commodity Trend Monitor</p>
         </div>
-      </ng-container>
+        <div class="flex items-center space-x-4">
+            <dx-button
+                *ngIf="dataType === 'Past'"
+                text="Show Live"
+                type="default"
+                (onClick)="fetchLiveData()"
+            ></dx-button>
+            <ng-container *ngIf="dataType === 'Live'">
+                <div class="live-indicator">
+                    <span class="blinking-dot"></span>
+                    <span>Live</span>
+                </div>
+            </ng-container>
+        </div>
     </div>
-  </div>
-  <div class="flex justify-between items-center space-x-4 mb-4">
-    <div class="flex items-center space-x-4">
-      <dx-date-box
-        [(value)]="selectedPastDate"
-        [showClearButton]="true"
-        placeholder="Select a date"
-        width="150px"
-      ></dx-date-box>
-      <dx-button
-        text="Show Past Data"
-        type="default"
-        (onClick)="fetchPastData()"
-      ></dx-button>
-      <dx-select-box
-        *ngIf="dataType === 'Past' && pastDataAvailableTimestamps.length"
-        [dataSource]="pastDataAvailableTimestamps"
-        displayExpr="display"
-        valueExpr="value"
-        [(value)]="selectedTimestamp"
-        (onValueChanged)="onTimestampChanged($event)"
-        placeholder="Select time"
-        width="150px"
-      ></dx-select-box>
-    </div>
-    <div class="flex items-center space-x-4">
-      <div #buttonWrapper>
-        <dx-button
-          text="Color Legend"
-          icon="palette"
-          (onClick)="toggle()"
-        ></dx-button>
-      </div>
-      <dx-popover
-        [(visible)]="overlayVisible"
-        [target]="buttonWrapper"
-        position="bottom"
-        width="300"
-      >
-        <div *dxTemplate="let data of 'content'">
-          <div class="p-4">
-            <p class="font-bold mb-2 text-xl">Gradient Reference</p>
-            <div class="grid grid-cols-1 gap-4">
-              <div
-                *ngFor="let legend of gradientLegend"
-                class="border-b border-gray-200 pb-2"
-              >
-                <p class="text-base font-semibold">
-                  {{ legend.title }}
-                </p>
-                <ul class="grid grid-cols-2 gap-3">
-                  <li
-                    *ngFor="let item of gradientConfig[legend.key]"
-                    class="flex items-center"
-                  >
-                    <span
-                      class="w-4 h-4 rounded-full mr-2"
-                      [ngClass]="item.color"
-                    ></span>
-                    {{ item.label }}
-                  </li>
-                </ul>
-              </div>
+    <div class="flex justify-between items-center space-x-4 mb-4">
+        <div class="flex items-center space-x-4">
+            <dx-date-box
+                [(value)]="selectedPastDate"
+                [showClearButton]="true"
+                placeholder="Select a date"
+                width="150px"
+            ></dx-date-box>
+            <dx-button
+                text="Show Past Data"
+                type="default"
+                (onClick)="fetchPastData()"
+            ></dx-button>
+            <dx-select-box
+                *ngIf="dataType === 'Past' && pastDataAvailableTimestamps.length"
+                [dataSource]="pastDataAvailableTimestamps"
+                displayExpr="display"
+                valueExpr="value"
+                [(value)]="selectedTimestamp"
+                (onValueChanged)="onTimestampChanged($event)"
+                placeholder="Select time"
+                width="150px"
+            ></dx-select-box>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div #buttonWrapper>
+                <dx-button
+                    text="Color Legend"
+                    icon="palette"
+                    (onClick)="toggle()"
+                ></dx-button>
             </div>
-          </div>
+            <dx-popover
+                [(visible)]="overlayVisible"
+                [target]="buttonWrapper"
+                position="bottom"
+                width="300"
+            >
+                <div *dxTemplate="let data of 'content'">
+                    <div class="p-4">
+                        <p class="font-bold mb-2 text-xl">Gradient Reference</p>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div
+                                *ngFor="let legend of gradientLegend"
+                                class="border-b border-gray-200 pb-2"
+                            >
+                                <p class="text-base font-semibold">
+                                    {{ legend.title }}
+                                </p>
+                                <ul class="grid grid-cols-2 gap-3">
+                                    <li
+                                        *ngFor="let item of gradientConfig[legend.key]"
+                                        class="flex items-center"
+                                    >
+                                        <span
+                                            class="w-4 h-4 rounded-full mr-2"
+                                            [ngClass]="item.color"
+                                        ></span>
+                                        {{ item.label }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </dx-popover>
+            <div
+                *ngIf="dataType == 'Live'"
+                class="text-gray-700 dark:text-gray-400 font-semibold"
+            >
+                Last Updated: {{ lastModified | date:'dd/MM/yyyy, HH:mm:ss' }}
+            </div>
         </div>
-      </dx-popover>
-      <div
-        *ngIf="dataType == 'Live'"
-        class="text-gray-700 dark:text-gray-400 font-semibold"
-      >
-        Last Updated: {{ lastModified | date:'dd/MM/yyyy, HH:mm:ss' }}
-      </div>
     </div>
-  </div>
 </div>
-<div class="dx-card bg-[var(--dx-color-main-bg)] rounded-xl">
-  <table class="w-full">
-    <thead>
-      <tr class="table-header">
-        <th
-          class="p-2 text-left"
-          *ngFor="let col of columns"
-          [ngClass]="(col.headerBgClass ? col.headerBgClass : '') + (col.cellClass ? ' ' + col.cellClass : '')"
-        >
-          {{col.header}}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let rowData of data; let i = index"
-        class="hover:bg-[var(--ternary-bg)]"
-      >
-        <td
-          class="p-2"
-          *ngFor="let col of columns"
-          [ngClass]="getGradientClass(col, col.field == 'Empty' ? '' : rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
-        >
-          <div class="flex items-center">
-            {{ col.field === 'Empty' ? '' : (col.type !== 'number' ? rowData[col.field] : (rowData[col.field] | number:'1.2-2')) }}
-            <i
-              *ngIf="col.showChange && dataType === 'Live'"
-              [ngClass]="getChange(i, col.field)"
-              class="ml-2"
-            ></i>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="shadow-lg bg-[var(--dx-color-main-bg)] rounded-xl">
+    <table class="w-full">
+        <thead>
+            <tr class="table-header">
+                <th
+                    class="p-2 text-left"
+                    *ngFor="let col of columns"
+                    [ngClass]="(col.headerBgClass ? col.headerBgClass : '') + (col.cellClass ? ' ' + col.cellClass : '')"
+                >
+                    {{col.header}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let rowData of data; let i = index"
+                class="hover:bg-[var(--secondary-bg)]"
+            >
+                <td
+                    class="p-2"
+                    *ngFor="let col of columns"
+                    [ngClass]="getGradientClass(col, col.field == 'Empty' ? '' : rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
+                >
+                    <div class="flex items-center">
+                        {{ col.field === 'Empty' ? '' : (col.type !== 'number' ?
+                        rowData[col.field] : (rowData[col.field] |
+                        number:'1.2-2')) }}
+                        <i
+                            *ngIf="col.showChange && dataType === 'Live'"
+                            [ngClass]="getChange(i, col.field)"
+                            class="ml-2"
+                        ></i>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

@@ -18,12 +18,14 @@ export class QuickMonitorService {
             | 'irmomentum'
             | 'currencymomentum'
             | 'commoditiesmomentum'
-            | 'cmdmomentum'
+            | 'indexmomentum'
     ): Observable<T> {
-        return this.httpService.getQuickMonitorData<T>(date, type, tableType).pipe(
-            switchMap((response: ApiResponse<T>) => {
-                return of(response.Model);
-            })
-        );
+        return this.httpService
+            .getQuickMonitorData<T>(date, type, tableType)
+            .pipe(
+                switchMap((response: ApiResponse<T>) => {
+                    return of(response.Model);
+                })
+            );
     }
 }

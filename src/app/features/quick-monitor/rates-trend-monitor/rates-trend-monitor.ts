@@ -49,11 +49,9 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
     private intervalId: any;
     overlayVisible: boolean = false;
 
-    buttonIcon = 'fa-solid fa-clock-rotate-left text-sm';
-
     dataType: 'Live' | 'Past' = 'Live';
     pastDataAvailableTimestamps: { display: string; value: string }[] = [];
-    selectedPastDate: Date = new Date('2025-09-05');
+    selectedPastDate: Date = new Date('2025-09-04');
     selectedTimestamp: string | null = null;
 
     columns: ColumnConfig[] = [
@@ -76,8 +74,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -111,8 +108,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -138,8 +134,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -165,8 +160,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -284,11 +278,9 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
         const toastId = 'live-data-toast';
 
         this.quickMonitorService
-            .getQuickMonitorData<QuickMonitorDataResponse<RatesTrendMonitorModel>>(
-                new Date(),
-                'Live',
-                'irmomentum'
-            )
+            .getQuickMonitorData<
+                QuickMonitorDataResponse<RatesTrendMonitorModel>
+            >(new Date(), 'Live', 'irmomentum')
             .subscribe({
                 next: (response: any) => {
                     console.log(response);
@@ -297,13 +289,16 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
                     // In response.Data, If size is 0, show no data toast
                     // Else there will be 2 items, you need to sort them by time, and newer one is current, older one is previous
                     if (response.Data.length === 0) {
-                        this.toast.info('No live data available.', { id: toastId });
+                        this.toast.info('No live data available.', {
+                            id: toastId,
+                        });
                         return;
                     }
 
                     response.Data.sort(
                         (a: any, b: any) =>
-                            new Date(b.Time).getTime() - new Date(a.Time).getTime()
+                            new Date(b.Time).getTime() -
+                            new Date(a.Time).getTime()
                     );
 
                     if (response.Data.length > 1) {

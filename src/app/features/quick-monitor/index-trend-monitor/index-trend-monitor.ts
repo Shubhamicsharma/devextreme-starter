@@ -73,8 +73,7 @@ export class IndexTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -108,8 +107,7 @@ export class IndexTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -135,8 +133,7 @@ export class IndexTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -162,8 +159,7 @@ export class IndexTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -227,7 +223,7 @@ export class IndexTrendMonitor implements OnInit, OnDestroy {
         this.quickMonitorService
             .getQuickMonitorData<
                 QuickMonitorDataResponse<IndexTrendMonitorModel>
-            >(new Date(formattedDate), 'Past', 'cmdmomentum')
+            >(new Date(formattedDate), 'Past', 'indexmomentum')
             .subscribe({
                 next: (response) => {
                     this.dataType = 'Past';
@@ -283,7 +279,7 @@ export class IndexTrendMonitor implements OnInit, OnDestroy {
         this.quickMonitorService
             .getQuickMonitorData<
                 QuickMonitorDataResponse<IndexTrendMonitorModel>
-            >(new Date(), 'Live', 'cmdmomentum')
+            >(new Date(), 'Live', 'indexmomentum')
             .subscribe({
                 next: (response: any) => {
                     this.dataType = response.Type;

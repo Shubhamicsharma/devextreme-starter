@@ -5,16 +5,15 @@ import { HotToastService } from '@ngxpert/hot-toast';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxPopoverModule } from 'devextreme-angular/ui/popover';
 import { QuickMonitorService } from '../../../shared/core/quick-monitor/quick-monitor.service';
-import { QuickMonitorDataResponse } from '../../../shared/core/quick-monitor/quick-monitor.model';
+import {
+    CurrencyTrendMonitorModel,
+    QuickMonitorDataResponse,
+} from '../../../shared/core/quick-monitor/quick-monitor.model';
 import { DxDateBoxModule } from 'devextreme-angular/ui/date-box';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 
-interface CurrencyData {
-    [key: string]: any;
-}
-
 interface ColumnConfig {
-    field: string;
+    field: keyof CurrencyTrendMonitorModel | 'Empty';
     header: string;
     gradientConfigKey: string;
     group?: string;
@@ -43,9 +42,9 @@ interface ColumnConfig {
 })
 export class CurrencyTrendMonitor implements OnInit, OnDestroy {
     private quickMonitorService = inject(QuickMonitorService);
-    data: CurrencyData[] = [];
-    previousData: CurrencyData[] = [];
-    pastData: QuickMonitorDataResponse<CurrencyData>['Data'] = [];
+    data: CurrencyTrendMonitorModel[] = [];
+    previousData: CurrencyTrendMonitorModel[] = [];
+    pastData: QuickMonitorDataResponse<CurrencyTrendMonitorModel>['Data'] = [];
     lastModified: string | null = null;
     private intervalId: any;
     overlayVisible: boolean = false;
@@ -81,7 +80,7 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             showChange: false,
         },
         {
-            field: 'Spot/Fwd',
+            field: 'SpotFwd',
             header: 'Spot/Fwd',
             gradientConfigKey: 'spotPct',
             type: 'number',
@@ -92,14 +91,13 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
 
         {
-            field: 'Z-Sc(1m)',
+            field: 'Z_Sc_1m',
             header: 'Z-Sc(1m)',
             gradientConfigKey: 'zScore',
             headerBgClass: '!bg-blue-100 dark:!bg-blue-900',
@@ -107,7 +105,7 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             showChange: true,
         },
         {
-            field: 'Z-Sc(3m)',
+            field: 'Z_Sc_3m',
             header: 'Z-Sc(3m)',
             gradientConfigKey: 'zScore',
             headerBgClass: '!bg-blue-100 dark:!bg-blue-900',
@@ -115,7 +113,7 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             showChange: true,
         },
         {
-            field: 'Z-Sc(1y)',
+            field: 'Z_Sc_1y',
             header: 'Z-Sc(1y)',
             gradientConfigKey: 'zScore',
             headerBgClass: '!bg-blue-100 dark:!bg-blue-900',
@@ -127,14 +125,13 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
 
         {
-            field: '1w Chg %',
+            field: 'Chg_1w_pct',
             header: '1w Chg %',
             gradientConfigKey: 'weeklyMonthly',
             headerBgClass: '!bg-green-100 dark:!bg-green-900',
@@ -142,7 +139,7 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             showChange: false,
         },
         {
-            field: 'Z(1w chg)',
+            field: 'Z_1w_chg',
             header: 'Z(1w chg)',
             gradientConfigKey: 'weeklyMonthly',
             headerBgClass: '!bg-green-100 dark:!bg-green-900',
@@ -154,14 +151,13 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
 
         {
-            field: '1m Chg %',
+            field: 'Chg_1m_pct',
             header: '1m Chg %',
             gradientConfigKey: 'weeklyMonthly',
             headerBgClass: '!bg-yellow-100 dark:!bg-yellow-900',
@@ -169,7 +165,7 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             showChange: false,
         },
         {
-            field: 'Z(1m chg)',
+            field: 'Z_1m_chg',
             header: 'Z(1m chg)',
             gradientConfigKey: 'weeklyMonthly',
             headerBgClass: '!bg-yellow-100 dark:!bg-yellow-900',
@@ -181,14 +177,13 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
 
         {
-            field: 'Short-Term',
+            field: 'Short_Term',
             header: 'Short Term',
             gradientConfigKey: 'shortTerm',
             headerBgClass: '!bg-purple-100 dark:!bg-purple-900',
@@ -196,7 +191,7 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             showChange: false,
         },
         {
-            field: 'Long-Term',
+            field: 'Long_Term',
             header: 'Long Term',
             gradientConfigKey: 'longTerm',
             headerBgClass: '!bg-purple-100 dark:!bg-purple-900',
@@ -244,11 +239,9 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             'en-US'
         );
         this.quickMonitorService
-            .getQuickMonitorData<QuickMonitorDataResponse<CurrencyData>>(
-                new Date(formattedDate),
-                'Past',
-                'currencymomentum'
-            )
+            .getQuickMonitorData<
+                QuickMonitorDataResponse<CurrencyTrendMonitorModel>
+            >(new Date(formattedDate), 'Past', 'currencymomentum')
             .subscribe({
                 next: (response) => {
                     this.dataType = 'Past';
@@ -301,17 +294,34 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
         const toastId = 'live-data-toast';
 
         this.quickMonitorService
-            .getQuickMonitorData<CurrencyData[]>(
+            .getQuickMonitorData<CurrencyTrendMonitorModel[]>(
                 new Date(),
                 'Live',
                 'currencymomentum'
             )
             .subscribe({
                 next: (response: any) => {
-                    this.dataType = 'Live';
-                    this.previousData = this.data;
-                    this.data = response.Data;
-                    this.lastModified = response.LastModified;
+                    this.dataType = response.Type;
+
+                    if (response.Data.length === 0) {
+                        this.toast.info('No live data available.', {
+                            id: toastId,
+                        });
+                        return;
+                    }
+
+                    response.Data.sort(
+                        (a: any, b: any) =>
+                            new Date(b.Time).getTime() -
+                            new Date(a.Time).getTime()
+                    );
+
+                    if (response.Data.length > 1) {
+                        this.previousData = response.Data[1].Data;
+                        this.data = response.Data[0].Data;
+                    }
+
+                    this.lastModified = response.Data[0].Time;
                     this.toast.success('Successfully fetched live data.', {
                         id: toastId,
                     });
@@ -366,8 +376,9 @@ export class CurrencyTrendMonitor implements OnInit, OnDestroy {
             this.previousData.length > rowIndex &&
             this.data.length > rowIndex
         ) {
-            const previousValue = this.previousData[rowIndex][col];
-            const currentValue = this.data[rowIndex][col];
+            const key = col as keyof CurrencyTrendMonitorModel;
+            const previousValue = this.previousData[rowIndex][key];
+            const currentValue = this.data[rowIndex][key];
             if (previousValue < currentValue) {
                 return 'pi pi-arrow-up text-green-500';
             } else if (previousValue > currentValue) {

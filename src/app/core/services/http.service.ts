@@ -55,12 +55,18 @@ export class RVHttpService {
     // Quick Monitor
     // Get rates trend monitor with date
     public getQuickMonitorData<T>(
-      date: Date,
-      type: 'Past' | 'Live',
-      tableType: 'irmomentum' | 'currencymomentum' | 'commoditiesmomentum' | 'cmdmomentum'
+        date: Date,
+        type: 'Past' | 'Live',
+        tableType:
+            | 'irmomentum'
+            | 'currencymomentum'
+            | 'commoditiesmomentum'
+            | 'indexmomentum'
     ): Observable<ApiResponse<T>> {
-      return this.http.get<ApiResponse<T>>(
-        `${this.baseUrl}/QuickMonitor/GetQuickMonitorData?date=${date.toISOString()}&type=${type}&tableType=${tableType}`
-      );
+        return this.http.get<ApiResponse<T>>(
+            `${
+                this.baseUrl
+            }/QuickMonitor/GetQuickMonitorData?date=${date.toISOString()}&type=${type}&tableType=${tableType}`
+        );
     }
 }
