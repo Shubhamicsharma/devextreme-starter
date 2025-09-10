@@ -9,7 +9,6 @@ import {
 } from '@angular/router';
 import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { DxHttpModule } from 'devextreme-angular/http';
-import { UnauthenticatedContentComponent } from './unauthenticated-content';
 import { SideNavOuterToolbarComponent as SideNavToolbarComponent } from './layouts';
 import { filter, map } from 'rxjs/operators';
 

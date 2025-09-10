@@ -1,12 +1,16 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import * as XLSX from 'xlsx';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxPopoverModule } from 'devextreme-angular/ui/popover';
 import { QuickMonitorService } from '../../../shared/core/quick-monitor/quick-monitor.service';
-import { RatesTrendMonitorModel } from '../../../shared/core/quick-monitor/quick-monitor.model';
+import {
+    QuickMonitorDataResponse,
+    RatesTrendMonitorModel,
+} from '../../../shared/core/quick-monitor/quick-monitor.model';
+import { DxDateBoxModule } from 'devextreme-angular/ui/date-box';
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 
 interface ColumnConfig {
     field: keyof RatesTrendMonitorModel | 'Empty';
@@ -24,7 +28,13 @@ interface ColumnConfig {
 @Component({
     selector: 'app-rates-trend-monitor',
     standalone: true,
-    imports: [CommonModule, DxButtonModule, DxPopoverModule],
+    imports: [
+        CommonModule,
+        DxButtonModule,
+        DxPopoverModule,
+        DxDateBoxModule,
+        DxSelectBoxModule,
+    ],
     templateUrl: './rates-trend-monitor.html',
     styleUrl: './rates-trend-monitor.scss',
 })
@@ -34,9 +44,15 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
 
     data: RatesTrendMonitorModel[] = [];
     previousData: RatesTrendMonitorModel[] = [];
+    pastData: QuickMonitorDataResponse<RatesTrendMonitorModel>['Data'] = [];
     lastModified: string | null = null;
     private intervalId: any;
     overlayVisible: boolean = false;
+
+    dataType: 'Live' | 'Past' = 'Live';
+    pastDataAvailableTimestamps: { display: string; value: string }[] = [];
+    selectedPastDate: Date = new Date('2025-09-04');
+    selectedTimestamp: string | null = null;
 
     columns: ColumnConfig[] = [
         {
@@ -58,8 +74,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -93,8 +108,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -120,8 +134,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -147,8 +160,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--base-bg-darken-5)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -200,21 +212,125 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
     constructor(private http: HttpClient, private toast: HotToastService) {}
 
     ngOnInit(): void {
-        this.fetchData();
-        this.intervalId = setInterval(() => this.fetchData(), 5000);
+        this.fetchLiveData();
     }
 
-    fetchData(): void {
+    fetchPastData(): void {
+        const formattedDate = formatDate(
+            this.selectedPastDate,
+            'yyyy-MM-dd',
+            'en-US'
+        );
         this.quickMonitorService
-            .getQuickMonitorData<RatesTrendMonitorModel>(new Date('2025-09-04'), 'Rates')
+            .getQuickMonitorData<
+                QuickMonitorDataResponse<RatesTrendMonitorModel>
+            >(new Date(formattedDate), 'Past', 'irmomentum')
             .subscribe({
                 next: (response) => {
-                    this.data = response;
-                    this.previousData = response;
-                    this.lastModified = response.length > 0 ? response[0].Date  : null;
-                    this.toast.success('Successfully fetched latest data.');
+                    this.dataType = 'Past';
+                    if (
+                        Array.isArray(response.Data) &&
+                        response.Data.length > 0
+                    ) {
+                        this.pastData = response.Data;
+                        this.pastDataAvailableTimestamps = response.Data.map(
+                            (item: any) => ({
+                                display: formatDate(
+                                    item.Time,
+                                    'hh:mm a',
+                                    'en-US'
+                                ),
+                                value: item.Time,
+                            })
+                        ).sort(
+                            (a, b) =>
+                                new Date(a.value).getTime() -
+                                new Date(b.value).getTime()
+                        );
+
+                        if (this.pastDataAvailableTimestamps.length > 0) {
+                            this.selectedTimestamp =
+                                this.pastDataAvailableTimestamps[0].value;
+                            const firstDataPoint = response.Data[0];
+                            this.data = firstDataPoint.Data;
+                            this.lastModified = new Date(
+                                firstDataPoint.Time
+                            ).toISOString();
+                        }
+
+                        this.toast.success('Successfully fetched past data.');
+                    } else {
+                        this.data = [];
+                        this.pastData = [];
+                        this.pastDataAvailableTimestamps = [];
+                        this.toast.info(
+                            'No past data available for this date.'
+                        );
+                    }
+                },
+                error: () => {
+                    this.toast.error('Failed to fetch past data.');
                 },
             });
+    }
+
+    fetchLiveData(): void {
+        const toastId = 'live-data-toast';
+
+        this.quickMonitorService
+            .getQuickMonitorData<
+                QuickMonitorDataResponse<RatesTrendMonitorModel>
+            >(new Date(), 'Live', 'irmomentum')
+            .subscribe({
+                next: (response: any) => {
+                    console.log(response);
+                    this.dataType = response.Type;
+
+                    // In response.Data, If size is 0, show no data toast
+                    // Else there will be 2 items, you need to sort them by time, and newer one is current, older one is previous
+                    if (response.Data.length === 0) {
+                        this.toast.info('No live data available.', {
+                            id: toastId,
+                        });
+                        return;
+                    }
+
+                    response.Data.sort(
+                        (a: any, b: any) =>
+                            new Date(b.Time).getTime() -
+                            new Date(a.Time).getTime()
+                    );
+
+                    if (response.Data.length > 1) {
+                        this.previousData = response.Data[1].Data;
+                        this.data = response.Data[0].Data;
+                    }
+
+                    this.lastModified = response.Data[0].Time;
+                    this.toast.success('Successfully fetched live data.', {
+                        id: toastId,
+                    });
+                },
+                error: () => {
+                    this.toast.error('Failed to fetch live data.', {
+                        id: toastId,
+                    });
+                },
+            });
+    }
+
+    onPastDateChanged(): void {
+        this.fetchPastData();
+    }
+
+    onTimestampChanged(e: any): void {
+        const selectedData = this.pastData.find(
+            (item) => item.Time === e.value
+        );
+        if (selectedData) {
+            this.data = selectedData.Data;
+            this.lastModified = new Date(selectedData.Time).toISOString();
+        }
     }
 
     ngOnDestroy(): void {
@@ -239,15 +355,20 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
     }
 
     getChange(rowIndex: number, col: string): string {
-        // if (this.previousData.length > rowIndex) {
-        //     const previousValue = this.previousData[rowIndex][col];
-        //     const currentValue = this.data[rowIndex][col];
-        //     if (previousValue < currentValue) {
-        //         return 'pi pi-arrow-up text-green-500';
-        //     } else if (previousValue > currentValue) {
-        //         return 'pi pi-arrow-down text-red-500';
-        //     }
-        // }
+        if (
+            this.dataType === 'Live' &&
+            this.previousData.length > rowIndex &&
+            this.data.length > rowIndex
+        ) {
+            const key = col as keyof RatesTrendMonitorModel;
+            const previousValue = this.previousData[rowIndex][key];
+            const currentValue = this.data[rowIndex][key];
+            if (previousValue < currentValue) {
+                return 'pi pi-arrow-up text-green-500';
+            } else if (previousValue > currentValue) {
+                return 'pi pi-arrow-down text-red-500';
+            }
+        }
         return '';
     }
 

@@ -67,10 +67,11 @@
                             }
                         ],
                         "styles": [
+                            "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
                             "node_modules/devextreme/dist/css/dx.common.css",
-                            "src/dx-styles.scss",
                             "src/variables.scss",
                             "src/tailwind.css",
+                            "src/dx-styles.scss",
                             "src/styles.scss"
                         ],
                         "scripts": []
@@ -107,6 +108,11 @@
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "ssl": true,
+                        "sslCert": "./certs/localhost.pem",
+                        "sslKey": "./certs/localhost-key.pem"
+                    },
                     "configurations": {
                         "production": {
                             "buildTarget": "devextreme-starter:build:production"

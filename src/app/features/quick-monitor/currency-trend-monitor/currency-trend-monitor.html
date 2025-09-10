@@ -1,8 +1,53 @@
 <div>
     <div class="flex justify-between items-center">
         <div class="mb-4">
-            <p class="text-3xl font-bold">FX Trend Monitor</p>
+            <p class="text-2xl font-semibold">FX Trend Monitor</p>
         </div>
+        <div class="flex items-center space-x-4">
+            <dx-button
+                *ngIf="dataType === 'Past'"
+                text="Show Live"
+                type="default"
+                (onClick)="fetchLiveData()"
+            >
+            </dx-button>
+
+            <ng-container *ngIf="dataType === 'Live'">
+                <div class="live-indicator">
+                    <span class="blinking-dot"></span>
+                    <span>Live</span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div class="flex justify-between items-center space-x-4 mb-4">
+        <div class="flex items-center space-x-4">
+            <dx-date-box
+                [(value)]="selectedPastDate"
+                [showClearButton]="true"
+                placeholder="Select a date"
+                (onValueChanged)="onPastDateChanged()"
+                width="150px"
+            >
+            </dx-date-box>
+            <dx-button
+                text="Show Past Data"
+                type="default"
+                (onClick)="fetchPastData()"
+            ></dx-button>
+            <dx-select-box
+                *ngIf="dataType === 'Past' && pastDataAvailableTimestamps.length"
+                [dataSource]="pastDataAvailableTimestamps"
+                displayExpr="display"
+                valueExpr="value"
+                [(value)]="selectedTimestamp"
+                (onValueChanged)="onTimestampChanged($event)"
+                placeholder="Select time"
+                width="150px"
+            >
+            </dx-select-box>
+        </div>
+
         <div class="flex items-center space-x-4">
             <div #buttonWrapper>
                 <dx-button
@@ -51,69 +96,51 @@
         </div>
     </div>
 </div>
-<div class="card bg-[var(--base-bg)] rounded-xl">
-    <div class="card-body">
-        <table class="w-full">
-            <thead>
-                <tr class="table-header">
-                    <th
-                        class="p-2 text-left"
-                        *ngFor="let col of columns"
-                        [ngClass]="(col.headerBgClass ? col.headerBgClass : '') + (col.cellClass ? ' ' + col.cellClass : '')"
-                    >
-                        {{col.header}}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    *ngFor="let rowData of data; let i = index"
-                    class="hover:bg-[var(--ternary-bg)]"
+<div class="shadow-lg bg-[var(--dx-color-main-bg)] rounded-xl">
+    <table class="w-full">
+        <thead>
+            <tr class="table-header">
+                <th
+                    class="p-2 text-left"
+                    *ngFor="let col of columns"
+                    [ngClass]="(col.headerBgClass ? col.headerBgClass : '') + (col.cellClass ? ' ' + col.cellClass : '')"
                 >
-                    <!-- <td
-                        class="p-2"
-                        *ngFor="let col of columns"
-                        [ngClass]="getGradientClass(col, rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
-                    >
-                        <div class="flex items-center">
-                            {{ col.type !== 'number' ? rowData[col.field] :
-                            (rowData[col.field] | number:'1.2-2') }}
-                            <i
-                                *ngIf="col.showChange"
-                                [ngClass]="getChange(i, col.field)"
-                                class="ml-2"
-                            ></i>
-                        </div>
-                    </td> -->
-
-                    <td
-                        class="p-2"
-                        *ngFor="let col of columns"
-                        [ngClass]="getGradientClass(col, rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
-                    >
-                        <div class="flex items-center">
-                            <!-- Custom decimal formatting for Spot/Fwd -->
-                            <ng-container
-                                *ngIf="col.field === 'Spot/Fwd'; else normalCell"
-                            >
-                                {{ rowData[col.field] | number:'1.' +
-                                getDecimalsForCurrency(rowData['Currency']) +
-                                '-' +
-                                getDecimalsForCurrency(rowData['Currency']) }}
-                            </ng-container>
-                            <ng-template #normalCell>
-                                {{ col.type !== 'number' ? rowData[col.field] :
-                                (rowData[col.field] | number:'1.2-2') }}
-                            </ng-template>
-                            <i
-                                *ngIf="col.showChange"
-                                [ngClass]="getChange(i, col.field)"
-                                class="ml-2"
-                            ></i>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                    {{col.header}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                *ngFor="let rowData of data; let i = index"
+                class="hover:bg-[var(--secondary-bg)]"
+            >
+                <td
+                    class="p-2"
+                    *ngFor="let col of columns"
+                    [ngClass]="getGradientClass(col, col.field == 'Empty' ? '' : rowData[col.field]) + (col.cellClass ? ' ' + col.cellClass : '')"
+                >
+                    <div class="flex items-center">
+                        <!-- Custom decimal formatting for Spot/Fwd -->
+                        <ng-container
+                            *ngIf="col.field === 'SpotFwd'; else normalCell"
+                        >
+                            {{ rowData[col.field] | number:'1.' +
+                            getDecimalsForCurrency(rowData['Currency']) + '-' +
+                            getDecimalsForCurrency(rowData['Currency']) }}
+                        </ng-container>
+                        <ng-template #normalCell>
+                            {{ col.field === 'Empty' ? '' : (col.type !==
+                            'number' ? rowData[col.field] : (rowData[col.field]
+                            | number:'1.2-2')) }}
+                        </ng-template>
+                        <i
+                            *ngIf="col.showChange && dataType === 'Live'"
+                            [ngClass]="getChange(i, col.field)"
+                            class="ml-2"
+                        ></i>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

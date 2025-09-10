@@ -2,158 +2,309 @@
 /* src/styles.css */
 
 // Custom Variables for All Themes
-/* Theme: Clay */
-body.clay-light {
+/* Theme: Indigo Night */
+body.indigo-night-light {
     --primary-bg: #ffffff;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
     --text-color: #000;
     --primary-text-color: #000;
     --secondary-text-color: #1a1a1a;
+    --sidebar-bg: color-mix(in srgb, var(--dx-color-primary) 30%, black 70%);
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-body.clay-dark {
+body.indigo-night-dark {
     --primary-bg: #0a0a0a;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
     --text-color: #fff;
     --primary-text-color: #fff;
     --secondary-text-color: #eeeeee;
+    --sidebar-bg: color-mix(
+        in srgb,
+        color-mix(in srgb, var(--dx-color-primary) 60%, white 40%) 40%,
+        black 60%
+    );
+
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-/* Theme: Sage */
-body.sage-light {
+/* Theme: Sunset-Ember */
+body.sunset-ember-light {
     --primary-bg: #ffffff;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
     --text-color: #000;
     --primary-text-color: #000;
     --secondary-text-color: #1a1a1a;
+    --sidebar-bg: color-mix(in srgb, var(--dx-color-primary) 30%, black 70%);
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-body.sage-dark {
+body.sunset-ember-dark {
     --primary-bg: #0a0a0a;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
     --text-color: #fff;
     --primary-text-color: #fff;
     --secondary-text-color: #eeeeee;
+    --sidebar-bg: color-mix(
+        in srgb,
+        color-mix(in srgb, var(--dx-color-primary) 60%, white 40%) 30%,
+        black 70%
+    );
+
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-/* Theme: Amberwood */
-body.amberwood-light {
+/* Theme: emerald-depths */
+body.emerald-depths-light {
     --primary-bg: #ffffff;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
     --text-color: #000;
     --primary-text-color: #000;
     --secondary-text-color: #1a1a1a;
+    --sidebar-bg: color-mix(in srgb, var(--dx-color-primary) 30%, black 70%);
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-body.amberwood-dark {
+body.emerald-depths-dark {
     --primary-bg: #0a0a0a;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
     --text-color: #fff;
     --primary-text-color: #fff;
     --secondary-text-color: #eeeeee;
+    --sidebar-bg: color-mix(
+        in srgb,
+        color-mix(in srgb, var(--dx-color-primary) 70%, white 30%) 50%,
+        black 50%
+    );
+
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-/* Theme: Storm */
-body.storm-light {
+/* Theme: royal-amethyst */
+body.royal-amethyst-light {
     --primary-bg: #ffffff;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
     --text-color: #000;
     --primary-text-color: #000;
     --secondary-text-color: #1a1a1a;
+    --sidebar-bg: color-mix(in srgb, var(--dx-color-primary) 30%, black 70%);
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-body.storm-dark {
+body.royal-amethyst-dark {
     --primary-bg: #0a0a0a;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
     --text-color: #fff;
     --primary-text-color: #fff;
     --secondary-text-color: #eeeeee;
+    --sidebar-bg: color-mix(
+        in srgb,
+        color-mix(in srgb, var(--dx-color-primary) 60%, white 40%) 40%,
+        black 60%
+    );
+
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-/* Theme: Mulberry */
-body.mulberry-light {
+/* Theme: crimson-flame */
+body.crimson-flame-light {
     --primary-bg: #ffffff;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
     --text-color: #000;
     --primary-text-color: #000;
     --secondary-text-color: #1a1a1a;
+    --sidebar-bg: color-mix(in srgb, var(--dx-color-primary) 30%, black 70%);
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-body.mulberry-dark {
+body.crimson-flame-dark {
     --primary-bg: #0a0a0a;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
     --text-color: #fff;
     --primary-text-color: #fff;
     --secondary-text-color: #eeeeee;
+    --sidebar-bg: color-mix(
+        in srgb,
+        color-mix(in srgb, var(--dx-color-primary) 60%, white 40%) 40%,
+        black 60%
+    );
+
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-/* Theme: Tealstone */
-body.tealstone-light {
+/* Theme: amber-glow */
+body.amber-glow-light {
     --primary-bg: #ffffff;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
     --text-color: #000;
     --primary-text-color: #000;
     --secondary-text-color: #1a1a1a;
+    --sidebar-bg: color-mix(in srgb, var(--dx-color-primary) 30%, black 70%);
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-body.tealstone-dark {
+body.amber-glow-dark {
     --primary-bg: #0a0a0a;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
     --text-color: #fff;
     --primary-text-color: #fff;
     --secondary-text-color: #eeeeee;
+    --sidebar-bg: color-mix(
+        in srgb,
+        color-mix(in srgb, var(--dx-color-primary) 60%, white 40%) 40%,
+        black 60%
+    );
+
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-/* Theme: Ochre */
-body.ochre-light {
+/* Theme: teal-abyss */
+body.teal-abyss-light {
     --primary-bg: #ffffff;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
     --text-color: #000;
     --primary-text-color: #000;
     --secondary-text-color: #1a1a1a;
+    --sidebar-bg: color-mix(in srgb, var(--dx-color-primary) 30%, black 70%);
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-body.ochre-dark {
+body.teal-abyss-dark {
     --primary-bg: #0a0a0a;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
     --text-color: #fff;
     --primary-text-color: #fff;
     --secondary-text-color: #eeeeee;
+    --sidebar-bg: color-mix(
+        in srgb,
+        color-mix(in srgb, var(--dx-color-primary) 60%, white 40%) 40%,
+        black 60%
+    );
+
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-/* Theme: Slate Rose */
-body.slaterose-light {
+/* Theme: Coral Blush */
+body.coral-blush-light {
     --primary-bg: #ffffff;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 20%, white 80%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 10%, white 90%);
     --text-color: #000;
     --primary-text-color: #000;
     --secondary-text-color: #1a1a1a;
+    --sidebar-bg: color-mix(in srgb, var(--dx-color-primary) 30%, black 70%);
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
 }
 
-body.slaterose-dark {
+body.coral-blush-dark {
     --primary-bg: #0a0a0a;
     --secondary-bg: color-mix(in srgb, var(--dx-color-primary) 25%, black 75%);
     --ternary-bg: color-mix(in srgb, var(--dx-color-primary) 15%, black 85%);
     --text-color: #fff;
     --primary-text-color: #fff;
     --secondary-text-color: #eeeeee;
-}
+    --sidebar-bg: color-mix(
+        in srgb,
+        color-mix(in srgb, var(--dx-color-primary) 60%, white 40%) 40%,
+        black 60%
+    );
 
+    --sidebar-text-color: #fff;
+    --selected-item-color: color-mix(
+        in srgb,
+        var(--dx-color-primary) 50%,
+        white 50%
+    );
+}
 
 .zero-padding-overlay .dx-popup-content {
     padding: 0 !important;
