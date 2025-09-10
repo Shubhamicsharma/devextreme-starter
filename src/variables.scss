@@ -1,6 +1,7 @@
 @use "sass:meta";
 @use "sass:color";
 @use "sass:map";
+@use "sass:string" as *;
 
 @use "./themes/generated/variables.indigo-night-light.scss" as
     variablesIndigoNightLight;
@@ -35,19 +36,36 @@
 @use "./themes/generated/variables.coral-blush-dark.scss" as
     variablesCoralBlushDark;
 
-@mixin theme-variables($theme-name) {
-    $theme: meta.module-variables($theme-name);
-    $base-text-color: map.get($theme, "base-text-color");
-    $base-bg: map.get($theme, "base-bg");
+// @mixin theme-variables($theme-name) {
+//     $theme: meta.module-variables($theme-name);
+//     $base-text-color: map.get($theme, "base-text-color");
+//     $base-bg: map.get($theme, "base-bg");
 
-    --base-text-color: #{$base-text-color};
-    --base-bg: #{$base-bg};
-    --base-bg-darken-5: #{color.adjust($base-bg, $lightness: -5%)};
-    --base-accent: #{map.get($theme, "base-accent")};
-    --base-text-color-alpha-7: #{rgba(
-            $base-text-color,
-            color.alpha($base-text-color) * 0.7
-        )};
+//     --base-text-color: #{$base-text-color};
+//     --base-bg: #{$base-bg};
+//     --base-bg-darken-5: #{color.adjust($base-bg, $lightness: -5%)};
+//     --base-accent: #{map.get($theme, "base-accent")};
+//     --base-text-color-alpha-7: #{rgba(
+//             $base-text-color,
+//             color.alpha($base-text-color) * 0.7
+//         )};
+// }
+
+/// Convert a SASS variable name ($base-text-color) → CSS variable (--base-text-color)
+@function to-css-var-name($name) {
+    // Check if it starts with `$`
+    @if slice($name, 1, 1) == "$" {
+        @return "--#{slice($name, 2)}";
+    }
+    @return "--#{$name}";
+}
+
+@mixin theme-variables($theme-module) {
+    $theme-vars: meta.module-variables($theme-module);
+
+    @each $name, $value in $theme-vars {
+        #{to-css-var-name($name)}: #{$value};
+    }
 }
 
 :root {

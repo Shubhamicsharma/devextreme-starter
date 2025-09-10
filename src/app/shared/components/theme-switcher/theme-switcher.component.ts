@@ -26,9 +26,9 @@ export class ThemeSwitcherComponent implements OnInit {
     faPalette = faPalette;
 
     colors: ThemeColor[] = [
+      { name: 'Emerald Depths 🍃', key: 'emerald-depths', rgba: 'rgba(52, 199, 89, 1)' },  // Light: #34C759
       { name: 'Indigo Night 🌌', key: 'indigo-night', rgba: 'rgba(75, 61, 191, 1)' },      // Light: #4B3DBF
       { name: 'Sunset Ember 🌅', key: 'sunset-ember', rgba: 'rgba(255, 112, 67, 1)' },     // Light: #FF7043
-      { name: 'Emerald Depths 🍃', key: 'emerald-depths', rgba: 'rgba(52, 199, 89, 1)' },  // Light: #34C759
       { name: 'Royal Amethyst 👑', key: 'royal-amethyst', rgba: 'rgba(155, 81, 224, 1)' }, // Light: #9B51E0
       { name: 'Crimson Flame 🔴', key: 'crimson-flame', rgba: 'rgba(235, 87, 87, 1)' },    // Light: #EB5757
       { name: 'Amber Glow 🌟', key: 'amber-glow', rgba: 'rgba(242, 201, 76, 1)' },         // Light: #F2C94C
@@ -36,7 +36,7 @@ export class ThemeSwitcherComponent implements OnInit {
       { name: 'Coral Blush 🌸', key: 'coral-blush', rgba: 'rgba(255, 111, 145, 1)' },      // Light: #FF6F91
     ];
 
-    selectedColor = 'sage';
+    selectedColor = 'emerald-depths'; // default color
     selectedMode = 'light'; // light or dark
 
     ngOnInit(): void {
@@ -59,6 +59,10 @@ export class ThemeSwitcherComponent implements OnInit {
 
     selectMode(mode: string) {
         this.selectedMode = mode;
+
+        if (mode === 'dark') {
+          this.selectColor('emerald-depths');
+        }
         this.applyTheme();
     }
 
