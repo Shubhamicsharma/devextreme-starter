@@ -24,7 +24,6 @@ import { filter, map } from 'rxjs/operators';
         CommonModule,
         DxHttpModule,
         SideNavToolbarComponent,
-        UnauthenticatedContentComponent,
     ],
     providers: [],
 })

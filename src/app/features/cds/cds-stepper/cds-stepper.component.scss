@@ -1,0 +1,64 @@
+// Enhanced vertical stepper styles using Tailwind + minimal custom CSS
+
+:host ::ng-deep {
+  .custom-vertical-stepper {
+    .dx-stepper-item {
+      margin-bottom: 1.5rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .dx-stepper-item-content {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+        
+        &:hover {
+          border-color: #3b82f6;
+          background-color: #f8fafc;
+        }
+      }
+      
+      &.dx-stepper-item-active .dx-stepper-item-content {
+        border-color: #3b82f6;
+        background-color: #eff6ff;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+      
+      &.dx-stepper-item-completed .dx-stepper-item-content {
+        border-color: #10b981;
+        background-color: #f0fdf4;
+      }
+    }
+  }
+  
+  // DevExtreme component smooth transitions
+  .dx-button {
+    transition: all 0.2s ease;
+  }
+  
+  .dx-multiview-item {
+    min-height: 400px;
+  }
+}
+
+.zero-padding-overlay {
+  .dx-popup-content {
+    padding: 0 !important;
+  }
+}
+
+.zero-border-overlay {
+  .dx-popup-content {
+    border: none;
+  }
+
+  .zero-title-overlay {
+    .dx-popup-title {
+
+      padding: 0 !important;
+    }
+}
+  }

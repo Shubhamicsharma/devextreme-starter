@@ -2,6 +2,12 @@
     /* Add custom styles here */
 }
 
+:host ::ng-deep {
+    .dx-card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
 
 :host ::ng-deep .custom-popup-wrapper .dx-overlay-content .dx-popup-content {
   padding: 0 !important;

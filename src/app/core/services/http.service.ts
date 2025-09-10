@@ -1,11 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError, map } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { Credentials } from '../auth/auth.service';
 import { CommonCacheEnum } from '../../shared/core/cache/cache.enum';
 import { RatesTrendMonitor } from '../../features/quick-monitor/rates-trend-monitor/rates-trend-monitor';
+import { AllocationTemplateResponse, AllocationTemplate } from '../models/allocation-template.model';
 
 @Injectable({
     providedIn: 'root',
@@ -61,4 +62,12 @@ export class RVHttpService {
             `${this.baseUrl}/MarketData/GetQuickMonitorData?date=${date.toISOString()}&type=${type}`
         );
     }
+
+    // Allocation Templates
+    public getAllocationTemplates(): Observable<AllocationTemplateResponse> {
+        return this.http.get<AllocationTemplateResponse>(
+            `${this.baseUrl}/Cache/GetAllocationTemplate`
+        );
+    }
+
 }

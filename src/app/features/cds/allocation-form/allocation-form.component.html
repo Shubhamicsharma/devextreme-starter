@@ -1,0 +1,138 @@
+
+<div class="p-3">
+  <div class="mb-6">
+    <div class="flex flex-wrap items-end gap-4">
+      <div class="flex-1 min-w-80">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Select Template</label>
+        <div class="flex gap-3 items-end">
+          <dx-select-box
+            [items]="templates"
+            displayExpr="TemplateName"
+            valueExpr="Id"
+            [(value)]="selectedTemplate"
+            [width]="320"
+            [disabled]="isLoadingTemplates"
+            [placeholder]="isLoadingTemplates ? 'Loading templates...' : 'Choose a template...'"
+            [searchEnabled]="true"
+            [showClearButton]="true"
+            >
+          </dx-select-box>
+          <dx-button 
+            text="Load Template"
+            type="default"
+            stylingMode="contained"
+            icon="import"
+            [width]="150"
+            [height]="34"
+            (onClick)="loadTemplate()"
+            [disabled]="!selectedTemplate || isLoadingTemplates"
+            hint="Load the selected template">
+          </dx-button>
+          <dx-button 
+            text="Refresh"
+            type="normal"
+            stylingMode="outlined"
+            icon="refresh"
+            [width]="120"
+            [height]="34"
+            (onClick)="loadTemplatesFromAPI()"
+            [disabled]="isLoadingTemplates"
+            hint="Refresh templates from server">
+          </dx-button>
+        </div>
+      </div>
+   
+    </div>
+  </div>
+  <div class="">
+    <dx-data-grid
+      [dataSource]="allocationData"
+      [showBorders]="true"
+      [rowAlternationEnabled]="true"
+      [columnAutoWidth]="true"
+      [hoverStateEnabled]="true"
+      class="rounded-lg border border-gray-200 auto-height-grid">
+      
+      <dxo-paging [enabled]="false"></dxo-paging>
+      <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+
+      <dxi-column 
+        dataField="account" 
+        caption="Account" 
+        [width]="100"
+        alignment="left">
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="notional" 
+        caption="Notional" 
+        dataType="number"
+        format="#,##0.00"
+        alignment="right">
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="notionalPercent" 
+        caption="Notional %" 
+        dataType="number"
+        format="#,##0.00"
+        alignment="right">
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="receiveNotional" 
+        caption="Receive Notional" 
+        dataType="number"
+        format="#,##0.00"
+        alignment="right">
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="payNotional" 
+        caption="Pay Notional" 
+        dataType="number"
+        format="#,##0.00"
+        alignment="right">
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="upfront" 
+        caption="Upfront" 
+        dataType="number" 
+        format="#,##0.0000"
+        alignment="right">
+      </dxi-column>
+
+      <dxi-column 
+        caption="Actions" 
+        [width]="100" 
+        cellTemplate="actionCell"
+        alignment="center">
+      </dxi-column>
+
+      <div *dxTemplate="let data of 'actionCell'">
+        <div class="flex justify-center gap-1">
+          <dx-button 
+            icon="plus" 
+            stylingMode="text" 
+            type="success" 
+            [height]="'30%'" 
+            [width]="'auto'"
+            hint="Add Row"
+            class="custom-icon-size"
+            >
+          </dx-button>
+          <dx-button 
+            icon="trash" 
+            stylingMode="text" 
+            type="danger" 
+               [height]="'30%'" 
+            [width]="'auto'"
+            hint="Delete Row"
+              class="custom-icon-size">
+          </dx-button>
+        </div>
+      </div>
+    </dx-data-grid>
+  </div>
+</div>

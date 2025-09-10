@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { RVHttpService } from '../../../core/services/http.service';
 import { CommonCacheDictionaryEnum, CommonCacheEnum } from '../../../shared/core/cache/cache.enum';
 import DataSource from 'devextreme/data/data_source';
@@ -64,7 +64,8 @@ interface FormFields {
     styleUrls: ['./cds-options.component.scss'],
 })
 export class CDSOptionsComponent implements OnInit {
-    showModal = false;
+    @Output() navigateToNext = new EventEmitter<void>();
+    
     tradeForm: FormGroup;
     subscription: Subscription = new Subscription();
 
@@ -568,7 +569,7 @@ export class CDSOptionsComponent implements OnInit {
                     },
                     type: 'success',
                 });
-                this.closeModal();
+                // Form submitted successfully - parent stepper will handle navigation
             });
         } else {
             this.tradeForm.markAllAsTouched();
@@ -586,38 +587,22 @@ export class CDSOptionsComponent implements OnInit {
     onSave() {
         // Implement save logic
         notify({
-            message: 'Trade saved as draft',
+            message: 'Trade saved and moving to allocation step',
             position: {
                 my: 'center top',
                 at: 'center top',
             },
+            type: 'success',
         });
+        
+        // Navigate to next step
+        this.navigateToNext.emit();
     }
 
     onPreview() {
         // Implement preview logic
         const previewData = this.tradeForm.value;
         console.log('Preview:', previewData);
-    }
-
-    openModal() {
-        this.showModal = true;
-    }
-
-    closeModal() {
-        if (this.tradeForm.dirty) {
-            confirm(
-                'Are you sure you want to close? Any unsaved changes will be lost.',
-                'Confirm close',
-            ).then((result) => {
-                if (result) {
-                    this.showModal = false;
-                    this.tradeForm.reset();
-                }
-            });
-        } else {
-            this.showModal = false;
-        }
     }
 
     ngOnInit(): void {
@@ -843,6 +828,16 @@ export class CDSOptionsComponent implements OnInit {
         //     }));
         //     brokerPayAccountField.dataSource = this.brokerPayAccountDataSource;
         // }
+    }
+
+    // Method to check if the form is valid for the stepper
+    isFormValid(): boolean {
+        return this.tradeForm.valid;
+    }
+
+    // Method to get form data for the stepper
+    getFormData(): any {
+        return this.tradeForm.value;
     }
 
 }

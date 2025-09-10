@@ -1,19 +1,10 @@
-<dx-button stylingMode="contained" text="Open CDS Options Form" type="default" (onClick)="openModal()" [width]="200"
-    icon="folder" class="mb-4">
-</dx-button>
-
-
-<dx-popup [visible]="showModal" [showTitle]="true" title="CDS Options Form" [hideOnOutsideClick]="false"
-    [showCloseButton]="true" [width]="1000" [height]="'90vh'" (onHiding)="closeModal()" [dragEnabled]="true"
-    [resizeEnabled]="true" [wrapperAttr]="{ class: 'zero-padding-overlay zero-border-overlay' }">
-    <dx-scroll-view [height]="'80vh'" [scrollByContent]="true" [scrollByThumb]="true" class="p-3">
-        <div class="dx-card p-3">
-            <div class="flex-1 overflow-y-auto">
-                <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()" class="space-y-3">
+<!-- CDS Options Form Content - Used within Stepper -->
+<div class="dx-card p-3">
+    <div class="flex-1 overflow-y-auto">
+        <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()" class="space-y-1">
                     <!-- basic details -->
                     <section>
                         <div class="flex items-center gap-0.5 mb-2">
-                            <span class="text-green-600">📊</span>
                             <span class="text-md font-semibold ">Basic Information</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
@@ -32,21 +23,22 @@
                                                 message="This field is required"></dxi-validation-rule>
                                         </dx-validator>
                                     </dx-text-box>
-                                    <ng-container [ngSwitch]="field.type">
-                                        <div *ngSwitchCase="'radio'"
-                                            class="flex justify-start items-center p-1 rounded-lg w-full">
 
-                                            <dx-radio-group [items]="field.options ?? []" displayExpr="name"
-                                                valueExpr="id" layout="horizontal" [width]="'100%'">
-                                            </dx-radio-group>
-
-                                            <div *dxTemplate="let item of 'radioItem'"
+                                    <div *ngSwitchCase="'radio'" class="w-full h-[30px] flex items-center">
+                                        <dx-radio-group 
+                                            [elementAttr]="{ class: 'zero-margin-radio' }"
+                                            [formControlName]="field.name"
+                                            [items]="field.options ?? []" 
+                                            displayExpr="name"
+                                            valueExpr="id" 
+                                            layout="horizontal" 
+                                            [width]="'100%'">
+                                        </dx-radio-group>
+                                    </div>
+   <!-- <div *dxTemplate="let item of 'radioItem'"
                                                 style="flex:1; text-align:center; min-width:0; display:flex; align-items:center; justify-content:center;">
                                                 {{ item.name }}
-                                            </div>
-                                        </div>
-                                    </ng-container>
-
+                                            </div> -->
 
                                     <dx-select-box *ngSwitchCase="'select'" [formControlName]="field.name"
                                         [dataSource]="field.options ? field.options : (field.dataSource ?? [])"
@@ -86,7 +78,6 @@
                     <!-- Section: Options Details -->
                     <section>
                         <div class="flex items-center gap-0.5 mb-2">
-                            <span class="text-green-600">📊</span>
                             <span class="text-md font-semibold ">Options Details</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
@@ -139,7 +130,6 @@
                     <!-- Section: CDS Details -->
                     <section>
                         <div class="flex items-center gap-0.5 mb-2">
-                            <span class="text-purple-600">🔄</span>
                             <span class="text-md font-semibold ">CDS Details</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
@@ -191,38 +181,12 @@
                                     </dx-text-box>
                                 </ng-container>
                             </div>
-                        </div>
-                        <!-- <div class="mt-1">
-                          <div class="mt-1 relative">
-                              <label
-                                  class="block text-xs font-semibold mb-1"
-                              >
-                                  Trade Rationale<span class="text-red-500"
-                                      >*</span
-                                  >
-                              </label>
-                              <dx-text-area
-                                  formControlName="tradeRationale"
-                                  [placeholder]="'Trade Rational'"
-                                  [stylingMode]="'outlined'"
-                                  [height]="60"
-                                  [width]="'100%'"
-                              >
-                                  <dx-validator>
-                                      <dxi-validation-rule
-                                          type="required"
-                                          message="This field is required"
-                                      ></dxi-validation-rule> </dx-validator
-                              ></dx-text-area>
-                          </div>
-                      </div> -->
-                    </section>
+                        </div>  </section>
 
                     <!-- Section: Trade Operations -->
 
                     <section>
                         <div class="flex items-center gap-0.5 mb-2">
-                            <span class="text-orange-500">⚙️</span>
                             <span class="text-md font-semibold ">Trade Operations</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
@@ -270,27 +234,21 @@
                         </div>
                     </section>
                     <!-- Action Buttons -->
-                    <div class="flex justify-end gap-2 mt-4">
+                    <!-- <div class="flex justify-end gap-2 mt-4">
                         <dx-button text="Reset" stylingMode="outlined" type="normal" [width]="100" icon="refresh"
                             (onClick)="tradeForm.reset()">
                         </dx-button>
 
-                        <dx-button text="Save" stylingMode="contained" type="success" [width]="100" icon="save"
+                        <dx-button text="Allocate" stylingMode="contained" type="success" [width]="130" icon="save"
                             (onClick)="onSave()">
                         </dx-button>
 
                         <dx-button text="Preview" stylingMode="contained" type="default" [width]="120" icon="eyeopen"
                             (onClick)="onPreview()">
                         </dx-button>
-
-                        <dx-button text="Submit" stylingMode="contained" type="default" [width]="100" icon="check"
-                            (onClick)="onSubmit()" [useSubmitBehavior]="true">
-                        </dx-button>
-                    </div>
+                    </div> -->
 
                     <dx-validation-summary></dx-validation-summary>
                 </form>
             </div>
         </div>
-    </dx-scroll-view>
-</dx-popup>

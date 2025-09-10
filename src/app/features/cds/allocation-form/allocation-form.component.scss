@@ -1,0 +1,58 @@
+// allocation-form.component.scss
+// Minimal custom styles - using Tailwind for everything else
+
+:host ::ng-deep {
+  // Only DevExtreme-specific styling that can't be handled with Tailwind
+  .dx-datagrid {
+    .dx-datagrid-rowsview .dx-row {
+      transition: background-color 0.2s ease;
+    }
+    
+    // Reduce cell padding
+    .dx-datagrid-headers .dx-header-row > td,
+    .dx-datagrid-rowsview .dx-row > td {
+      padding: 4px 8px !important;
+    }
+    
+    // Reduce header padding specifically
+    .dx-datagrid-headers .dx-header-row > td {
+      padding: 6px 8px !important;
+    }
+    
+    // Reduce row height
+    .dx-datagrid-rowsview .dx-row {
+      min-height: 32px;
+    }
+  }
+  
+  // Auto height grid - sizes based on content
+  .auto-height-grid {
+    .dx-datagrid {
+      height: auto !important;
+      
+      .dx-datagrid-rowsview {
+        height: auto !important;
+        max-height: none !important;
+      }
+      
+      .dx-scrollable-content {
+        height: auto !important;
+      }
+      
+      .dx-scrollview-content {
+        height: auto !important;
+      }
+    }
+  }
+  
+  // Custom icon size for buttons
+  .custom-icon-size {
+    .dx-icon {
+      font-size: 16px !important; // Adjust this value as needed
+    }
+  }
+  
+  .dx-button {
+    transition: all 0.2s ease;
+  }
+}

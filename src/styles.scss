@@ -162,3 +162,12 @@ body.slaterose-dark {
 .zero-border-overlay .dx-popup-content .dx-card {
     border: none !important;
 }
+
+.zero-margin-radio .dx-radiobutton {
+    margin: 0 !important;
+}
+
+.zero-title-popup .dx-popup-title {
+    // display: none !important;
+    padding: 0 !important;
+}

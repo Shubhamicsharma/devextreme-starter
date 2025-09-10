@@ -1,7 +1,7 @@
 export const navigation = [
     {
-        text: 'CdsOptions',
-        path: '/cds/cds-option',
+        text: 'CDS Demo',
+        path: '/cds',
         icon: 'fas fa-cog',
     },
     {
