@@ -60,10 +60,6 @@
                 font-weight: 600;
             }
 
-            &:hover:not(.selected) > .nav-item-content {
-                background: var(--list-item-hover-bg);
-            }
-
             .nav-item-content {
                 display: flex;
                 align-items: center;
