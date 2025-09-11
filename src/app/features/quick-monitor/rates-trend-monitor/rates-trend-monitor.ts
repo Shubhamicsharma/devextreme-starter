@@ -304,6 +304,8 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
                     if (response.Data.length > 1) {
                         this.previousData = response.Data[1].Data;
                         this.data = response.Data[0].Data;
+
+                        console.log(this.previousData);
                     }
 
                     this.lastModified = response.Data[0].Time;
@@ -355,6 +357,7 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
     }
 
     getChange(rowIndex: number, col: string): string {
+        console.log('Called');
         if (
             this.dataType === 'Live' &&
             this.previousData.length > rowIndex &&
@@ -364,9 +367,9 @@ export class RatesTrendMonitor implements OnInit, OnDestroy {
             const previousValue = this.previousData[rowIndex][key];
             const currentValue = this.data[rowIndex][key];
             if (previousValue < currentValue) {
-                return 'pi pi-arrow-up text-green-500';
+                return 'fa-solid fa-arrow-up text-green-500';
             } else if (previousValue > currentValue) {
-                return 'pi pi-arrow-down text-red-500';
+                return 'fa-solid fa-arrow-down text-red-500';
             }
         }
         return '';

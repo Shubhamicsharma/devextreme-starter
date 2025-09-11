@@ -64,6 +64,11 @@
                                 "glob": "**/*",
                                 "input": "assets",
                                 "output": "assets"
+                            },
+                            {
+                              "glob": "web.config",
+                              "input": "src",
+                              "output": ""
                             }
                         ],
                         "styles": [
@@ -86,8 +91,8 @@
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "8kB",
-                                    "maximumError": "16kB"
+                                    "maximumWarning": "512kb",
+                                    "maximumError": "1024kb"
                                 }
                             ],
                             "outputHashing": "all"

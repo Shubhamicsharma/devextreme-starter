@@ -1,0 +1,24 @@
+.badge {
+    background-color: #f5f6fa; // Light background
+    color: #22223b; // Default dark text
+    border: none;
+    display: inline-block;
+    min-width: 60px;
+    text-align: center;
+    transition:
+        background 0.2s,
+        color 0.2s;
+}
+
+// Admin badge
+.badge-admin {
+    background-color: #e3f2fd; // Light blue
+    color: #1565c0; // Dark blue
+}
+
+// Super Admin badge
+.badge-superadmin {
+    background-color: #fff3e0; // Light orange
+    color: #e65100; // Dark orange
+}
+

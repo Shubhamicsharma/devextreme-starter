@@ -19,7 +19,7 @@ import { environment } from '../../../../environments/environment';
  */
 export const authInterceptor = (
     req: HttpRequest<unknown>,
-    next: HttpHandlerFn,
+    next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
     const authService = inject(AuthService);
     const router = inject(Router);
@@ -40,11 +40,7 @@ export const authInterceptor = (
     if (authService.securityKey) {
         newReq = req.clone({
             headers: req.headers
-                // .set('Authorization', 'Bearer ' + authService.securityKey)
-                .set(
-                    'Authorization',
-                    'Bearer ' + '6Dt6leCsTQsS0h8Y5h4zrdXoNAlgHTXvi23',
-                )
+                .set('Authorization', 'Bearer ' + authService.securityKey)
                 .set('BlotterClientVersion', blotterClientVersion)
                 .set('Access-Control-Allow-Origin', '*'),
         });
@@ -58,13 +54,13 @@ export const authInterceptor = (
                 // Sign out
                 // authService.signOut();
                 localStorage.removeItem('securityKey');
-                router.navigate(['/auth/login']);
+                router.navigate(['/login']);
 
                 // Reload the app
                 // location.reload();
             }
 
             return throwError(error);
-        }),
+        })
     );
 };

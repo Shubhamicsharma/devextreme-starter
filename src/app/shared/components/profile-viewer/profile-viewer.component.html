@@ -1,0 +1,45 @@
+<div class="relative inline-block text-left">
+    <!-- Profile Icon Button -->
+    <button
+        type="button"
+        class="w-6 h-6 rounded-full flex items-center justify-center bg-[var(--dx-color-primary)] shadow-md cursor-pointer"
+        (click)="toggleDropdown()"
+    >
+        <fa-icon [icon]="faUser" class="text-white"></fa-icon>
+    </button>
+
+    <!-- Dropdown -->
+    <div
+        *ngIf="showDropdown"
+        class="absolute right-0 mt-2 w-72 bg-[var(--base-bg)] border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50"
+    >
+        <div class="p-5 flex flex-col items-center">
+            <div class="mb-2 text-base font-semibold welcome-text">
+                Welcome to Atlas - RV Capital
+            </div>
+            <div class="flex flex-col items-center gap-1">
+                <div class="font-bold text-lg">{{ user?.DisplayName }}</div>
+                <div class="text-sm user-email">{{ user?.Email }}</div>
+                <span
+                    *ngIf="user?.Role"
+                    [ngClass]="getRoleBadgeClass(user?.Role)"
+                    class="mt-2"
+                >
+                    {{ user?.Role }}
+                </span>
+            </div>
+        </div>
+        <div class="border-t border-gray-200 dark:border-gray-700 mx-5"></div>
+        <div class="py-4 flex justify-center">
+            <dx-button
+              text="Sign Out"
+              icon="fa-solid fa-right-from-bracket"
+              [rtlEnabled]="true"
+              stylingMode="contained"
+              type="normal"
+              class="px-6 py-2 bg-[var(--dx-color-primary)] text-[var(--text-color)] rounded-lg font-semibold shadow"
+              (onClick)="signOut()"
+            ></dx-button>
+        </div>
+    </div>
+</div>

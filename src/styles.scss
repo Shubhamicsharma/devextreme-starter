@@ -306,10 +306,18 @@ body.coral-blush-dark {
     );
 }
 
+:root {
+    color-scheme: light dark; /* Or dark light */
+}
+
 .zero-padding-overlay .dx-popup-content {
     padding: 0 !important;
 }
 
 .zero-border-overlay .dx-popup-content .dx-card {
     border: none !important;
+}
+
+.dx-checkbox-checked .dx-checkbox-icon {
+    color: light-dark(#000, #fff);
 }

@@ -9,6 +9,7 @@ import {
 } from './shared/services';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import { provideAuth } from './core/auth/auth.provider';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -17,7 +18,10 @@ export const appConfig: ApplicationConfig = {
         AuthGuardService,
         AuthService,
         ScreenService,
-        AppInfoService, provideHotToastConfig(),
+        AppInfoService,
+        provideHotToastConfig(),
         provideAuth(),
+        JwtHelperService,
+        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     ],
 };

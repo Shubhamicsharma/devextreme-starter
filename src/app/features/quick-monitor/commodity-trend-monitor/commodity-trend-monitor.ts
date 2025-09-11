@@ -73,8 +73,7 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -108,8 +107,7 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -135,8 +133,7 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -162,8 +159,7 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             field: 'Empty',
             header: '',
             gradientConfigKey: 'default',
-            cellClass:
-                '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
+            cellClass: '!w-[15px] !border-b-0 !px-0 !bg-[var(--ternary-bg)]',
             type: 'string',
             showChange: false,
         },
@@ -364,9 +360,9 @@ export class CommodityTrendMonitor implements OnInit, OnDestroy {
             const previousValue = this.previousData[rowIndex][key];
             const currentValue = this.data[rowIndex][key];
             if (previousValue < currentValue) {
-                return 'pi pi-arrow-up text-green-500';
+                return 'fa-solid fa-arrow-up text-green-500';
             } else if (previousValue > currentValue) {
-                return 'pi pi-arrow-down text-red-500';
+                return 'fa-solid fa-arrow-down text-red-500';
             }
         }
         return '';

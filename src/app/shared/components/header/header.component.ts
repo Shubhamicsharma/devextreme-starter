@@ -8,7 +8,7 @@ import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.compone
 import { User } from 'devextreme/ui/chat';
 // import { AuthService } from '../../../core/auth/auth.service';
 import { DxButtonModule } from 'devextreme-angular';
-// import { ProfileViewerComponent } from '../profile-viewer/profile-viewer.component';
+import { ProfileViewerComponent } from '../profile-viewer/profile-viewer.component';
 @Component({
     selector: 'app-header',
     templateUrl: 'header.component.html',
@@ -18,7 +18,7 @@ import { DxButtonModule } from 'devextreme-angular';
         NgIf,
         ThemeSwitcherComponent,
         DxButtonModule,
-        // ProfileViewerComponent,
+        ProfileViewerComponent,
     ],
 })
 export class HeaderComponent implements OnInit {
@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
     onLogout() {
         // this.authService.signOut().subscribe(
         //     () => {
-        //         this.router.navigate(['/auth/login']);
+        //         this.router.navigate(['/login']);
         //     },
         //     (error: Error) => {
         //         console.error('Logout failed', error);

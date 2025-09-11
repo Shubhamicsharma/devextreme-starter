@@ -1,81 +1,79 @@
 <div class="login-container">
     <div class="left-pane">
-        <div class="logo-container">
+        <div class="flex flex-col items-center justify-center gap-4">
             <img
-                src="assets/images/logo/rv-capital-logo.svg"
+                src="assets/images/logo/white-logo.svg"
                 alt="RV Capital Logo"
             />
-            <h1>Welcome Back</h1>
-            <p>Enter your credentials to access your account.</p>
+            <p class="text-2xl text-[var(--text-color)]">Welcome Back</p>
+            <p class="text-lg text-[var(--text-color)]">
+                Enter your credentials to access your account.
+            </p>
         </div>
         <div class="background-shape"></div>
     </div>
     <div class="right-pane">
         <div class="login-form-container">
             <h2>Login</h2>
-            <form (submit)="onLoginClick($event)">
-                <dx-validation-group>
-                    <div class="form-field">
-                        <label for="email">Email</label>
-                        <dx-text-box
-                            mode="email"
-                            placeholder="Enter your email"
-                            [showClearButton]="true"
-                            stylingMode="filled"
-                        >
-                            <dx-validator>
-                                <dxi-validation-rule
-                                    type="required"
-                                    message="Email is required"
-                                ></dxi-validation-rule>
-                                <dxi-validation-rule
-                                    type="email"
-                                    message="Email is invalid"
-                                ></dxi-validation-rule>
-                            </dx-validator>
-                        </dx-text-box>
-                    </div>
-
-                    <div class="form-field">
-                        <label for="password">Password</label>
-                        <dx-text-box
-                            mode="password"
-                            placeholder="Enter your password"
-                            [showClearButton]="true"
-                            stylingMode="filled"
-                        >
-                            <dx-validator>
-                                <dxi-validation-rule
-                                    type="required"
-                                    message="Password is required"
-                                ></dxi-validation-rule>
-                            </dx-validator>
-                        </dx-text-box>
-                    </div>
-
-                    <div class="options">
-                        <dx-check-box
-                            text="Remember me"
-                            [value]="true"
-                        ></dx-check-box>
-                        <a routerLink="/forgot-password" class="forgot-password"
-                            >Forgot password?</a
-                        >
-                    </div>
-
-                    <dx-button
-                        text="Login"
-                        type="default"
-                        [useSubmitBehavior]="true"
-                        width="100%"
-                        height="48px"
-                        stylingMode="contained"
-                        class="login-button"
+            <form [formGroup]="loginForm" (ngSubmit)="onLoginClick()">
+                <div class="form-field">
+                    <label for="email">Email</label>
+                    <dx-text-box
+                        formControlName="email"
+                        mode="email"
+                        placeholder="Enter your email"
+                        [showClearButton]="true"
+                        stylingMode="filled"
+                        [inputAttr]="{ autocomplete: 'off' }"
+                    ></dx-text-box>
+                    <div
+                        *ngIf="hasError('email', 'required')"
+                        class="error-message"
                     >
-                    </dx-button>
-                </dx-validation-group>
+                        Email is required
+                    </div>
+                    <div
+                        *ngIf="hasError('email', 'email')"
+                        class="error-message"
+                    >
+                        Email is invalid
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <dx-text-box
+                        formControlName="password"
+                        mode="password"
+                        placeholder="Enter your password"
+                        [showClearButton]="true"
+                        stylingMode="filled"
+                        [inputAttr]="{ autocomplete: 'new-password' }"
+                    ></dx-text-box>
+                    <div
+                        *ngIf="hasError('password', 'required')"
+                        class="error-message"
+                    >
+                        Password is required
+                    </div>
+                    <div
+                        *ngIf="hasError('password', 'minlength')"
+                        class="error-message"
+                    >
+                        Password must be at least 6 characters long
+                    </div>
+                </div>
+
+                <dx-button
+                    text="Login"
+                    type="default"
+                    [useSubmitBehavior]="true"
+                    width="100%"
+                    height="48px"
+                    stylingMode="contained"
+                    class="login-button"
+                ></dx-button>
             </form>
-            
         </div>
     </div>
 </div>

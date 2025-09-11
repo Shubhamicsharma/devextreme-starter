@@ -1,9 +1,17 @@
-export const navigation = [
-    {
-        text: 'CdsOptions',
-        path: '/cds/cds-option',
-        icon: 'fas fa-cog',
-    },
+export interface NavigationItem {
+    text: string;
+    roles?: string[];
+    path?: string;
+    icon?: string;
+    items?: NavigationItem[];
+}
+
+export const navigation: NavigationItem[] = [
+    // {
+    //     text: 'CdsOptions',
+    //     path: '/cds/cds-option',
+    //     icon: 'fas fa-cog',
+    // },
     {
         text: 'Quick Monitor',
         icon: 'fas fa-chart-line',

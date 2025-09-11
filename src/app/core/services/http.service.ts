@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { catchError, Observable, tap, throwError } from 'rxjs';
@@ -13,12 +13,20 @@ import { RatesTrendMonitor } from '../../features/quick-monitor/rates-trend-moni
 export class RVHttpService {
     private http = inject(HttpClient);
 
+    private httpBackend = inject(HttpBackend);
+    private httpNoInterceptor: HttpClient;
+
     // Base API URL
     private baseUrl = environment.apiUrl;
 
+    constructor() {
+        // Create HttpClient instance that bypasses interceptors
+        this.httpNoInterceptor = new HttpClient(this.httpBackend);
+    }
+
     // Auth
     public login(credentials: Credentials): Observable<ApiResponse<any>> {
-        return this.http.post<ApiResponse<any>>(
+        return this.httpNoInterceptor.post<ApiResponse<any>>(
             `${this.baseUrl}/Auth/Login`,
             credentials
         );

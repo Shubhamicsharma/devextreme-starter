@@ -11,12 +11,12 @@ export class ThemeService {
 
   // ✅ List of available themes
   readonly allThemes = [
+    'emerald-depths.light',
+    'emerald-depths.dark',
     'indigo-night.light',
     'indigo-night.dark',
     'sunset-ember.light',
     'sunset-ember.dark',
-    'emerald-depths.light',
-    'emerald-depths.dark',
     'royal-amethyst.light',
     'royal-amethyst.dark',
     'crimson-flame.light',

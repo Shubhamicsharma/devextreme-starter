@@ -64,9 +64,9 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
 
         // If compact mode is on, show small logo, else show large logo
         if (this._compactMode) {
-            this.logoUrl = 'assets/images/logo/rv-logo-small.png';
+            this.logoUrl = 'assets/images/logo/white-logomark.svg';
         } else {
-            this.logoUrl = 'assets/images/logo/rv-capital-logo.svg';
+            this.logoUrl = 'assets/images/logo/white-logo.svg';
         }
 
         // Update expansion state
