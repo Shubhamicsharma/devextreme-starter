@@ -15,7 +15,9 @@ import {
     DxScrollViewModule,
     DxLoadIndicatorModule,
     DxRadioGroupModule,
-    DxSwitchModule
+    DxSwitchModule,
+    DxAccordionModule,
+    DxCheckBoxModule
 } from 'devextreme-angular';
 import { confirm } from 'devextreme/ui/dialog';
 import notify from 'devextreme/ui/notify';
@@ -58,7 +60,9 @@ interface FormFields {
         DxScrollViewModule,
         DxLoadIndicatorModule,
         DxRadioGroupModule,
-        DxSwitchModule
+        DxSwitchModule,
+        DxAccordionModule,
+        DxCheckBoxModule
     ],
     templateUrl: './cds-options.component.html',
     styleUrls: ['./cds-options.component.scss'],
@@ -68,6 +72,12 @@ export class CDSOptionsComponent implements OnInit {
     
     tradeForm: FormGroup;
     subscription: Subscription = new Subscription();
+
+    // Accordion configuration
+    accordionMultiple = true; // Always allow multiple sections open
+    accordionCollapsible = true;
+    accordionSections: any[] = [];
+    selectedAccordionItems: any[] = []; // Will be populated in ngOnInit
 
     // Data sources for select boxes
     accountsDataSource: DataSource = new DataSource({
@@ -187,7 +197,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-          {
+            {
             name: 'tradeAction',
             label: 'Trade Action',
             type: 'radio',
@@ -200,23 +210,23 @@ export class CDSOptionsComponent implements OnInit {
                 { id: 2, name: 'Exit' }
             ]
         },
+      
          
-           {
+        {
             name: 'securityId',
             label: 'Security ID',
             type: 'text',
             placeholder: 'Security ID',
+            // Make securityId narrower so it sits on the same row with counterParty
             colSpan: 2,
             options: undefined,
         },
-
-      
-          
         {
             name: 'counterParty',
-            label: 'Counter Party',
+            label: 'CounterParty',
             type: 'select',
             placeholder: 'Select Counter Party',
+            // Give counterParty more width (2 columns) while keeping same row
             colSpan: 1,
             dataSource: this.counterPartiesDataSource,
             valueExpr: 'Id',
@@ -239,7 +249,7 @@ export class CDSOptionsComponent implements OnInit {
     optionFields = [
         {
             name: 'premium',
-            label: 'Premium',
+            label: 'Premium(Trade Price)',
             type: 'number',
             placeholder: 'Enter amount',
             colSpan: 1,
@@ -247,9 +257,17 @@ export class CDSOptionsComponent implements OnInit {
         },
         {
             name: 'upfront',
-            label: 'Upfront',
+            label: 'Upfront(bps)',
             type: 'number',
             placeholder: 'Enter amount',
+            colSpan: 1,
+            options: undefined,
+        },
+           {
+            name: 'upfrontCcyFxRate',
+            label: 'FX Rate',
+            type: 'number',
+            placeholder: 'Enter FX rate',
             colSpan: 1,
             options: undefined,
         },
@@ -261,14 +279,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-        {
-            name: 'maturityDate',
-            label: 'Maturity Date',
-            type: 'date',
-            placeholder: 'Select date',
-            colSpan: 1,
-            options: undefined,
-        },
+      
         {
             name: 'optionExpiry',
             label: 'Option Expiry Date',
@@ -285,14 +296,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-        {
-            name: 'upfrontCcyFxRate',
-            label: 'FX Rate',
-            type: 'number',
-            placeholder: 'Enter FX rate',
-            colSpan: 1,
-            options: undefined,
-        },
+     
         {
             name: 'settlementType',
             label: 'Settlement Type',
@@ -334,7 +338,7 @@ export class CDSOptionsComponent implements OnInit {
             name: 'notional',
             label: 'Notional',
             placeholder: 'Enter Notional',
-            type: 'text',
+            type: 'number',
             colSpan: 1,
             options: undefined,
         },
@@ -361,23 +365,23 @@ export class CDSOptionsComponent implements OnInit {
             name: 'fixedRate',
             label: 'Fixed Rate',
             placeholder: 'Enter Rate %',
-            type: 'text',
+            type: 'number',
             colSpan: 1,
             options: undefined,
         },
         {
             name: 'index',
-            label: 'EnterIndex',
+            label: 'Index',
             placeholder: 'Spread bps',
-            type: 'text',
+            type: 'number',
             colSpan: 1,
             options: undefined,
         },
         {
             name: 'spread',
-            label: 'Enter Spread',
+            label: 'Spread',
             placeholder: 'Spread bps',
-            type: 'text',
+            type: 'number',
             colSpan: 1,
             options: undefined,
         },
@@ -386,7 +390,7 @@ export class CDSOptionsComponent implements OnInit {
             name: 'accuredInterest',
             label: 'Accrued Interest',
             placeholder: 'Enter Interest',
-            type: 'text',
+            type: 'number',
             colSpan: 1,
             options: undefined,
         },
@@ -406,6 +410,14 @@ export class CDSOptionsComponent implements OnInit {
             label: 'First Coupon Date',
             placeholder: 'dd-mm-yyyy',
             type: 'date',
+            colSpan: 1,
+            options: undefined,
+        },
+          {
+            name: 'maturityDate',
+            label: 'Maturity Date',
+            type: 'date',
+            placeholder: 'Select date',
             colSpan: 1,
             options: undefined,
         },
@@ -503,12 +515,13 @@ export class CDSOptionsComponent implements OnInit {
             tradeName: ['', Validators.required],
             tradeAction: ['', Validators.required],
             counterParty: ['', Validators.required],
-            securityId: ['', Validators.required],
             capAllocation: ['', Validators.required],
-            description: [''],
+            securityId: ['CDS Option', Validators.required],
+            description: ['CDS Option'],
+            // Make securityId and description default values and read-only where appropriate
 
             tradeDate: ['', Validators.required],
-            settlementDate: ['', Validators.required],
+            // settlementDate: ['', Validators.required],
             maturityDate: ['', Validators.required],
             optionExpiry: ['', Validators.required],
             premium: [''],
@@ -539,6 +552,15 @@ export class CDSOptionsComponent implements OnInit {
             brokerAccount: [''],
             brokerPayAccount: [''],
         });
+        // Make securityId and description read-only by disabling the controls
+        const secCtrl = this.tradeForm.get('securityId');
+        const descCtrl = this.tradeForm.get('description');
+        try {
+            secCtrl?.disable({ emitEvent: false });
+            descCtrl?.disable({ emitEvent: false });
+        } catch (e) {
+            // ignore
+        }
     }
 
 
@@ -606,11 +628,110 @@ export class CDSOptionsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // Initialize accordion sections
+        this.accordionSections = [
+            {
+                title: 'Basic Information',
+                sectionType: 'basic',
+                fields: this.basicFields
+            },
+            {
+                title: 'Options Details',
+                sectionType: 'options',
+                fields: this.optionFields
+            },
+            {
+                title: 'CDS Details',
+                sectionType: 'cds',
+                fields: this.cdsFields
+            },
+            {
+                title: 'Trade Operations',
+                sectionType: 'tradeOps',
+                fields: this.tradeOpFields
+            }
+        ];
+        
+        // Set all sections to be open by default
+        this.selectedAccordionItems = [...this.accordionSections];
+        
         this.loadCacheData();
+
+        // Make every defined field required (so stepper only advances when all fields filled)
+        this.makeAllFieldsRequired();
+    }
+
+    // Make all fields defined in the field arrays required on the FormGroup
+    private makeAllFieldsRequired(): void {
+        // Intentionally exclude trade operation fields so they remain optional
+        // and the stepper can advance even if those fields are not filled.
+        const allFields = [
+            ...(this.basicFields || []),
+            ...(this.optionFields || []),
+            ...(this.cdsFields || [])
+            // tradeOpFields are intentionally omitted here
+        ];
+
+        const updated: string[] = [];
+
+        allFields.forEach((f: any) => {
+            const control = this.tradeForm.get(f.name);
+            if (control) {
+                // preserve existing validators where possible
+                const existing = control.validator ? [control.validator] : [];
+                (control as any).setValidators([...(existing as any), Validators.required]);
+                control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+                updated.push(f.name);
+            }
+        });
+
+        console.log('makeAllFieldsRequired applied to controls:', updated);
+    }
+
+    // Reset accordion state - close all sections and reopen them
+    resetAccordionState(): void {
+        // First clear all selected items
+        this.selectedAccordionItems = [];
+        
+        // Use setTimeout to ensure the accordion processes the empty state first
+        setTimeout(() => {
+            // Then reopen all sections
+            this.selectedAccordionItems = [...this.accordionSections];
+        }, 50);
     }
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
+    }
+
+    // Compute width percentage for fractional colSpan values.
+    // The layout grid uses 3 columns on large screens; a colSpan of 1.5
+    // will result in 50% width (1.5 / 3 * 100).
+    public getFieldWidthPercent(field: any): number | null {
+        const totalColumns = 3;
+        const raw = Number(field?.colSpan ?? 1);
+        if (isNaN(raw)) return null;
+        // If colSpan is non-integer (fractional), return the percentage; otherwise null
+        if (!Number.isInteger(raw)) {
+            return (raw / totalColumns) * 100;
+        }
+        return null;
+    }
+
+    // Return the loaded accounts as an array for parent components
+    public getAccountsList(): any[] {
+        try {
+            // DevExtreme DataSource provides items() when data is loaded
+            if (this.accountsDataSource && typeof (this.accountsDataSource as any).items === 'function') {
+                return (this.accountsDataSource as any).items() || [];
+            }
+            // Fallback: if store was provided as an array during initialization
+            const store = (this.accountsDataSource as any)?.store;
+            return Array.isArray(store) ? store : [];
+        } catch (e) {
+            console.error('Error retrieving accounts list from accountsDataSource', e);
+            return [];
+        }
     }
 
     private _mapAndCreateDataSource<T>(data: any[], mapFn: (item: any) => T): DataSource {

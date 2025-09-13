@@ -78,4 +78,19 @@ export class RVHttpService {
         );
     }
 
+    // Fund Combination and Allocation (new endpoint)
+    public getFundCombination(valuationDate: string): Observable<any> {
+        return this.http.get<any>(
+            `${this.baseUrl}/Lookups/GetFundCombination?valuationdate=${valuationDate}`
+        );
+    }
+
+    // CDS Option
+    public insertCdsOptionData(data: any[]): Observable<ApiResponse<string>> {
+        return this.http.post<ApiResponse<string>>(
+            `${this.baseUrl}/swaps/InsertCDSOptionData`, 
+            data
+        );
+    }
+
 }

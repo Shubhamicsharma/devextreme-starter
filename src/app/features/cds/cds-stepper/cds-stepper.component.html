@@ -21,13 +21,13 @@
 
   <!-- Custom Popup Header (Stepper) -->
   <div *dxTemplate="let data of 'title'" class="!p-0">
-    <div class="relative flex bg-white border-b rounded-t-lg overflow-hidden">
+    <div class="relative flex  border-b rounded-t-lg overflow-hidden">
       <!-- Close Button -->
       <button 
         class="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200 text-gray-500 hover:text-gray-700"
         (click)="closeModal()"
         type="button">
-        <i class="dx-icon-close text-lg"></i>
+        <i class="dx-icon-close text-lg text-[var(--secondary-text-color)] hover:text-black"></i>
       </button>
       
       <!-- Stepper Steps -->
@@ -35,25 +35,23 @@
         <div 
           class="flex-1 flex items-center justify-center border-r p-3 last:border-r-0 transition-all duration-300 gap-3"
           [ngClass]="{
-            'bg-green-50': i < selectedIndex && step.isValid,
-            'bg-blue-50': i === selectedIndex,
-            'bg-gray-100': i > selectedIndex
+            'bg-[var(--dx-color-primary)]':(i < selectedIndex && step.isValid) || i === selectedIndex,
+            'bg-[var(--base-bg)]': i > selectedIndex
           }"
         >
           <div 
-            class="w-6 h-6 flex items-center justify-center rounded-full border-2 font-semibold transition-all duration-300 flex-shrink-0"
+            class="w-6 h-6 flex items-center justify-center rounded-full font-semibold transition-all duration-300 flex-shrink-0"
             [ngClass]="{
-              'border-green-500 bg-green-500 text-white': i < selectedIndex && step.isValid,
-              'border-blue-500 bg-blue-500 text-white': i === selectedIndex,
-              'border-gray-300 bg-white text-gray-400': i > selectedIndex
+              
+              'bg-[var(--selected-item-color)] text-white':(i < selectedIndex && step.isValid) || i === selectedIndex,
+              'bg-[var(--list-item-active-bg)] text-gray-400': i > selectedIndex
             }">
             {{ i + 1 }}
           </div>
           <span 
             class="text-sm font-medium"
             [ngClass]="{
-              'text-green-600': i < selectedIndex && step.isValid,
-              'text-blue-600': i === selectedIndex,
+              'text-[var(--text-color)]': (i < selectedIndex && step.isValid) || i === selectedIndex,
               'text-gray-400': i > selectedIndex
             }">
             {{ step.label }}
@@ -67,27 +65,26 @@
    <div class="flex flex-col h-full justify-between">
      <dx-scroll-view >
        <div class="px-2">
-         <ng-container [ngSwitch]="selectedIndex">
-           
-           <!-- Step 1 -->
-           <div *ngSwitchCase="0">
+         <!-- Keep both step components in DOM and toggle visibility so they keep state -->
+         <div>
+           <!-- Step 1 (CDS Options) -->
+           <div [hidden]="selectedIndex !== 0">
              <app-cds-options #cdsOptionsRef (navigateToNext)="goToNext()"></app-cds-options>
            </div>
-           
-           <!-- Step 2 -->
-           <div *ngSwitchCase="1">
+
+           <!-- Step 2 (Allocation) -->
+           <div [hidden]="selectedIndex !== 1">
              <allocation-form 
                #allocationRef 
                (navigateToPrevious)="goToPrevious()" 
                (finishProcess)="onFinish()">
              </allocation-form>
            </div>
-   
-         </ng-container>
+         </div>
        </div>
      </dx-scroll-view>
    
-       <div class="border-t bg-white px-6 py-4">
+       <div class="border-t  px-6 py-4">
        <div class="flex justify-between items-center">
          <div class="flex-1">
            <dx-button
@@ -108,6 +105,7 @@
              stylingMode="contained"
              [icon]="selectedIndex === steps.length - 1 ? 'check' : 'chevronright'"
              (onClick)="onNextButtonClick()"
+             [disabled]="isNextButtonDisabled()"
              [width]="120">
            </dx-button>
          </div>
@@ -116,7 +114,6 @@
 
    </div>
   
-  <!-- Navigation Buttons as Fixed Footer -->
 
 
 </dx-popup>

@@ -322,3 +322,13 @@ body.coral-blush-dark {
     // display: none !important;
     padding: 0 !important;
 }
+
+.equal-size-radio .dx-widget {
+    display: flex !important;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+}
+
+.equal-size-radio .dx-radiobutton {
+    width: 50% !important;
+}

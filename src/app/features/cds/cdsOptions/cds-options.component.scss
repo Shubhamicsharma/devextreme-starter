@@ -12,3 +12,129 @@
 :host ::ng-deep .custom-popup-wrapper .dx-overlay-content .dx-popup-content {
   padding: 0 !important;
 }
+
+/* DevExtreme Accordion Custom Styles */
+#cds-accordion {
+  .dx-accordion {
+    // border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    // box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .dx-accordion-item {
+    // border-bottom: 1px solid #e5e7eb;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .dx-accordion-item-title {
+    background: var(--ternary-bg);
+    border-bottom: 1px solid light-dark(#374151, #374151);
+    padding: 0px 10px;
+    min-height: 50px;
+    
+    &:hover {
+      background: var(--secondary-bg);
+    }
+    
+    &.dx-state-active {
+      background: var(--primary-bg);
+      color: var(--primary-text-color);
+      border-left: 4px solid #6366f1;
+      
+      .accordion-header {
+        color: var(--primary-text-color) !important;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 16px;
+    // color: #374151;
+    transition: all 0.3s ease;
+  }
+
+  .dx-accordion-item-body {
+    padding: 0;
+    // background-color: #ffffff;
+  }
+
+  .accordion-content {
+    // background-color: #ffffff;
+    // border-top: 1px solid #e5e7eb;
+  }
+
+  // Form field spacing
+  .dx-texteditor, .dx-selectbox, .dx-numberbox, .dx-datebox, .dx-textarea {
+    margin-bottom: 8px;
+  }
+
+  // Radio group styling
+  .zero-margin-radio {
+    .dx-radiobutton {
+      margin-right: 12px;
+      
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    
+    .dx-radiobutton-text {
+      font-size: 14px;
+      padding-left:12px;
+    }
+  }
+}
+
+// Checkbox for multiple sections - keeping your existing blue theme
+// .dx-checkbox {
+//   .dx-checkbox-icon {
+//     border-color: #6366f1;
+//   }
+  
+//   &.dx-state-active .dx-checkbox-icon {
+//     background-color: #6366f1;
+//   }
+  
+//   .dx-checkbox-text {
+//     color: #6366f1;
+//     font-weight: 500;
+//   }
+// }
+
+// Loading state
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+//   background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+// Responsive design
+// @media (max-width: 768px) {
+//   #cds-accordion {
+//     .accordion-content {
+//       padding: 16px;
+//     }
+    
+//     .accordion-header {
+//       font-size: 14px;
+//       padding: 10px 12px;
+//     }
+//   }
+// }
