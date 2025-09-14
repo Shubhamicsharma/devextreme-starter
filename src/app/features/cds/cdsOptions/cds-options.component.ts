@@ -26,6 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { CounterParties, Currency, TradeAccounts, TradeNames } from '../../../shared/core/cache/cache.model';
+import { CDSOptionModel } from '../../../core/models/cds-option.model';
 
 
 interface FormFields {
@@ -957,8 +958,8 @@ export class CDSOptionsComponent implements OnInit {
     }
 
     // Method to get form data for the stepper
-    getFormData(): any {
-        return this.tradeForm.value;
+    getFormData(): Partial<CDSOptionModel> {
+        return this.tradeForm.value as Partial<CDSOptionModel>;
     }
 
 }
