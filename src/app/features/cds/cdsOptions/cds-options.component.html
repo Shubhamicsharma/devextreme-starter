@@ -3,15 +3,10 @@
     <div class="flex-1 overflow-y-auto">
         <!-- DevExtreme Accordion -->
         <div id="cds-accordion">
-            <dx-accordion
-                #accordion
-                [dataSource]="accordionSections"
-                [collapsible]="accordionCollapsible"
-                [multiple]="accordionMultiple"
-                [animationDuration]="300"
-                [selectedItems]="selectedAccordionItems"
+            <dx-accordion #accordion [dataSource]="accordionSections" [collapsible]="accordionCollapsible"
+                [multiple]="accordionMultiple" [animationDuration]="300" [selectedItems]="selectedAccordionItems"
                 class=" rounded-lg">
-                
+
                 <!-- Title Template -->
                 <div *dxTemplate="let section of 'title'">
                     <div class="accordion-header font-semibold text-md py-2 px-3">
@@ -24,109 +19,108 @@
                     <div class="accordion-content p-4">
                         <form [formGroup]="tradeForm" class="space-y-1">
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                          <div *ngFor="let field of section.fields" 
-                              class="relative"
-                              [class.lg:col-span-2]="field.colSpan === 2" 
-                              [class.lg:col-span-3]="field.colSpan === 3">
-                                    
+                                <div *ngFor="let field of section.fields" class="relative"
+                                    [class.lg:col-span-2]="field.colSpan === 2"
+                                    [class.lg:col-span-3]="field.colSpan === 3">
+
                                     <label class="block text-xs font-semibold mb-1">
                                         {{ field.label }}
-                                        <!-- Don't show '*' for trade operation fields or for read-only securityId/description -->
-                                        <span *ngIf="section.sectionType !== 'tradeOps' && field.name !== 'securityId' && field.name !== 'description' && !(tradeForm.get(field.name)?.disabled)" class="text-red-500">*</span>
+                                        <span
+                                            *ngIf="section.sectionType !== 'tradeOps' && field.name !== 'securityId' && field.name !== 'description' && !(tradeForm.get(field.name)?.disabled)"
+                                            class="text-red-500">*</span>
                                     </label>
 
                                     <ng-container [ngSwitch]="field.type">
-                                        <!-- number input -->
-                                       
-                                        <!-- Text Input -->
 
-                                        <dx-text-box *ngSwitchCase="'text'" 
-                                                     [formControlName]="field.name"
-                                                     [placeholder]="field.placeholder" 
-                                                     [showClearButton]="true"
-                                                     [stylingMode]="'outlined'" 
-                                                     [width]="'100%'">
+                                        <!-- Text Input -->
+                                        <dx-text-box *ngSwitchCase="'text'" [formControlName]="field.name"
+                                            [placeholder]="field.placeholder" [showClearButton]="true"
+                                            [stylingMode]="'outlined'" [width]="'100%'">
                                             <dx-validator>
-                                                <dxi-validation-rule type="required"
-                                                                     message="This field is required">
+                                                <dxi-validation-rule type="required" message="This field is required">
                                                 </dxi-validation-rule>
                                             </dx-validator>
                                         </dx-text-box>
 
                                         <!-- Radio Group -->
-                                        <div *ngSwitchCase="'radio'" class="w-full h-[30px] flex items-center">
-                                            <dx-radio-group 
+                                        <div *ngSwitchCase="'radio'" class="w-full h-[30px] flex items-center ml-3">
+                                            <dx-radio-group
                                                 [elementAttr]="{ class: 'zero-margin-radio equal-size-radio' }"
-                                                [formControlName]="field.name"
-                                                [items]="field.options ?? []" 
-                                                displayExpr="name"
-                                                valueExpr="id" 
-                                                layout="horizontal" 
-                                                [width]="'100%'">
+                                                [formControlName]="field.name" [items]="field.options ?? []"
+                                                displayExpr="name" valueExpr="id" layout="horizontal" [width]="'100%'">
                                             </dx-radio-group>
                                         </div>
 
-                                        <!-- Select Box -->
-                                        <dx-select-box *ngSwitchCase="'select'" 
-                                                       [formControlName]="field.name"
-                                                       [dataSource]="field.options ? field.options : (field.dataSource ?? [])"
-                                                       [valueExpr]="field.options ? 'this' : (field.valueExpr ?? 'id')"
-                                                       [displayExpr]="field.options ? 'this' : (field.displayExpr ?? 'name')"
-                                                       [searchEnabled]="true" 
-                                                       [showClearButton]="true" 
-                                                       [stylingMode]="'outlined'"
-                                                       [width]="'100%'">
-                                            <dx-validator>
-                                                <dxi-validation-rule type="required"
-                                                                     message="This field is required">
-                                                </dxi-validation-rule>
-                                            </dx-validator>
-                                        </dx-select-box>
-
                                         <!-- Date Box -->
-                                        <dx-date-box *ngSwitchCase="'date'" 
-                                                     [formControlName]="field.name"
-                                                     [placeholder]="field.placeholder" 
-                                                     [showClearButton]="true"
-                                                     [stylingMode]="'outlined'" 
-                                                     [width]="'100%'" 
-                                                     type="date"
-                                                     displayFormat="dd-MMM-yyyy">
+                                        <dx-date-box *ngSwitchCase="'date'" [formControlName]="field.name"
+                                            [placeholder]="field.placeholder" [showClearButton]="true"
+                                            [stylingMode]="'outlined'" [width]="'100%'" type="date"
+                                            displayFormat="dd-MMM-yyyy">
                                             <dx-validator>
-                                                <dxi-validation-rule type="required"
-                                                                     message="This field is required">
+                                                <dxi-validation-rule type="required" message="This field is required">
                                                 </dxi-validation-rule>
                                             </dx-validator>
                                         </dx-date-box>
 
                                         <!-- Number Box -->
-                                        <dx-number-box *ngSwitchCase="'number'" 
-                                                       [formControlName]="field.name"
-                                                       [placeholder]="field.placeholder" 
-                                                       [showClearButton]="true"
-                                                       [showSpinButtons]="false" 
-                                                       [stylingMode]="'outlined'" 
-                                                       [width]="'100%'">
+                                        <dx-number-box *ngSwitchCase="'number'" [formControlName]="field.name"
+                                            [placeholder]="field.placeholder" [showClearButton]="true"
+                                            [showSpinButtons]="false" [stylingMode]="'outlined'" [width]="'100%'">
                                             <dx-validator>
-                                                <dxi-validation-rule type="required"
-                                                                     message="This field is required">
+                                                <dxi-validation-rule type="required" message="This field is required">
                                                 </dxi-validation-rule>
                                             </dx-validator>
                                         </dx-number-box>
 
                                         <!-- Text Area -->
-                                        <dx-text-area *ngSwitchCase="'textarea'" 
-                                                      [formControlName]="field.name"
-                                                      [placeholder]="field.placeholder" 
-                                                      [height]="33" 
-                                                      [stylingMode]="'outlined'"
-                                                      [width]="'100%'">
+                                        <dx-text-area *ngSwitchCase="'textarea'" [formControlName]="field.name"
+                                            [placeholder]="field.placeholder" [height]="33" [stylingMode]="'outlined'"
+                                            [width]="'100%'">
                                             <dx-validator>
-                                                <dxi-validation-rule type="required"
-                                                                     message="This field is required">
+                                                <dxi-validation-rule type="required" message="This field is required">
                                                 </dxi-validation-rule>
                                             </dx-validator>
                                         </dx-text-area>
+
+                                        
+                                        <!-- Select Box -->
+                                        <dx-select-box *ngSwitchCase="'select'" [formControlName]="field.name"
+                                            [dataSource]="field.options ? field.options : (field.dataSource ?? [])"
+                                            [valueExpr]="field.options ? 'this' : (field.valueExpr ?? 'id')"
+                                            [displayExpr]="field.options ? 'this' : (field.displayExpr ?? 'name')"
+                                            [searchEnabled]="true" [showClearButton]="true" [stylingMode]="'outlined'"
+                                            [width]="'100%'">
+                                            <dx-validator>
+                                                <dxi-validation-rule type="required" message="This field is required">
+                                                </dxi-validation-rule>
+                                            </dx-validator>
+                                        </dx-select-box>
+
+                                        <!-- upfront ccy and amount -->
+                                        <ng-container *ngIf="field.type === 'select' && field.name === 'upfront'">
+                                            <div class="flex gap-2">
+                                                <dx-select-box [formControlName]="field.name"
+                                                    [dataSource]="field.options ? field.options : (field.dataSource ?? [])"
+                                                    [displayExpr]="field.options ? 'this' : (field.displayExpr ?? 'Code')"
+                                                    [valueExpr]="field.options ? 'this' : (field.valueExpr ?? 'Code')"
+                                                    [searchEnabled]="true" [showClearButton]="true"
+                                                    [stylingMode]="'outlined'" [width]="'40%'">
+                                                    <dx-validator>
+                                                        <dxi-validation-rule type="required"
+                                                            message="This field is required"></dxi-validation-rule>
+                                                    </dx-validator>
+                                                </dx-select-box>
+                                                <dx-number-box [formControlName]="field.name"
+                                                    [placeholder]="field.placeholder" [showClearButton]="true"
+                                                    [showSpinButtons]="false" [stylingMode]="'outlined'"
+                                                    [width]="'60%'">
+                                                    <dx-validator>
+                                                        <dxi-validation-rule type="required"
+                                                            message="This field is required"></dxi-validation-rule>
+                                                    </dx-validator>
+                                                </dx-number-box>
+                                            </div>
+                                        </ng-container>
                                     </ng-container>
                                 </div>
                             </div>

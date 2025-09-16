@@ -16,6 +16,7 @@ export interface CDSOptionModel {
   currencyId: number;
   notional: number;
   enteredById?: number | null;
+ counterpartyId?: number | null;
 
   // ----------------- CDSOption Fields -----------------
   tradeId: number;
@@ -39,4 +40,7 @@ export interface CDSOptionModel {
   cdsIndexName?: string | null;
   settlementType?: string | null;
   optionExpiryDate?: Date | string | null;
+  utiId?: string | null;
+  utiPrefix?: string | null;
+  fixedRate?: number | null;
 }

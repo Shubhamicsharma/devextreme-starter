@@ -242,13 +242,15 @@ export class CDSStepperComponent implements OnInit, OnDestroy {
         }
 
         const cdsData = this.cdsOptionsForm?.getFormData();
+        console.log('CDS Model Form Data:', cdsData);
         const allocationData = this.allocationForm?.getFormData();
 
         // Combine the data from both forms into the format expected by the API
-        const payload: CDSOptionModel[] = allocationData.map((alloc: any) => {
+        const payload: CDSOptionModel[] = allocationData.map((alloc: any, idx: number) => {
             const model: CDSOptionModel = {
                 id: 0,
-                tradeId: 0,
+                // assign a 1-based sequential tradeId per allocation row
+                tradeId: idx + 1,
                 accountId: alloc.account,
                 tradeDate: cdsData.tradeDate ?? new Date().toISOString(),
                 tradeNameId: cdsData.tradeNameId ?? 0,
@@ -266,10 +268,11 @@ export class CDSStepperComponent implements OnInit, OnDestroy {
                 currencyId: cdsData.currencyId ?? 0,
                 notional: alloc.notional,
                 enteredById: null,
+                counterpartyId: cdsData.counterpartyId,
                 strikeRate: cdsData.strikeRate,
                 upfront: alloc.upfront,
                 upfrontDate: cdsData.upfrontDate,
-                upfrontCCY: cdsData.indeptCCY, // need to check this field
+                upfrontCCY: cdsData.upfrontCCY, // need to check this field
                 payFreq: cdsData.payFreq,
                 tradeAction: cdsData.tradeAction,
                 dayCount: cdsData.dayCount,
@@ -287,9 +290,13 @@ export class CDSStepperComponent implements OnInit, OnDestroy {
                 settlementType: cdsData.settlementType,
                 optionExpiryDate:
                     cdsData.optionExpiryDate ?? new Date().toISOString(),
+                utiId: cdsData.utiId,
+                utiPrefix: cdsData.utiPrefix,
+                fixedRate: cdsData.fixedRate,
             };
             return model;
         });
+        console.log('Submitting payload:', payload);
 
         this.isSubmitting = true;
 

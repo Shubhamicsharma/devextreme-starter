@@ -70,7 +70,7 @@ interface FormFields {
 })
 export class CDSOptionsComponent implements OnInit {
     @Output() navigateToNext = new EventEmitter<void>();
-    
+
     tradeForm: FormGroup;
     subscription: Subscription = new Subscription();
 
@@ -105,10 +105,14 @@ export class CDSOptionsComponent implements OnInit {
         store: [],
         paginate: false
     });
-    capAllocationDataSource: DataSource = new DataSource({
+    indicesDataSource: DataSource = new DataSource({
         store: [],
         paginate: false
     });
+    // capAllocationDataSource: DataSource = new DataSource({
+    //     store: [],
+    //     paginate: false
+    // });
     tradeActionDataSource: DataSource = new DataSource({
         store: [],
         paginate: false
@@ -153,7 +157,7 @@ export class CDSOptionsComponent implements OnInit {
             options: undefined,
             // dataSource: this.accountsDataSource
         },
-       
+
         {
             name: 'tradeName',
             label: 'Trade Name',
@@ -165,7 +169,7 @@ export class CDSOptionsComponent implements OnInit {
             displayExpr: 'Name',
             options: undefined,
         },
-            {
+        {
             name: 'capAllocation',
             label: 'Capital Allocation',
             type: 'radio',
@@ -174,13 +178,13 @@ export class CDSOptionsComponent implements OnInit {
             valueExpr: 'id',
             displayExpr: 'name',
             options: [
-                { id: 1, name: 'Primary' },
-                { id: 2, name: 'Secondary' }
+                { id: 0, name: 'Primary' },
+                { id: 1, name: 'Secondary' }
             ]
         },
-          {
+        {
             name: 'isin',
-            label: 'Underlying ISIN',
+            label: 'ISIN',
             type: 'select',
             placeholder: 'Select ISIN',
             colSpan: 1,
@@ -188,8 +192,8 @@ export class CDSOptionsComponent implements OnInit {
             displayExpr: 'ISINCode',
             options: undefined,
         },
-        
-       
+
+
         {
             name: 'tradeDate',
             label: 'Trade Date',
@@ -198,7 +202,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-            {
+        {
             name: 'tradeAction',
             label: 'Trade Action',
             type: 'radio',
@@ -211,14 +215,13 @@ export class CDSOptionsComponent implements OnInit {
                 { id: 2, name: 'Exit' }
             ]
         },
-      
-         
+
+
         {
             name: 'securityId',
             label: 'Security ID',
             type: 'text',
             placeholder: 'Security ID',
-            // Make securityId narrower so it sits on the same row with counterParty
             colSpan: 2,
             options: undefined,
         },
@@ -227,14 +230,13 @@ export class CDSOptionsComponent implements OnInit {
             label: 'CounterParty',
             type: 'select',
             placeholder: 'Select Counter Party',
-            // Give counterParty more width (2 columns) while keeping same row
             colSpan: 1,
             dataSource: this.counterPartiesDataSource,
             valueExpr: 'Id',
             displayExpr: 'Name',
             options: undefined,
         },
-          {
+        {
             name: 'description',
             label: 'Description',
             type: 'text',
@@ -242,15 +244,15 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 3,
             options: undefined,
         },
-     
-      
-      
+
+
+
     ];
 
     optionFields = [
         {
             name: 'premium',
-            label: 'Premium(Trade Price)',
+            label: 'Premium (Trade Price)',
             type: 'number',
             placeholder: 'Enter amount',
             colSpan: 1,
@@ -258,13 +260,24 @@ export class CDSOptionsComponent implements OnInit {
         },
         {
             name: 'upfront',
-            label: 'Upfront(bps)',
+            label: 'Upfront Amount',
             type: 'number',
             placeholder: 'Enter amount',
             colSpan: 1,
             options: undefined,
         },
-           {
+        {
+            name: 'upfrontCcy',
+            label: 'Upfront Ccy',
+            type: 'select',
+            placeholder: 'Select Currency',
+            colSpan: 1,
+            dataSource: this.independentCcyDataSource,
+            valueExpr: 'Id',
+            displayExpr: 'Code',
+            options: undefined,
+        },
+        {
             name: 'upfrontCcyFxRate',
             label: 'FX Rate',
             type: 'number',
@@ -280,7 +293,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-      
+
         {
             name: 'optionExpiry',
             label: 'Option Expiry Date',
@@ -297,7 +310,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-     
+
         {
             name: 'settlementType',
             label: 'Settlement Type',
@@ -345,7 +358,7 @@ export class CDSOptionsComponent implements OnInit {
         },
         {
             name: 'underlyingIsin',
-            label: 'Underlying ISIN',
+            label: 'Underlying Bond ISIN',
             placeholder: 'Enter ISIN',
             type: 'select',
             dataSource: this.isinDataSource,
@@ -364,23 +377,26 @@ export class CDSOptionsComponent implements OnInit {
         },
         {
             name: 'fixedRate',
-            label: 'Fixed Rate',
-            placeholder: 'Enter Rate %',
+            label: 'Fixed Rate %',
+            placeholder: 'Enter Rate',
             type: 'number',
             colSpan: 1,
             options: undefined,
         },
         {
             name: 'index',
-            label: 'Index',
-            placeholder: 'Spread bps',
-            type: 'number',
+            label: 'Benchmark Index',
+            placeholder: 'Select Benchmark Index',
+            type: 'select',
             colSpan: 1,
+            dataSource: this.indicesDataSource,
+            valueExpr: 'Id',
+            displayExpr: 'IndexName',
             options: undefined,
         },
         {
             name: 'spread',
-            label: 'Spread',
+            label: 'Spread (bps)',
             placeholder: 'Spread bps',
             type: 'number',
             colSpan: 1,
@@ -414,16 +430,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-          {
-            name: 'maturityDate',
-            label: 'Maturity Date',
-            type: 'date',
-            placeholder: 'Select date',
-            colSpan: 1,
-            options: undefined,
-        },
-
-        {
+         {
             name: 'tradeRationale',
             label: 'Trade Rationale',
             placeholder: 'Enter Rationale',
@@ -432,8 +439,18 @@ export class CDSOptionsComponent implements OnInit {
             options: undefined,
         },
         {
+            name: 'maturityDate',
+            label: 'Swap Maturity Date',
+            type: 'date',
+            placeholder: 'Select date',
+            colSpan: 1,
+            options: undefined,
+        },
+
+       
+        {
             name: 'frequency',
-            label: 'Pay Frequency',
+            label: 'Payment Frequency',
             type: 'select',
             placeholder: 'Select an option',
             options: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Semi-Annually', 'Yearly'],
@@ -445,7 +462,7 @@ export class CDSOptionsComponent implements OnInit {
     ];
 
     tradeOpFields = [
-          {
+        {
             name: 'brokerPayAccount',
             label: 'Broker Pay Account',
             type: 'select',
@@ -456,7 +473,7 @@ export class CDSOptionsComponent implements OnInit {
             valueExpr: 'Id',
             displayExpr: 'Name',
         },
-      
+
         {
             name: 'brokerAccount',
             label: 'Broker Account',
@@ -468,7 +485,7 @@ export class CDSOptionsComponent implements OnInit {
             valueExpr: 'Id',
             displayExpr: 'Name',
         },
-          {
+        {
             name: 'utiId',
             label: 'UTI ID',
             type: 'text',
@@ -484,7 +501,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-      
+
         {
             name: 'independentAmt',
             label: 'Independent Amt',
@@ -514,19 +531,20 @@ export class CDSOptionsComponent implements OnInit {
             account: ['', Validators.required],
             isin: ['', Validators.required],
             tradeName: ['', Validators.required],
-            tradeAction: ['', Validators.required],
+            tradeAction: [1, Validators.required],
             counterParty: ['', Validators.required],
-            capAllocation: ['', Validators.required],
+            capAllocation: [0, Validators.required],
             securityId: ['CDS Option', Validators.required],
             description: ['CDS Option'],
             // Make securityId and description default values and read-only where appropriate
 
-            tradeDate: ['', Validators.required],
+            tradeDate: [new Date(), Validators.required],
             // settlementDate: ['', Validators.required],
             maturityDate: ['', Validators.required],
             optionExpiry: ['', Validators.required],
             premium: [''],
             upfront: [''],
+            upfrontCcy: [''],
             upfrontDate: [''],
             strikeRate: [''],
             upfrontCcyFxRate: [''],
@@ -617,7 +635,7 @@ export class CDSOptionsComponent implements OnInit {
             },
             type: 'success',
         });
-        
+
         // Navigate to next step
         this.navigateToNext.emit();
     }
@@ -652,14 +670,54 @@ export class CDSOptionsComponent implements OnInit {
                 fields: this.tradeOpFields
             }
         ];
-        
+
         // Set all sections to be open by default
         this.selectedAccordionItems = [...this.accordionSections];
-        
+
         this.loadCacheData();
 
         // Make every defined field required (so stepper only advances when all fields filled)
         this.makeAllFieldsRequired();
+
+        // Ensure upfrontDate is always tradeDate + 2 business days (skip weekends)
+        const tradeDateCtrl = this.tradeForm.get('tradeDate');
+        const upfrontDateCtrl = this.tradeForm.get('upfrontDate');
+        if (tradeDateCtrl && upfrontDateCtrl) {
+            // initialize upfrontDate based on initial tradeDate value
+            const initialTradeDate = (tradeDateCtrl.value) ? new Date(tradeDateCtrl.value) : new Date();
+            upfrontDateCtrl.setValue(this.addBusinessDays(initialTradeDate, 2));
+
+            // subscribe to changes; use normalized dates to avoid timezone/time-of-day causing off-by-one
+            this.subscription.add(
+                tradeDateCtrl.valueChanges.subscribe((v: any) => {
+                    try {
+                        const td = v ? new Date(v) : new Date();
+                        upfrontDateCtrl.setValue(this.addBusinessDays(td, 2));
+                    } catch (e) {
+                        // ignore invalid dates
+                    }
+                })
+            );
+        }
+    }
+
+    // Adds business days to a date (skips Saturdays and Sundays)
+    private addBusinessDays(startDate: Date, days: number): Date {
+        if (!startDate || typeof days !== 'number') return startDate;
+        // Normalize start date to local midnight to avoid timezone and time-of-day issues
+        const normalized = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+        const result = new Date(normalized);
+        let added = 0;
+        // Exclusive counting: start from the next calendar day
+        while (added < days) {
+            result.setDate(result.getDate() + 1);
+            const day = result.getDay();
+            // 0 = Sunday, 6 = Saturday
+            if (day !== 0 && day !== 6) {
+                added++;
+            }
+        }
+        return result;
     }
 
     // Make all fields defined in the field arrays required on the FormGroup
@@ -693,7 +751,7 @@ export class CDSOptionsComponent implements OnInit {
     resetAccordionState(): void {
         // First clear all selected items
         this.selectedAccordionItems = [];
-        
+
         // Use setTimeout to ensure the accordion processes the empty state first
         setTimeout(() => {
             // Then reopen all sections
@@ -753,6 +811,8 @@ export class CDSOptionsComponent implements OnInit {
             CommonCacheDictionaryEnum.CurrentAllocation,
             CommonCacheDictionaryEnum.ISIN,
             CommonCacheDictionaryEnum.TradarAccount,
+            CommonCacheDictionaryEnum.Indices,
+            // CommonCacheDictionaryEnum.TradeName,
             // CommonCacheEnum.AllocationTemplate, // This enum is not used in the current data source mappings
         ];
         console.log(cacheTypes);
@@ -855,15 +915,25 @@ export class CDSOptionsComponent implements OnInit {
                         }
 
                         // Cap Allocation is a static lookup, so it can be mapped directly
-                        this.capAllocationDataSource = new DataSource({
-                            store: response.Model.CurrentAllocations || [],
+                        // this.capAllocationDataSource = new DataSource({
+                        //     store: response.Model.CurrentAllocations || [],
+                        //     paginate: true,
+                        //     pageSize: 10
+                        // });
+                        // Indices (Benchmark Index) - populate if available
+                        this.indicesDataSource = new DataSource({
+                            store: response.Model.IndiceList || [],
                             paginate: true,
                             pageSize: 10
                         });
-                        const capAllocationField = this.basicFields.find(field => field.name === 'capAllocation');
-                        if (capAllocationField) {
-                            capAllocationField.dataSource = this.capAllocationDataSource;
+                        const indexField = this.cdsFields.find(field => field.name === 'index');
+                        if (indexField) {
+                            indexField.dataSource = this.indicesDataSource;
                         }
+                        // const capAllocationField = this.basicFields.find(field => field.name === 'capAllocation');
+                        // if (capAllocationField) {
+                        //     capAllocationField.dataSource = this.capAllocationDataSource;
+                        // }
                         this.basicFields = [...this.basicFields];
                     }
                     // Populate static data sources after dynamic data is loaded
@@ -933,6 +1003,14 @@ export class CDSOptionsComponent implements OnInit {
             frequencyField.dataSource = this.frequencyDataSource;
         }
 
+        // Bind independent currency list to the upfrontCcy select (right-side of upfront amount)
+        const upfrontCcyField = this.optionFields.find(field => field.name === 'upfrontCcy');
+        if (upfrontCcyField) {
+            upfrontCcyField.dataSource = this.independentCcyDataSource;
+            upfrontCcyField.valueExpr = 'Id';
+            upfrontCcyField.displayExpr = 'Code';
+        }
+
         // const brokerAccountField = this.tradeOpFields.find(field => field.name === 'brokerAccount');
         // if (brokerAccountField?.options) {
         //     this.brokerAccountDataSource = this._mapAndCreateDataSource(brokerAccountField.options, (item: string) => ({
@@ -959,7 +1037,81 @@ export class CDSOptionsComponent implements OnInit {
 
     // Method to get form data for the stepper
     getFormData(): Partial<CDSOptionModel> {
-        return this.tradeForm.value as Partial<CDSOptionModel>;
+        // Use getRawValue() to include disabled controls (securityId, description) which are intentionally disabled/read-only
+        const formValue = (typeof (this.tradeForm as any).getRawValue === 'function')
+            ? (this.tradeForm as any).getRawValue()
+            : this.tradeForm.value;
+
+        const tradeDate = formValue.tradeDate ? new Date(formValue.tradeDate) : null;
+        if (tradeDate) {
+            tradeDate.setHours(0, 0, 0, 0);
+        }
+
+        // Map form fields to the backend CDSOptionModel property names
+        return {
+            // Identifiers
+            accountId: formValue.account,
+            isinId: formValue.isin,
+            tradeNameId: formValue.tradeName,
+            counterpartyId: formValue.counterParty,
+
+            // Dates
+            tradeDate: tradeDate,
+            settlementDate: formValue.settlementDate ?? null,
+            maturityDate: formValue.maturityDate ?? null,
+            upfrontDate: formValue.upfrontDate ?? null,
+            firstCouponDate: formValue.firstCoupon ?? null,
+            optionExpiryDate: formValue.optionExpiry ?? null,
+
+            // Amounts / money
+            notional: Number(formValue.notional) ?? 0,
+            tradePrice: Number(formValue.premium) ?? 0,
+            upfront: formValue.upfront ?? null,
+            accruedInterest: formValue.accuredInterest ?? null,
+            capitalAllocation: formValue.capAllocation ?? null,
+            fixedRate: formValue.fixedRate ?? null,
+
+            // Accounts
+            tradarAccount: formValue.brokerAccount ?? null,
+            tradarPayAccount: formValue.brokerPayAccount ?? null,
+
+            // Security / description
+            securityId: formValue.securityId ?? null,
+            description: formValue.description ?? null,
+
+            // CDS / option specifics
+            strikeRate: formValue.strikeRate ?? null,
+            upfrontCCY: formValue.upfrontCcy ?? null,
+            currencyId: formValue.independentCcy ?? null,
+            exchangeRate: formValue.upfrontCcyFxRate ?? null,
+            settlementType: (() => {
+                const v = formValue.settlementType;
+                if (v === undefined || v === null) return null;
+                const s = String(v).trim().toLowerCase();
+                if (s === 'cash' || s === 'c') return 'C';
+                if (s === 'physical' || s === 'p') return 'P';
+                return null;
+            })(),
+            optionType: formValue.optionType ?? null,
+            optionStyle: formValue.optionStyle ?? null,
+            payFreq: formValue.frequency ?? null,
+            tradeAction: formValue.tradeAction === 1 ? 'ENTER' : 'EXIT',
+            dayCount: formValue.dayCount ?? null,
+            redCode: formValue.redCode ?? null,
+            underlyingISIN: formValue.underlyingIsin ?? null,
+            indeptAmt: formValue.independentAmt ?? null,
+            indeptCCY: formValue.independentCcy ?? null,
+            spread: formValue.spread ?? null,
+
+            // Free-text / rationale
+            traderRationale: formValue.tradeRationale ?? null,
+            cdsIndexName: formValue.index ?? null,
+
+            // UTI
+            utiId: formValue.utiId ?? null,
+            utiPrefix: formValue.utiPrefix ?? null,
+
+        } as Partial<CDSOptionModel>;
     }
 
 }

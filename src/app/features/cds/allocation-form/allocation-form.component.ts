@@ -22,6 +22,7 @@ import {
     DxDataGridModule,
     DxDateBoxModule,
     DxDataGridComponent,
+    DxNumberBoxModule,
 } from 'devextreme-angular';
 import { RVHttpService } from '../../../core/services/http.service';
 import { AllocationTemplate } from '../../../core/models/allocation-template.model';
@@ -47,12 +48,20 @@ import { CDSOptionModel } from '../../../core/models/cds-option.model';
         DxSelectBoxModule,
         DxDataGridModule,
         DxDateBoxModule,
+        DxNumberBoxModule,
     ],
 })
-export class AllocationFormComponent implements OnInit, OnDestroy {
+export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
     @Output() navigateToPrevious = new EventEmitter<void>();
     @Output() finishProcess = new EventEmitter<void>();
     @Input() initialAllocationData: any[] | null = null;
+
+    // New properties for totals
+    totalNotionalFromCDS = 0;
+    totalUpfrontFromCDS = 0;
+    totalAllocatedNotional = 0;
+    totalAllocatedPercent = 0;
+    totalAllocatedUpfront = 0;
 
     private subscription = new Subscription();
 
@@ -65,14 +74,12 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
     // valuation date string formatted for API (e.g., 11Sep2025)
     valuationDate: string | null = null;
 
-    allocationData = [
+    allocationData: any[] = [
         // fallback placeholder row (will be replaced if initialAllocationData is provided)
         {
             account: 'UCITS',
             notional: 34538.58,
-            notionalPercent: 10099,
-            receiveNotional: 34538.58,
-            payNotional: 34538.58,
+            notionalPercent: 100,
             upfront: -8289.2592,
         },
     ];
@@ -94,10 +101,15 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
                     account: r.account ?? r.Account ?? 'UNKNOWN',
                     notional: r.notional ?? r.Notional ?? 0,
                     notionalPercent: r.notionalPercent ?? 100,
-                    receiveNotional: r.notional ?? r.Notional ?? 0,
-                    payNotional: r.notional ?? r.Notional ?? 0,
                     upfront: r.upfront ?? 0,
                 }));
+
+                // Set totals from incoming data
+                this.totalNotionalFromCDS =
+                    this.initialAllocationData[0]?.notional ?? 0;
+                this.totalUpfrontFromCDS =
+                    this.initialAllocationData[0]?.upfront ?? 0;
+                this.recalculateTotals();
             }
         }
     }
@@ -111,7 +123,13 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
             this.expectedTotalNotional = Number(
                 incoming?.notional ?? incoming?.Notional ?? 0
             );
+
+            // Set totals from incoming data
+            this.totalNotionalFromCDS = incoming?.notional ?? 0;
+            this.totalUpfrontFromCDS = incoming?.upfront ?? 0;
+
             this.computeAllocationState();
+            this.recalculateTotals();
         }
     }
 
@@ -127,8 +145,6 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
             account: r.account ?? r.Account ?? 'UNKNOWN',
             notional: r.notional ?? r.Notional ?? 0,
             notionalPercent: r.notionalPercent ?? 100,
-            receiveNotional: r.notional ?? r.Notional ?? 0,
-            payNotional: r.notional ?? r.Notional ?? 0,
             upfront: r.upfront ?? 0,
         }));
         // compute initial expected total if provided
@@ -140,6 +156,7 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
             );
         }
         this.computeAllocationState();
+        this.recalculateTotals();
     }
 
     constructor(private httpService: RVHttpService) {}
@@ -347,8 +364,6 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
                             account: m.FundId ?? m.Title,
                             notionalPercent: pct,
                             notional: +notionalVal.toFixed(2),
-                            receiveNotional: +notionalVal.toFixed(2),
-                            payNotional: +notionalVal.toFixed(2),
                             upfront: +upfrontVal.toFixed(4),
                         };
                     });
@@ -366,11 +381,6 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
                         rows[rows.length - 1].notional = +(
                             rows[rows.length - 1].notional + notionalDiff
                         ).toFixed(2);
-                        // also adjust receive/pay accordingly
-                        rows[rows.length - 1].receiveNotional =
-                            rows[rows.length - 1].notional;
-                        rows[rows.length - 1].payNotional =
-                            rows[rows.length - 1].notional;
                     }
 
                     const sumUpfront = rows.reduce(
@@ -387,6 +397,7 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
                     }
 
                     this.allocationData = rows;
+                    this.recalculateTotals();
                 },
                 error: (err: any) => {
                     this.isLoadingTemplates = false;
@@ -399,33 +410,7 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
         );
     }
 
-    // Update allocation data based on selected template
-    private updateAllocationDataFromTemplate(templateId: number): void {
-        // You can implement specific logic based on template ID
-        // For now, we'll use some default data
-        console.log('Updating allocation data for template ID:', templateId);
-
-        // You could make another API call here to get template-specific allocation data
-        // For demonstration, we'll keep the current data structure
-        this.allocationData = [
-            {
-                account: 'TEMPLATE_' + templateId,
-                notional: 50000.0,
-                notionalPercent: 15000,
-                receiveNotional: 50000.0,
-                payNotional: 50000.0,
-                upfront: -12000.0,
-            },
-            {
-                account: 'AUTO_' + templateId,
-                notional: 30000.0,
-                notionalPercent: 9000,
-                receiveNotional: 30000.0,
-                payNotional: 30000.0,
-                upfront: -7200.0,
-            },
-        ];
-    }
+  
 
     // Navigate back to previous step
     goToPrevious(): void {
@@ -445,8 +430,6 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
                 account: '',
                 notional: 0,
                 notionalPercent: 0,
-                receiveNotional: 0,
-                payNotional: 0,
                 upfront: 0,
             };
             this.allocationData = [...this.allocationData, row];
@@ -455,10 +438,47 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
                 this.allocGrid.instance.refresh();
             } catch (e) {}
             this.computeAllocationState();
+            this.recalculateTotals();
         } catch (e) {
             console.error('addNewRow error', e);
         }
     }
+
+        // Insert a new row after the provided row reference
+        public insertRowAfter(rowData: any): void {
+            try {
+                const idx = this.allocationData.indexOf(rowData);
+                const newRow = {
+                    account: '',
+                    notional: 0,
+                    notionalPercent: 0,
+                    upfront: 0,
+                };
+                if (idx >= 0) {
+                    this.allocationData = [
+                        ...this.allocationData.slice(0, idx + 1),
+                        newRow,
+                        ...this.allocationData.slice(idx + 1),
+                    ];
+                } else {
+                    this.allocationData = [...this.allocationData, newRow];
+                }
+                        try {
+                            this.allocGrid.instance.refresh();
+                            // attempt to start editing the first cell of the newly inserted row
+                            const newIndex = this.allocationData.indexOf(newRow);
+                            if (newIndex >= 0) {
+                                try {
+                                    this.allocGrid.instance.editCell(newIndex, 'account');
+                                } catch (e) {}
+                            }
+                        } catch (e) {}
+                this.computeAllocationState();
+                this.recalculateTotals();
+            } catch (e) {
+                console.error('insertRowAfter error', e);
+            }
+        }
 
     // Delete selected rows in the grid
     public deleteSelectedRows(): void {
@@ -475,6 +495,7 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
                 this.allocGrid.instance.refresh();
             } catch (e) {}
             this.computeAllocationState();
+            this.recalculateTotals();
         } catch (e) {
             console.error('deleteSelectedRows error', e);
         }
@@ -484,6 +505,7 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
     public clearRows(): void {
         this.allocationData = [];
         this.computeAllocationState();
+        this.recalculateTotals();
     }
 
     // Calculate notional based on percent
@@ -501,21 +523,16 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
     // Compute totals and determine completion similar to backend CheckNotionalPerc
     public computeAllocationState(): void {
         try {
-            const totalPercent = this.allocationData.reduce(
-                (s: number, r: any) => s + (Number(r.notionalPercent) || 0),
-                0
-            );
-            const sumReceiveNotional = this.allocationData.reduce(
-                (s: number, r: any) => s + (Number(r.receiveNotional) || 0),
-                0
-            );
+            this.recalculateTotals();
+            const totalPercent = this.totalAllocatedPercent;
+            const sumReceiveNotional = this.totalAllocatedNotional;
 
             // if expected total provided, compare receive notional sum to expected
             let notionalOk = true;
-            if (this.expectedTotalNotional && this.expectedTotalNotional > 0) {
+            if (this.totalNotionalFromCDS && this.totalNotionalFromCDS > 0) {
                 // allow tiny rounding diff
                 notionalOk =
-                    Math.abs(sumReceiveNotional - this.expectedTotalNotional) <=
+                    Math.abs(sumReceiveNotional - this.totalNotionalFromCDS) <=
                     0.01;
             }
 
@@ -529,8 +546,8 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
 
             // Backend accepted exact equality of ReceiveNotional to expected; here we require total percent ~100 and notional match
             this.allocationComplete =
-                totalPercent >= 99 &&
-                totalPercent <= 100 &&
+                totalPercent >= 99.9 &&
+                totalPercent <= 100.1 &&
                 notionalOk &&
                 allHaveAccountAndPct &&
                 this.allocationData.length > 0;
@@ -541,103 +558,78 @@ export class AllocationFormComponent implements OnInit, OnDestroy {
     }
 
     // Handle row update events from the grid
-    public onRowUpdated(e: any): void {
-        try {
-            const data = e.data || {};
-            const key = e.key;
-            // find index
-            const idx = this.allocationData.findIndex(
-                (r: any) => r === e.data || r.account === e.key || r === e.key
-            );
-            // If not found, fallback to attempt matching by key if row object provided
-            // Update logic similar to backend: if notional changed, compute percent; if percent changed, compute notional/upfront/payNotional
-            if (
-                data.hasOwnProperty('receiveNotional') ||
-                data.hasOwnProperty('notional')
-            ) {
-                // notional edited -> update percent and pay/upfront
-                const newNotional =
-                    Number(data.receiveNotional ?? data.notional) || 0;
-                // update corresponding entry by reference or by id
-                const target =
-                    this.allocationData[idx] ??
-                    this.allocationData.find(
-                        (r: any) => r.account === (e.key?.account ?? e.key)
-                    );
-                if (target) {
-                    target.receiveNotional = Math.abs(newNotional);
-                    target.payNotional = Math.abs(
-                        this.NotionalCal(
-                            this.expectedTotalNotional || newNotional,
-                            target.notionalPercent || 0
-                        )
-                    );
-                    // compute percent if expectedTotalNotional present
-                    if (
-                        this.expectedTotalNotional &&
-                        this.expectedTotalNotional > 0
-                    ) {
-                        target.notionalPercent = +(
-                            (newNotional / this.expectedTotalNotional) *
-                            100
-                        );
-                    }
-                }
-            }
+    public onSaving(e: any): void {
+        if (e.changes.length) {
+            const change = e.changes[0];
+            // The key is the data row. The changes are in `change.data`.
+            const rowData = change.key;
 
-            if (data.hasOwnProperty('notionalPercent')) {
-                const newPct = Number(data.notionalPercent) || 0;
-                const target =
-                    this.allocationData[idx] ??
-                    this.allocationData.find(
-                        (r: any) => r.account === (e.key?.account ?? e.key)
-                    );
-                if (target) {
-                    const total =
-                        this.expectedTotalNotional ||
-                        this.allocationData.reduce(
-                            (s: number, r: any) =>
-                                s + (Number(r.receiveNotional) || 0),
-                            0
-                        );
-                    const newNotional = +(total * (newPct / 100));
-                    target.receiveNotional = Math.abs(newNotional);
-                    target.payNotional = Math.abs(
-                        this.NotionalCal(total, newPct)
-                    );
-                    target.upfront = this.NotionalCal(
-                        Number(this.initialAllocationData?.[0]?.upfront ?? 0),
-                        newPct
-                    );
-                    target.notionalPercent = newPct;
-                }
-            }
+            // Merge the pending changes into the row data to work with the latest values.
+            Object.assign(rowData, change.data);
 
-            // recompute completion state
-            this.computeAllocationState();
-        } catch (e) {
-            console.error('onRowUpdated error', e);
+            if (change.data.hasOwnProperty('notional')) {
+                // If notional was changed, recalculate percent and upfront.
+                const newNotional = rowData.notional;
+                if (this.totalNotionalFromCDS > 0) {
+                    rowData.notionalPercent = (newNotional / this.totalNotionalFromCDS) * 100;
+                } else {
+                    rowData.notionalPercent = 0;
+                }
+                rowData.upfront = (rowData.notionalPercent / 100) * this.totalUpfrontFromCDS;
+
+            } else if (change.data.hasOwnProperty('notionalPercent')) {
+                // If percent was changed, recalculate notional and upfront.
+                const newPercent = rowData.notionalPercent;
+                rowData.notional = (newPercent / 100) * this.totalNotionalFromCDS;
+                rowData.upfront = (newPercent / 100) * this.totalUpfrontFromCDS;
+            }
+            // If 'upfront' is changed, we do nothing to other fields, per requirements.
         }
+        // Recalculate totals and check if the allocation is complete after any change.
+        this.computeAllocationState();
     }
 
     public onRowInserted(e: any): void {
         this.computeAllocationState();
+        this.recalculateTotals();
     }
 
     public onRowRemoved(e: any): void {
         this.computeAllocationState();
+        this.recalculateTotals();
+    }
+
+    recalculateTotals() {
+        this.totalAllocatedNotional = this.allocationData.reduce(
+            (sum, row) => sum + (Number(row.notional) || 0),
+            0
+        );
+        this.totalAllocatedPercent = this.allocationData.reduce(
+            (sum, row) => sum + (Number(row.notionalPercent) || 0),
+            0
+        );
+        this.totalAllocatedUpfront = this.allocationData.reduce(
+            (sum, row) => sum + (Number(row.upfront) || 0),
+            0
+        );
     }
 
     // Delete a single row by reference
-    public deleteSingleRow(row: any): void {
+    public deleteSingleRow(rowData: any): void {
         try {
-            this.allocationData = this.allocationData.filter(
-                (r: any) => r !== row
-            );
+                // remove by strict reference, or try matching by account/notional/upfront if object shapes differ
+                const idx = this.allocationData.findIndex((r: any) => r === rowData || (r.account === rowData.account && Number(r.notional) === Number(rowData.notional) && Number(r.upfront) === Number(rowData.upfront)));
+                if (idx >= 0) {
+                    this.allocationData.splice(idx, 1);
+                } else {
+                    // fallback: remove any exact object
+                    this.allocationData = this.allocationData.filter((r: any) => r !== rowData);
+                }
             try {
                 this.allocGrid.instance.refresh();
             } catch (e) {}
             this.computeAllocationState();
+            this.recalculateTotals();
         } catch (e) {
             console.error('deleteSingleRow error', e);
         }
