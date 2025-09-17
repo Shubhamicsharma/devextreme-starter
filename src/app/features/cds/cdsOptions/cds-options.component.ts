@@ -1,6 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { RVHttpService } from '../../../core/services/http.service';
-import { CommonCacheDictionaryEnum, CommonCacheEnum } from '../../../shared/core/cache/cache.enum';
+import {
+    CommonCacheDictionaryEnum,
+    CommonCacheEnum,
+} from '../../../shared/core/cache/cache.enum';
 import DataSource from 'devextreme/data/data_source';
 import {
     DxTextBoxModule,
@@ -17,7 +20,7 @@ import {
     DxRadioGroupModule,
     DxSwitchModule,
     DxAccordionModule,
-    DxCheckBoxModule
+    DxCheckBoxModule,
 } from 'devextreme-angular';
 import { confirm } from 'devextreme/ui/dialog';
 import notify from 'devextreme/ui/notify';
@@ -25,9 +28,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { CounterParties, Currency, TradeAccounts, TradeNames } from '../../../shared/core/cache/cache.model';
+import {
+    CounterParties,
+    Currency,
+    TradeAccounts,
+    TradeNames,
+} from '../../../shared/core/cache/cache.model';
 import { CDSOptionModel } from '../../../core/models/cds-option.model';
-
 
 interface FormFields {
     name: string;
@@ -63,7 +70,7 @@ interface FormFields {
         DxRadioGroupModule,
         DxSwitchModule,
         DxAccordionModule,
-        DxCheckBoxModule
+        DxCheckBoxModule,
     ],
     templateUrl: './cds-options.component.html',
     styleUrls: ['./cds-options.component.scss'],
@@ -83,31 +90,31 @@ export class CDSOptionsComponent implements OnInit {
     // Data sources for select boxes
     accountsDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     tradeNamesDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     counterPartiesDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     independentCcyDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     dayCountsDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     isinDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     indicesDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     // capAllocationDataSource: DataSource = new DataSource({
     //     store: [],
@@ -115,31 +122,31 @@ export class CDSOptionsComponent implements OnInit {
     // });
     tradeActionDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     settlementTypeDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     optionTypeDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     optionStyleDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     frequencyDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     brokerAccountDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
     brokerPayAccountDataSource: DataSource = new DataSource({
         store: [],
-        paginate: false
+        paginate: false,
     });
 
     // Loading state
@@ -179,8 +186,8 @@ export class CDSOptionsComponent implements OnInit {
             displayExpr: 'name',
             options: [
                 { id: 0, name: 'Primary' },
-                { id: 1, name: 'Secondary' }
-            ]
+                { id: 1, name: 'Secondary' },
+            ],
         },
         {
             name: 'isin',
@@ -192,7 +199,6 @@ export class CDSOptionsComponent implements OnInit {
             displayExpr: 'ISINCode',
             options: undefined,
         },
-
 
         {
             name: 'tradeDate',
@@ -212,10 +218,9 @@ export class CDSOptionsComponent implements OnInit {
             displayExpr: 'name',
             options: [
                 { id: 1, name: 'Enter' },
-                { id: 2, name: 'Exit' }
-            ]
+                { id: 2, name: 'Exit' },
+            ],
         },
-
 
         {
             name: 'securityId',
@@ -244,9 +249,6 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 3,
             options: undefined,
         },
-
-
-
     ];
 
     optionFields = [
@@ -320,7 +322,7 @@ export class CDSOptionsComponent implements OnInit {
             dataSource: this.settlementTypeDataSource,
             valueExpr: 'id',
             displayExpr: 'name',
-            colSpan: 1
+            colSpan: 1,
         },
         {
             name: 'optionType',
@@ -331,7 +333,7 @@ export class CDSOptionsComponent implements OnInit {
             dataSource: this.optionTypeDataSource,
             valueExpr: 'id',
             displayExpr: 'name',
-            colSpan: 1
+            colSpan: 1,
         },
         {
             name: 'optionStyle',
@@ -342,9 +344,8 @@ export class CDSOptionsComponent implements OnInit {
             // dataSource: this.optionStyleDataSource,
             valueExpr: 'id',
             displayExpr: 'name',
-            colSpan: 1
+            colSpan: 1,
         },
-
     ];
 
     cdsFields = [
@@ -430,7 +431,7 @@ export class CDSOptionsComponent implements OnInit {
             colSpan: 1,
             options: undefined,
         },
-         {
+        {
             name: 'tradeRationale',
             label: 'Trade Rationale',
             placeholder: 'Enter Rationale',
@@ -447,17 +448,23 @@ export class CDSOptionsComponent implements OnInit {
             options: undefined,
         },
 
-       
         {
             name: 'frequency',
             label: 'Payment Frequency',
             type: 'select',
             placeholder: 'Select an option',
-            options: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Semi-Annually', 'Yearly'],
+            options: [
+                'Daily',
+                'Weekly',
+                'Monthly',
+                'Quarterly',
+                'Semi-Annually',
+                'Yearly',
+            ],
             dataSource: this.frequencyDataSource,
             valueExpr: 'id',
             displayExpr: 'name',
-            colSpan: 1
+            colSpan: 1,
         },
     ];
 
@@ -523,10 +530,7 @@ export class CDSOptionsComponent implements OnInit {
         },
     ];
 
-    constructor(
-        private fb: FormBuilder,
-        private httpService: RVHttpService
-    ) {
+    constructor(private fb: FormBuilder, private httpService: RVHttpService) {
         this.tradeForm = this.fb.group({
             account: ['', Validators.required],
             isin: ['', Validators.required],
@@ -581,7 +585,6 @@ export class CDSOptionsComponent implements OnInit {
             // ignore
         }
     }
-
 
     inputClass(controlName: string) {
         const control = this.tradeForm.get(controlName);
@@ -652,23 +655,23 @@ export class CDSOptionsComponent implements OnInit {
             {
                 title: 'Basic Information',
                 sectionType: 'basic',
-                fields: this.basicFields
+                fields: this.basicFields,
             },
             {
                 title: 'Options Details',
                 sectionType: 'options',
-                fields: this.optionFields
+                fields: this.optionFields,
             },
             {
                 title: 'CDS Details',
                 sectionType: 'cds',
-                fields: this.cdsFields
+                fields: this.cdsFields,
             },
             {
                 title: 'Trade Operations',
                 sectionType: 'tradeOps',
-                fields: this.tradeOpFields
-            }
+                fields: this.tradeOpFields,
+            },
         ];
 
         // Set all sections to be open by default
@@ -684,7 +687,9 @@ export class CDSOptionsComponent implements OnInit {
         const upfrontDateCtrl = this.tradeForm.get('upfrontDate');
         if (tradeDateCtrl && upfrontDateCtrl) {
             // initialize upfrontDate based on initial tradeDate value
-            const initialTradeDate = (tradeDateCtrl.value) ? new Date(tradeDateCtrl.value) : new Date();
+            const initialTradeDate = tradeDateCtrl.value
+                ? new Date(tradeDateCtrl.value)
+                : new Date();
             upfrontDateCtrl.setValue(this.addBusinessDays(initialTradeDate, 2));
 
             // subscribe to changes; use normalized dates to avoid timezone/time-of-day causing off-by-one
@@ -705,7 +710,11 @@ export class CDSOptionsComponent implements OnInit {
     private addBusinessDays(startDate: Date, days: number): Date {
         if (!startDate || typeof days !== 'number') return startDate;
         // Normalize start date to local midnight to avoid timezone and time-of-day issues
-        const normalized = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+        const normalized = new Date(
+            startDate.getFullYear(),
+            startDate.getMonth(),
+            startDate.getDate()
+        );
         const result = new Date(normalized);
         let added = 0;
         // Exclusive counting: start from the next calendar day
@@ -727,7 +736,7 @@ export class CDSOptionsComponent implements OnInit {
         const allFields = [
             ...(this.basicFields || []),
             ...(this.optionFields || []),
-            ...(this.cdsFields || [])
+            ...(this.cdsFields || []),
             // tradeOpFields are intentionally omitted here
         ];
 
@@ -738,8 +747,14 @@ export class CDSOptionsComponent implements OnInit {
             if (control) {
                 // preserve existing validators where possible
                 const existing = control.validator ? [control.validator] : [];
-                (control as any).setValidators([...(existing as any), Validators.required]);
-                control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+                (control as any).setValidators([
+                    ...(existing as any),
+                    Validators.required,
+                ]);
+                control.updateValueAndValidity({
+                    onlySelf: true,
+                    emitEvent: false,
+                });
                 updated.push(f.name);
             }
         });
@@ -781,19 +796,28 @@ export class CDSOptionsComponent implements OnInit {
     public getAccountsList(): any[] {
         try {
             // DevExtreme DataSource provides items() when data is loaded
-            if (this.accountsDataSource && typeof (this.accountsDataSource as any).items === 'function') {
+            if (
+                this.accountsDataSource &&
+                typeof (this.accountsDataSource as any).items === 'function'
+            ) {
                 return (this.accountsDataSource as any).items() || [];
             }
             // Fallback: if store was provided as an array during initialization
             const store = (this.accountsDataSource as any)?.store;
             return Array.isArray(store) ? store : [];
         } catch (e) {
-            console.error('Error retrieving accounts list from accountsDataSource', e);
+            console.error(
+                'Error retrieving accounts list from accountsDataSource',
+                e
+            );
             return [];
         }
     }
 
-    private _mapAndCreateDataSource<T>(data: any[], mapFn: (item: any) => T): DataSource {
+    private _mapAndCreateDataSource<T>(
+        data: any[],
+        mapFn: (item: any) => T
+    ): DataSource {
         const mappedData: T[] = data?.map(mapFn) || [];
         return new DataSource({
             store: mappedData,
@@ -818,7 +842,6 @@ export class CDSOptionsComponent implements OnInit {
         console.log(cacheTypes);
 
         this.subscription.add(
-
             this.httpService.getCacheLookupsData(cacheTypes).subscribe({
                 next: (response: any) => {
                     console.log(response);
@@ -826,9 +849,11 @@ export class CDSOptionsComponent implements OnInit {
                         this.accountsDataSource = new DataSource({
                             store: response.Model.TradeAccounts || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const accountField = this.basicFields.find(field => field.name === 'account');
+                        const accountField = this.basicFields.find(
+                            (field) => field.name === 'account'
+                        );
                         if (accountField) {
                             accountField.dataSource = this.accountsDataSource;
                         }
@@ -836,39 +861,50 @@ export class CDSOptionsComponent implements OnInit {
                         this.tradeNamesDataSource = new DataSource({
                             store: response.Model.ActiveTradeNames || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const tradeNameField = this.basicFields.find(field => field.name === 'tradeName');
+                        const tradeNameField = this.basicFields.find(
+                            (field) => field.name === 'tradeName'
+                        );
                         if (tradeNameField) {
-                            tradeNameField.dataSource = this.tradeNamesDataSource;
+                            tradeNameField.dataSource =
+                                this.tradeNamesDataSource;
                         }
 
                         this.counterPartiesDataSource = new DataSource({
                             store: response.Model.CounterParties || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const counterPartyField = this.basicFields.find(field => field.name === 'counterParty');
+                        const counterPartyField = this.basicFields.find(
+                            (field) => field.name === 'counterParty'
+                        );
                         if (counterPartyField) {
-                            counterPartyField.dataSource = this.counterPartiesDataSource;
+                            counterPartyField.dataSource =
+                                this.counterPartiesDataSource;
                         }
 
                         this.independentCcyDataSource = new DataSource({
                             store: response.Model.Currencies || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const independentCcyField = this.tradeOpFields.find(field => field.name === 'independentCcy');
+                        const independentCcyField = this.tradeOpFields.find(
+                            (field) => field.name === 'independentCcy'
+                        );
                         if (independentCcyField) {
-                            independentCcyField.dataSource = this.independentCcyDataSource;
+                            independentCcyField.dataSource =
+                                this.independentCcyDataSource;
                         }
 
                         this.dayCountsDataSource = new DataSource({
                             store: response.Model.DayCounts || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const dayCountField = this.cdsFields.find(field => field.name === 'dayCount');
+                        const dayCountField = this.cdsFields.find(
+                            (field) => field.name === 'dayCount'
+                        );
                         if (dayCountField) {
                             dayCountField.dataSource = this.dayCountsDataSource;
                         }
@@ -876,10 +912,12 @@ export class CDSOptionsComponent implements OnInit {
                         this.isinDataSource = new DataSource({
                             store: response.Model.Isins || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
 
-                        const isinField = this.basicFields.find(field => field.name === 'isin');
+                        const isinField = this.basicFields.find(
+                            (field) => field.name === 'isin'
+                        );
                         if (isinField) {
                             isinField.dataSource = this.isinDataSource;
                         }
@@ -887,31 +925,40 @@ export class CDSOptionsComponent implements OnInit {
                         this.isinDataSource = new DataSource({
                             store: response.Model.Isins || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const underlyingIsinField = this.cdsFields.find(field => field.name === 'underlyingIsin');
+                        const underlyingIsinField = this.cdsFields.find(
+                            (field) => field.name === 'underlyingIsin'
+                        );
                         if (underlyingIsinField) {
-                            underlyingIsinField.dataSource = this.isinDataSource;
+                            underlyingIsinField.dataSource =
+                                this.isinDataSource;
                         }
 
                         this.brokerAccountDataSource = new DataSource({
                             store: response.Model.TradarAccounts || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const brokerAccountField = this.tradeOpFields.find(field => field.name === 'brokerAccount');
+                        const brokerAccountField = this.tradeOpFields.find(
+                            (field) => field.name === 'brokerAccount'
+                        );
                         if (brokerAccountField) {
-                            brokerAccountField.dataSource = this.brokerAccountDataSource;
+                            brokerAccountField.dataSource =
+                                this.brokerAccountDataSource;
                         }
 
                         this.brokerPayAccountDataSource = new DataSource({
                             store: response.Model.TradarAccounts || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const brokerPayAccountField = this.tradeOpFields.find(field => field.name === 'brokerPayAccount');
+                        const brokerPayAccountField = this.tradeOpFields.find(
+                            (field) => field.name === 'brokerPayAccount'
+                        );
                         if (brokerPayAccountField) {
-                            brokerPayAccountField.dataSource = this.brokerPayAccountDataSource;
+                            brokerPayAccountField.dataSource =
+                                this.brokerPayAccountDataSource;
                         }
 
                         // Cap Allocation is a static lookup, so it can be mapped directly
@@ -924,9 +971,11 @@ export class CDSOptionsComponent implements OnInit {
                         this.indicesDataSource = new DataSource({
                             store: response.Model.IndiceList || [],
                             paginate: true,
-                            pageSize: 10
+                            pageSize: 10,
                         });
-                        const indexField = this.cdsFields.find(field => field.name === 'index');
+                        const indexField = this.cdsFields.find(
+                            (field) => field.name === 'index'
+                        );
                         if (indexField) {
                             indexField.dataSource = this.indicesDataSource;
                         }
@@ -958,53 +1007,80 @@ export class CDSOptionsComponent implements OnInit {
     }
 
     private populateStaticDataSources(): void {
-        const settlementTypeField = this.optionFields.find(field => field.name === 'settlementType');
+        const settlementTypeField = this.optionFields.find(
+            (field) => field.name === 'settlementType'
+        );
         if (settlementTypeField?.options) {
-            this.settlementTypeDataSource = this._mapAndCreateDataSource(settlementTypeField.options, (item: string) => ({
-                id: item,
-                name: item,
-            }));
+            this.settlementTypeDataSource = this._mapAndCreateDataSource(
+                settlementTypeField.options,
+                (item: string) => ({
+                    id: item,
+                    name: item,
+                })
+            );
             settlementTypeField.dataSource = this.settlementTypeDataSource;
         }
 
-        const optionTypeField = this.optionFields.find(field => field.name === 'optionType');
+        const optionTypeField = this.optionFields.find(
+            (field) => field.name === 'optionType'
+        );
         if (optionTypeField?.options) {
-            this.optionTypeDataSource = this._mapAndCreateDataSource(optionTypeField.options, (item: string) => ({
-                id: item,
-                name: item,
-            }));
+            this.optionTypeDataSource = this._mapAndCreateDataSource(
+                optionTypeField.options,
+                (item: string) => ({
+                    id: item,
+                    name: item,
+                })
+            );
             optionTypeField.dataSource = this.optionTypeDataSource;
         }
 
-        const optionStyleField = this.optionFields.find(field => field.name === 'optionStyle');
+        const optionStyleField = this.optionFields.find(
+            (field) => field.name === 'optionStyle'
+        );
         if (optionStyleField?.options) {
-            this.optionStyleDataSource = this._mapAndCreateDataSource(optionStyleField.options, (item: string) => ({
-                id: item,
-                name: item,
-            }));
+            this.optionStyleDataSource = this._mapAndCreateDataSource(
+                optionStyleField.options,
+                (item: string) => ({
+                    id: item,
+                    name: item,
+                })
+            );
             optionStyleField.dataSource = this.optionStyleDataSource;
         }
 
-        const tradeActionField = this.basicFields.find(field => field.name === 'tradeAction');
+        const tradeActionField = this.basicFields.find(
+            (field) => field.name === 'tradeAction'
+        );
         if (tradeActionField?.options) {
-            this.tradeActionDataSource = this._mapAndCreateDataSource(tradeActionField.options, (item: string) => ({
-                id: item,
-                name: item,
-            }));
+            this.tradeActionDataSource = this._mapAndCreateDataSource(
+                tradeActionField.options,
+                (item: string) => ({
+                    id: item,
+                    name: item,
+                })
+            );
             tradeActionField.dataSource = this.tradeActionDataSource;
         }
 
-        const frequencyField = this.cdsFields.find(field => field.name === 'frequency');
+        const frequencyField = this.cdsFields.find(
+            (field) => field.name === 'frequency'
+        );
         if (frequencyField?.options) {
-            this.frequencyDataSource = this._mapAndCreateDataSource(frequencyField.options, (item: string) => ({
-                id: item,
-                name: item,
-            }));
+            this.frequencyDataSource = this._mapAndCreateDataSource(
+                frequencyField.options,
+                (item: string) => ({
+                    id: item,
+                    name: item,
+                })
+            );
             frequencyField.dataSource = this.frequencyDataSource;
         }
 
         // Bind independent currency list to the upfrontCcy select (right-side of upfront amount)
-        const upfrontCcyField = this.optionFields.find(field => field.name === 'upfrontCcy');
+        const upfrontCcyField = this.optionFields.find(
+            (field) => field.name === 'upfrontCcy'
+        );
         if (upfrontCcyField) {
             upfrontCcyField.dataSource = this.independentCcyDataSource;
             upfrontCcyField.valueExpr = 'Id';
@@ -1038,11 +1114,14 @@ export class CDSOptionsComponent implements OnInit {
     // Method to get form data for the stepper
     getFormData(): Partial<CDSOptionModel> {
         // Use getRawValue() to include disabled controls (securityId, description) which are intentionally disabled/read-only
-        const formValue = (typeof (this.tradeForm as any).getRawValue === 'function')
-            ? (this.tradeForm as any).getRawValue()
-            : this.tradeForm.value;
+        const formValue =
+            typeof (this.tradeForm as any).getRawValue === 'function'
+                ? (this.tradeForm as any).getRawValue()
+                : this.tradeForm.value;
 
-        const tradeDate = formValue.tradeDate ? new Date(formValue.tradeDate) : null;
+        const tradeDate = formValue.tradeDate
+            ? new Date(formValue.tradeDate)
+            : null;
         if (tradeDate) {
             tradeDate.setHours(0, 0, 0, 0);
         }
@@ -1110,8 +1189,67 @@ export class CDSOptionsComponent implements OnInit {
             // UTI
             utiId: formValue.utiId ?? null,
             utiPrefix: formValue.utiPrefix ?? null,
-
         } as Partial<CDSOptionModel>;
     }
 
+    public handleNumericKeyDown(e: any): void {
+        const event = e.event as KeyboardEvent;
+        const input = event.target as HTMLInputElement;
+        const key = event.key;
+        const value = input.value;
+
+        // Allow control keys
+        if (
+            [
+                'Backspace',
+                'Delete',
+                'ArrowLeft',
+                'ArrowRight',
+                'Tab',
+                'Enter',
+            ].includes(key) ||
+            (event.ctrlKey && ['a', 'c', 'v', 'x'].includes(key.toLowerCase()))
+        ) {
+            return;
+        }
+
+        // Allow numbers
+        if (key >= '0' && key <= '9') {
+            return;
+        }
+
+        // Allow one dot
+        if (key === '.' && !value.includes('.')) {
+            return;
+        }
+
+        // Allow k, m, b only at the end and only one of them
+        if (['k', 'm', 'b'].includes(key.toLowerCase())) {
+            if (!/[kmb]/.test(value.toLowerCase())) {
+                return;
+            }
+        }
+
+        event.preventDefault();
+    }
+
+    public handleNumericKeyUp(event: any, fieldName: string): void {
+        const input = event.event.target as HTMLInputElement;
+        const value = input.value.toLowerCase();
+
+        let numericValue: number | null = null;
+        if (value.endsWith('k')) {
+            numericValue = parseFloat(value.slice(0, -1)) * 1000;
+        } else if (value.endsWith('m')) {
+            numericValue = parseFloat(value.slice(0, -1)) * 1000000;
+        } else if (value.endsWith('b')) {
+            numericValue = parseFloat(value.slice(0, -1)) * 1000000000;
+        } else {
+            return; // No suffix, do nothing on key up
+        }
+
+        if (numericValue !== null && !isNaN(numericValue)) {
+            this.tradeForm.get(fieldName)?.setValue(numericValue);
+        }
+    }
 }

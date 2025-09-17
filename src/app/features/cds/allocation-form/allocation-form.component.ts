@@ -137,6 +137,7 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
     accountsList: any[] = [];
     setAccountsList(accounts: any[] | null): void {
         this.accountsList = accounts ?? [];
+        console.log('Setting accounts list:', this.accountsList);
     }
 
     // Extracted mapping logic so it can be reused from ngOnChanges and setter
@@ -410,8 +411,6 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
         );
     }
 
-  
-
     // Navigate back to previous step
     goToPrevious(): void {
         this.navigateToPrevious.emit();
@@ -444,41 +443,41 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-        // Insert a new row after the provided row reference
-        public insertRowAfter(rowData: any): void {
-            try {
-                const idx = this.allocationData.indexOf(rowData);
-                const newRow = {
-                    account: '',
-                    notional: 0,
-                    notionalPercent: 0,
-                    upfront: 0,
-                };
-                if (idx >= 0) {
-                    this.allocationData = [
-                        ...this.allocationData.slice(0, idx + 1),
-                        newRow,
-                        ...this.allocationData.slice(idx + 1),
-                    ];
-                } else {
-                    this.allocationData = [...this.allocationData, newRow];
-                }
-                        try {
-                            this.allocGrid.instance.refresh();
-                            // attempt to start editing the first cell of the newly inserted row
-                            const newIndex = this.allocationData.indexOf(newRow);
-                            if (newIndex >= 0) {
-                                try {
-                                    this.allocGrid.instance.editCell(newIndex, 'account');
-                                } catch (e) {}
-                            }
-                        } catch (e) {}
-                this.computeAllocationState();
-                this.recalculateTotals();
-            } catch (e) {
-                console.error('insertRowAfter error', e);
+    // Insert a new row after the provided row reference
+    public insertRowAfter(rowData: any): void {
+        try {
+            const idx = this.allocationData.indexOf(rowData);
+            const newRow = {
+                account: '',
+                notional: 0,
+                notionalPercent: 0,
+                upfront: 0,
+            };
+            if (idx >= 0) {
+                this.allocationData = [
+                    ...this.allocationData.slice(0, idx + 1),
+                    newRow,
+                    ...this.allocationData.slice(idx + 1),
+                ];
+            } else {
+                this.allocationData = [...this.allocationData, newRow];
             }
+            try {
+                this.allocGrid.instance.refresh();
+                // attempt to start editing the first cell of the newly inserted row
+                const newIndex = this.allocationData.indexOf(newRow);
+                if (newIndex >= 0) {
+                    try {
+                        this.allocGrid.instance.editCell(newIndex, 'account');
+                    } catch (e) {}
+                }
+            } catch (e) {}
+            this.computeAllocationState();
+            this.recalculateTotals();
+        } catch (e) {
+            console.error('insertRowAfter error', e);
         }
+    }
 
     // Delete selected rows in the grid
     public deleteSelectedRows(): void {
@@ -571,16 +570,18 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
                 // If notional was changed, recalculate percent and upfront.
                 const newNotional = rowData.notional;
                 if (this.totalNotionalFromCDS > 0) {
-                    rowData.notionalPercent = (newNotional / this.totalNotionalFromCDS) * 100;
+                    rowData.notionalPercent =
+                        (newNotional / this.totalNotionalFromCDS) * 100;
                 } else {
                     rowData.notionalPercent = 0;
                 }
-                rowData.upfront = (rowData.notionalPercent / 100) * this.totalUpfrontFromCDS;
-
+                rowData.upfront =
+                    (rowData.notionalPercent / 100) * this.totalUpfrontFromCDS;
             } else if (change.data.hasOwnProperty('notionalPercent')) {
                 // If percent was changed, recalculate notional and upfront.
                 const newPercent = rowData.notionalPercent;
-                rowData.notional = (newPercent / 100) * this.totalNotionalFromCDS;
+                rowData.notional =
+                    (newPercent / 100) * this.totalNotionalFromCDS;
                 rowData.upfront = (newPercent / 100) * this.totalUpfrontFromCDS;
             }
             // If 'upfront' is changed, we do nothing to other fields, per requirements.
@@ -615,19 +616,31 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     // Delete a single row by reference
-    public deleteSingleRow(rowData: any): void {
+    public deleteSingleRow(rowData: { data: any }): void {
         try {
-                // remove by strict reference, or try matching by account/notional/upfront if object shapes differ
-                const idx = this.allocationData.findIndex((r: any) => r === rowData || (r.account === rowData.account && Number(r.notional) === Number(rowData.notional) && Number(r.upfront) === Number(rowData.upfront)));
-                if (idx >= 0) {
-                    this.allocationData.splice(idx, 1);
-                } else {
-                    // fallback: remove any exact object
-                    this.allocationData = this.allocationData.filter((r: any) => r !== rowData);
-                }
+            console.log('Deleting row', rowData.data);
+            // remove by strict reference, or try matching by account/notional/upfront if object shapes differ
+            const idx = this.allocationData.findIndex(
+                (r: any) =>
+                    r === rowData.data ||
+                    (r.account === rowData.data.account &&
+                        Number(r.notional) === Number(rowData.data.notional) &&
+                        Number(r.upfront) === Number(rowData.data.upfront))
+            );
+            if (idx >= 0) {
+                this.allocationData.splice(idx, 1);
+            } else {
+                // fallback: remove any exact object
+                this.allocationData = this.allocationData.filter(
+                    (r: any) => r !== rowData.data
+                );
+            }
             try {
+                console.log('Refreshing grid after deletion');
                 this.allocGrid.instance.refresh();
-            } catch (e) {}
+            } catch (e) {
+                console.error('Error refreshing grid after row deletion', e);
+            }
             this.computeAllocationState();
             this.recalculateTotals();
         } catch (e) {

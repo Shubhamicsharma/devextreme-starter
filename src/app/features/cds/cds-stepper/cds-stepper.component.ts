@@ -246,56 +246,58 @@ export class CDSStepperComponent implements OnInit, OnDestroy {
         const allocationData = this.allocationForm?.getFormData();
 
         // Combine the data from both forms into the format expected by the API
-        const payload: CDSOptionModel[] = allocationData.map((alloc: any, idx: number) => {
-            const model: CDSOptionModel = {
-                id: 0,
-                // assign a 1-based sequential tradeId per allocation row
-                tradeId: idx + 1,
-                accountId: alloc.account,
-                tradeDate: cdsData.tradeDate ?? new Date().toISOString(),
-                tradeNameId: cdsData.tradeNameId ?? 0,
-                settlementDate:
-                    cdsData.settlementDate ?? new Date().toISOString(),
-                isinId: cdsData.isinId ?? 0,
-                capitalAllocation: cdsData.capitalAllocation ?? 0,
-                securityId: cdsData.securityId ?? '',
-                description: cdsData.description ?? '',
-                tradePrice: cdsData.tradePrice ?? 0,
-                traderRationale: cdsData.traderRationale ?? '',
-                tradarAccount: cdsData.tradarAccount ?? '',
-                tradarPayAccount: cdsData.tradarPayAccount ?? '',
-                finUpdateTime: new Date().toISOString(),
-                currencyId: cdsData.currencyId ?? 0,
-                notional: alloc.notional,
-                enteredById: null,
-                counterpartyId: cdsData.counterpartyId,
-                strikeRate: cdsData.strikeRate,
-                upfront: alloc.upfront,
-                upfrontDate: cdsData.upfrontDate,
-                upfrontCCY: cdsData.upfrontCCY, // need to check this field
-                payFreq: cdsData.payFreq,
-                tradeAction: cdsData.tradeAction,
-                dayCount: cdsData.dayCount,
-                firstCouponDate: cdsData.firstCouponDate,
-                redCode: cdsData.redCode,
-                accruedInterest: cdsData.accruedInterest,
-                underlyingISIN: cdsData.underlyingISIN,
-                indeptAmt: cdsData.indeptAmt,
-                indeptCCY: cdsData.indeptCCY,
-                optionType: cdsData.optionType,
-                optionStyle: cdsData.optionStyle,
-                exchangeRate: cdsData.exchangeRate,
-                spread: cdsData.spread,
-                cdsIndexName: cdsData.cdsIndexName,
-                settlementType: cdsData.settlementType,
-                optionExpiryDate:
-                    cdsData.optionExpiryDate ?? new Date().toISOString(),
-                utiId: cdsData.utiId,
-                utiPrefix: cdsData.utiPrefix,
-                fixedRate: cdsData.fixedRate,
-            };
-            return model;
-        });
+        const payload: CDSOptionModel[] = allocationData.map(
+            (alloc: any, idx: number) => {
+                const model: CDSOptionModel = {
+                    id: 0,
+                    // assign a 1-based sequential tradeId per allocation row
+                    tradeId: idx + 1,
+                    accountId: alloc.account,
+                    tradeDate: cdsData.tradeDate ?? new Date().toISOString(),
+                    tradeNameId: cdsData.tradeNameId ?? 0,
+                    settlementDate:
+                        cdsData.settlementDate ?? new Date().toISOString(),
+                    isinId: cdsData.isinId ?? 0,
+                    capitalAllocation: cdsData.capitalAllocation ?? 0,
+                    securityId: cdsData.securityId ?? '',
+                    description: cdsData.description ?? '',
+                    tradePrice: cdsData.tradePrice ?? 0,
+                    traderRationale: cdsData.traderRationale ?? '',
+                    tradarAccount: cdsData.tradarAccount ?? '',
+                    tradarPayAccount: cdsData.tradarPayAccount ?? '',
+                    finUpdateTime: new Date().toISOString(),
+                    currencyId: cdsData.currencyId ?? 0,
+                    notional: alloc.notional,
+                    enteredById: null,
+                    counterpartyId: cdsData.counterpartyId,
+                    strikeRate: cdsData.strikeRate,
+                    upfront: alloc.upfront,
+                    upfrontDate: cdsData.upfrontDate,
+                    upfrontCCY: cdsData.upfrontCCY, // need to check this field
+                    payFreq: cdsData.payFreq,
+                    tradeAction: cdsData.tradeAction,
+                    dayCount: cdsData.dayCount,
+                    firstCouponDate: cdsData.firstCouponDate,
+                    redCode: cdsData.redCode,
+                    accruedInterest: cdsData.accruedInterest,
+                    underlyingISIN: cdsData.underlyingISIN,
+                    indeptAmt: cdsData.indeptAmt,
+                    indeptCCY: cdsData.indeptCCY,
+                    optionType: cdsData.optionType,
+                    optionStyle: cdsData.optionStyle,
+                    exchangeRate: cdsData.exchangeRate,
+                    spread: cdsData.spread,
+                    cdsIndexName: cdsData.cdsIndexName,
+                    settlementType: cdsData.settlementType,
+                    optionExpiryDate:
+                        cdsData.optionExpiryDate ?? new Date().toISOString(),
+                    utiId: cdsData.utiId,
+                    utiPrefix: cdsData.utiPrefix,
+                    fixedRate: cdsData.fixedRate,
+                };
+                return model;
+            }
+        );
         console.log('Submitting payload:', payload);
 
         this.isSubmitting = true;

@@ -1,23 +1,29 @@
 <div class="p-3">
-  <div class="mb-6">
-    <div class="flex flex-wrap items-end gap-4">
-      <div class="flex-1 min-w-80">
-        <label class="block text-sm font-medium mb-2">Select Template</label>
-        <div class="flex gap-3 items-end">
-          <dx-select-box
-            [items]="fundCombinations"
-            displayExpr="Title"
-            valueExpr="Title"
-            [(value)]="selectedFundCombinationTitle"
-            [width]="320"
-            [disabled]="isLoadingTemplates"
-            [placeholder]="isLoadingTemplates ? 'Loading templates...' : 'Choose a template...'"
-            [searchEnabled]="true"
-            [showClearButton]="true"
-            (onValueChanged)="loadTemplate()"
-            >
-          </dx-select-box>
-          <!-- <dx-button 
+    <div class="mb-6">
+        <div class="flex flex-wrap items-end gap-4">
+            <div class="flex-1 min-w-80">
+                <label class="block text-sm font-medium mb-2"
+                    >Select Template</label
+                >
+                <div class="flex gap-3 items-end">
+                    <dx-select-box
+                        [items]="fundCombinations"
+                        displayExpr="Title"
+                        valueExpr="Title"
+                        [(value)]="selectedFundCombinationTitle"
+                        [width]="320"
+                        [disabled]="isLoadingTemplates"
+                        [placeholder]="
+                            isLoadingTemplates
+                                ? 'Loading templates...'
+                                : 'Choose a template...'
+                        "
+                        [searchEnabled]="true"
+                        [showClearButton]="true"
+                        (onValueChanged)="loadTemplate()"
+                    >
+                    </dx-select-box>
+                    <!-- <dx-button 
             text="Refresh"
             type="normal"
             stylingMode="outlined"
@@ -28,113 +34,125 @@
             [disabled]="isLoadingTemplates"
             hint="Refresh templates from server">
           </dx-button> -->
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <dx-data-grid #allocGrid
-      [dataSource]="allocationData"
-      [showBorders]="true"
-      [rowAlternationEnabled]="true"
-      [columnAutoWidth]="true"
-      [hoverStateEnabled]="true"
-      class="auto-height-grid"
-      (onSaving)="onSaving($event)"
-      (onRowInserted)="onRowInserted($event)"
-      (onRowRemoved)="onRowRemoved($event)">
-      
-      <dxo-paging [enabled]="false"></dxo-paging>
-      <!-- <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="true" [allowDeleting]="true"></dxo-editing> -->
+    <dx-data-grid
+        #allocGrid
+        [dataSource]="allocationData"
+        [showBorders]="true"
+        [rowAlternationEnabled]="true"
+        [columnAutoWidth]="true"
+        [hoverStateEnabled]="true"
+        class="auto-height-grid"
+        (onSaving)="onSaving($event)"
+        (onRowInserted)="onRowInserted($event)"
+        (onRowRemoved)="onRowRemoved($event)"
+    >
+        <dxo-paging [enabled]="false"></dxo-paging>
+        <dxo-editing
+            mode="cell"
+            [allowUpdating]="true"
+            [allowAdding]="true"
+            [allowDeleting]="true"
+        ></dxo-editing>
 
-      <dxi-column 
-        dataField="account" 
-        caption="Account" 
-        [width]="140"
-        alignment="left">
-         <dxo-lookup
-            [dataSource]="accountsList"
-            valueExpr="Id"
-            displayExpr="Name"
-        ></dxo-lookup>
-      </dxi-column>
-      <dxi-column 
-        dataField="notionalPercent" 
-        caption="Notional %" 
-        [width]="160"
-        dataType="number"
-        format="#,##0.00"
-        alignment="right">
-      </dxi-column>
-      
-      <dxi-column 
-        dataField="notional" 
-        caption="Notional" 
-        dataType="number"
-        format="#,##0.00"
-        alignment="right">
-      </dxi-column>
+        <dxi-column
+            dataField="account"
+            caption="Account"
+            [width]="140"
+            alignment="left"
+        >
+            <dxo-lookup
+                [dataSource]="accountsList"
+                valueExpr="Id"
+                displayExpr="Name"
+            ></dxo-lookup>
+        </dxi-column>
+        <dxi-column
+            dataField="notionalPercent"
+            caption="Notional %"
+            [width]="160"
+            dataType="number"
+            format="#,##0.00"
+            alignment="right"
+        >
+        </dxi-column>
 
-      <dxi-column 
-        dataField="upfront" 
-        caption="Upfront" 
-        dataType="number" 
-        format="#,##0.0000"
-        alignment="right">
-      </dxi-column>
+        <dxi-column
+            dataField="notional"
+            caption="Notional"
+            dataType="number"
+            format="#,##0.00"
+            alignment="right"
+        >
+        </dxi-column>
 
-      <dxi-column 
-        caption="Actions" 
-        [width]="140" 
-        cellTemplate="actionCell"
-        alignment="center">
-      </dxi-column>
+        <dxi-column
+            dataField="upfront"
+            caption="Upfront"
+            dataType="number"
+            format="#,##0.0000"
+            alignment="right"
+        >
+        </dxi-column>
 
-      <div *dxTemplate="let data of 'actionCell'">
-        <div class="flex justify-center gap-1">
-          <dx-button 
-            icon="plus" 
-            stylingMode="text" 
-            type="success" 
-            [height]="28" 
-            (onClick)="insertRowAfter(data)"
-            hint="Insert Row After"
-            class="custom-icon-size"
-            >
-          </dx-button>
-          <dx-button 
-            icon="trash" 
-            stylingMode="text" 
-            type="danger" 
-            [height]="28" 
-            (onClick)="deleteSingleRow(data)"
-            hint="Delete Row"
-            class="custom-icon-size">
-          </dx-button>
+        <dxi-column
+            caption="Actions"
+            [width]="140"
+            cellTemplate="actionCell"
+            alignment="center"
+        >
+        </dxi-column>
+
+        <div *dxTemplate="let data of 'actionCell'">
+            <div class="flex justify-center gap-1">
+                <dx-button
+                    icon="plus"
+                    stylingMode="text"
+                    type="success"
+                    [height]="28"
+                    (onClick)="insertRowAfter(data)"
+                    hint="Insert Row After"
+                    class="custom-icon-size"
+                >
+                </dx-button>
+                <dx-button
+                    icon="trash"
+                    stylingMode="text"
+                    type="danger"
+                    [height]="28"
+                    (onClick)="deleteSingleRow(data)"
+                    hint="Delete Row"
+                    class="custom-icon-size"
+                >
+                </dx-button>
+            </div>
         </div>
-      </div>
-      <dxo-summary [recalculateWhileEditing]="true">
-        <dxi-total-item
-            column="notional"
-            summaryType="sum"
-            valueFormat="#,##0.00"
-            displayFormat="Total: {0}"
-        ></dxi-total-item>
-        <dxi-total-item
-            column="notionalPercent"
-            summaryType="sum"
-            valueFormat="#,##0.00"
-            displayFormat="{0} %"
-        ></dxi-total-item>
-        <dxi-total-item
-            column="upfront"
-            summaryType="sum"
-            valueFormat="#,##0.0000"
-            displayFormat="{0}"
-        ></dxi-total-item>
-    </dxo-summary>
-  </dx-data-grid>
-<!-- 
+        <dxo-summary [recalculateWhileEditing]="true">
+            <dxi-total-item
+                column="notional"
+                summaryType="sum"
+                valueFormat="#,##0.00"
+                displayFormat="Total: {0}"
+            ></dxi-total-item>
+            <dxi-total-item
+                column="notionalPercent"
+                summaryType="sum"
+                valueFormat="#,##0.00"
+                displayFormat="{0} %"
+            ></dxi-total-item>
+            <dxi-total-item
+                column="upfront"
+                summaryType="sum"
+                valueFormat="#,##0.0000"
+                displayFormat="{0}"
+            ></dxi-total-item>
+        </dxo-summary>
+    </dx-data-grid>
+    <!-- 
   <div class="flex justify-end mt-4 space-x-2">
       <dx-button
           text="Previous"
