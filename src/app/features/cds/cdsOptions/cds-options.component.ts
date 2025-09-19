@@ -48,6 +48,7 @@ interface FormFields {
     displayExpr?: string; // Add displayExpr property
     onText?: string; // For switch
     offText?: string; // For switch
+    disabled?: boolean; // To make field read-only
 }
 
 @Component({
@@ -86,6 +87,9 @@ export class CDSOptionsComponent implements OnInit {
     accordionCollapsible = true;
     accordionSections: any[] = [];
     selectedAccordionItems: any[] = []; // Will be populated in ngOnInit
+
+    // Component variables
+    isinList: any[] = [];
 
     // Data sources for select boxes
     accountsDataSource: DataSource = new DataSource({
@@ -248,6 +252,33 @@ export class CDSOptionsComponent implements OnInit {
             placeholder: 'Description',
             colSpan: 3,
             options: undefined,
+        },
+        {
+            name: 'CountryId',
+            label: 'Country',
+            type: 'text',
+            placeholder: 'Country',
+            colSpan: 1,
+            options: undefined,
+            disabled: true,
+        },
+        {
+            name: 'BBGType',
+            label: 'BBG Type',
+            type: 'text',
+            placeholder: 'BBG Type',
+            colSpan: 1,
+            options: undefined,
+            disabled: true,
+        },
+        {
+            name: 'AssetQuality',
+            label: 'Asset Quality',
+            type: 'text',
+            placeholder: 'Asset Quality',
+            colSpan: 1,
+            options: undefined,
+            disabled: true,
         },
     ];
 
@@ -574,15 +605,25 @@ export class CDSOptionsComponent implements OnInit {
             independentCcy: [''],
             brokerAccount: [''],
             brokerPayAccount: [''],
+            CountryId: [''],
+            BBGType: [''],
+            AssetQuality: [''],
         });
-        // Make securityId and description read-only by disabling the controls
-        const secCtrl = this.tradeForm.get('securityId');
-        const descCtrl = this.tradeForm.get('description');
+        // Make controls read-only by disabling them
         try {
+            const secCtrl = this.tradeForm.get('securityId');
+            const descCtrl = this.tradeForm.get('description');
+            const countryIdCtrl = this.tradeForm.get('CountryId');
+            const bbgTypeCtrl = this.tradeForm.get('BBGType');
+            const assetQualityCtrl = this.tradeForm.get('AssetQuality');
+
             secCtrl?.disable({ emitEvent: false });
             descCtrl?.disable({ emitEvent: false });
+            countryIdCtrl?.disable({ emitEvent: false });
+            bbgTypeCtrl?.disable({ emitEvent: false });
+            assetQualityCtrl?.disable({ emitEvent: false });
         } catch (e) {
-            // ignore
+            console.error('Error disabling form controls:', e);
         }
     }
 
@@ -650,6 +691,40 @@ export class CDSOptionsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // Set up ISIN selection subscription
+        const isinCtrl = this.tradeForm.get('isin');
+        if (isinCtrl) {
+            this.subscription.add(
+                isinCtrl.valueChanges.subscribe((selectedIsinId: number) => {
+                    console.log('Selected ISIN ID:', selectedIsinId);
+                    if (selectedIsinId) {
+                        console.log('ISIN Data Source:', this.isinDataSource.store());
+                        // Get the selected ISIN data from the data source`
+                        const isinData = this.isinList.find((item: any) => item.Id === selectedIsinId);
+                        console.log('Found ISIN data:', isinData);
+                        if (isinData) {
+                            // Update the form controls with ISIN data
+                            const updateData = {
+                                CountryId: isinData.CountryId ?? null,
+                                BBGType: isinData.BBGType ?? null,
+                                AssetQuality: isinData.AssetQuality ?? null
+                            };
+                            console.log('Updating form with:', updateData);
+                            this.tradeForm.patchValue(updateData, { emitEvent: false });
+                            console.log('Trade form with:', this.tradeForm.getRawValue());
+                        }
+                    } else {
+                        // Clear the fields if no ISIN is selected
+                        this.tradeForm.patchValue({
+                            CountryId: null,
+                            BBGType: null,
+                            AssetQuality: null
+                        }, { emitEvent: false });
+                    }
+                })
+            );
+        }
+
         // Initialize accordion sections
         this.accordionSections = [
             {
@@ -909,8 +984,9 @@ export class CDSOptionsComponent implements OnInit {
                             dayCountField.dataSource = this.dayCountsDataSource;
                         }
 
+                        this.isinList = response.Model.Isins || [];
                         this.isinDataSource = new DataSource({
-                            store: response.Model.Isins || [],
+                            store: this.isinList,
                             paginate: true,
                             pageSize: 10,
                         });
@@ -922,11 +998,6 @@ export class CDSOptionsComponent implements OnInit {
                             isinField.dataSource = this.isinDataSource;
                         }
 
-                        this.isinDataSource = new DataSource({
-                            store: response.Model.Isins || [],
-                            paginate: true,
-                            pageSize: 10,
-                        });
                         const underlyingIsinField = this.cdsFields.find(
                             (field) => field.name === 'underlyingIsin'
                         );
@@ -1118,6 +1189,7 @@ export class CDSOptionsComponent implements OnInit {
             typeof (this.tradeForm as any).getRawValue === 'function'
                 ? (this.tradeForm as any).getRawValue()
                 : this.tradeForm.value;
+        console.log('Form Value for mapping:', formValue);
 
         const tradeDate = formValue.tradeDate
             ? new Date(formValue.tradeDate)
@@ -1129,41 +1201,41 @@ export class CDSOptionsComponent implements OnInit {
         // Map form fields to the backend CDSOptionModel property names
         return {
             // Identifiers
-            accountId: formValue.account,
-            isinId: formValue.isin,
-            tradeNameId: formValue.tradeName,
-            counterpartyId: formValue.counterParty,
+            Id: 0,
+            AccountId: formValue.account,
+            ISINId: formValue.isin,
+            TradeNameId: formValue.tradeName,
+            CounterPartyId: formValue.counterParty,
 
             // Dates
-            tradeDate: tradeDate,
-            settlementDate: formValue.settlementDate ?? null,
-            maturityDate: formValue.maturityDate ?? null,
-            upfrontDate: formValue.upfrontDate ?? null,
-            firstCouponDate: formValue.firstCoupon ?? null,
-            optionExpiryDate: formValue.optionExpiry ?? null,
+            TradeDate: tradeDate,
+            SettlementDate: formValue.settlementDate ? new Date(formValue.settlementDate) : null,
+            MaturityDate: formValue.maturityDate ? new Date(formValue.maturityDate) : new Date(),
+            UpfrontDate: formValue.upfrontDate ? new Date(formValue.upfrontDate) : null,
+            FirstCouponDate: formValue.firstCoupon ? new Date(formValue.firstCoupon) : null,
+            OptionExpiryDate: formValue.optionExpiry ? new Date(formValue.optionExpiry) : null,
 
             // Amounts / money
-            notional: Number(formValue.notional) ?? 0,
-            tradePrice: Number(formValue.premium) ?? 0,
-            upfront: formValue.upfront ?? null,
-            accruedInterest: formValue.accuredInterest ?? null,
-            capitalAllocation: formValue.capAllocation ?? null,
-            fixedRate: formValue.fixedRate ?? null,
+            Notional: Number(formValue.notional) ?? null,
+            TradePrice: Number(formValue.premium) ?? null,
+            Upfront: formValue.upfront ?? null,
+            AccruedInterest: formValue.accuredInterest ?? null,
+            CapitalAllocation: formValue.capAllocation ?? null,
 
             // Accounts
-            tradarAccount: formValue.brokerAccount ?? null,
-            tradarPayAccount: formValue.brokerPayAccount ?? null,
+            TradarAccount: (formValue.brokerAccount && formValue.brokerAccount !== '') ? formValue.brokerAccount : null,
+            TradarPayAccount: (formValue.brokerPayAccount && formValue.brokerPayAccount !== '') ? formValue.brokerPayAccount : null,
 
             // Security / description
-            securityId: formValue.securityId ?? null,
-            description: formValue.description ?? null,
+            SecurityID: formValue.securityId ?? '',
+            Description: formValue.description ?? '',
 
             // CDS / option specifics
-            strikeRate: formValue.strikeRate ?? null,
-            upfrontCCY: formValue.upfrontCcy ?? null,
-            currencyId: formValue.independentCcy ?? null,
-            exchangeRate: formValue.upfrontCcyFxRate ?? null,
-            settlementType: (() => {
+            StrikeRate: formValue.strikeRate ?? null,
+            UpfrontCCY: formValue.upfrontCcy ?? null,
+            CurrencyId: formValue.independentCcy ?? null,
+            ExchangeRate: formValue.upfrontCcyFxRate ?? null,
+            SettlementType: (() => {
                 const v = formValue.settlementType;
                 if (v === undefined || v === null) return null;
                 const s = String(v).trim().toLowerCase();
@@ -1171,24 +1243,34 @@ export class CDSOptionsComponent implements OnInit {
                 if (s === 'physical' || s === 'p') return 'P';
                 return null;
             })(),
-            optionType: formValue.optionType ?? null,
-            optionStyle: formValue.optionStyle ?? null,
-            payFreq: formValue.frequency ?? null,
-            tradeAction: formValue.tradeAction === 1 ? 'ENTER' : 'EXIT',
-            dayCount: formValue.dayCount ?? null,
-            redCode: formValue.redCode ?? null,
-            underlyingISIN: formValue.underlyingIsin ?? null,
-            indeptAmt: formValue.independentAmt ?? null,
-            indeptCCY: formValue.independentCcy ?? null,
-            spread: formValue.spread ?? null,
+            OptionType: formValue.optionType ?? null,
+            OptionStyle: formValue.optionStyle ?? null,
+            PayFreq: formValue.frequency ?? null,
+            TradeAction: formValue.tradeAction === 1 ? 'ENTER' : 'EXIT',
+            DayCount: formValue.dayCount ?? null,
+            REDCode: formValue.redCode ?? null,
+            UnderlyingISIN: formValue.underlyingIsin ?? null,
+            IndeptAmt: formValue.independentAmt ?? null,
+            IndeptCCY: formValue.independentCcy ?? null,
+            Spread: formValue.spread ?? null,
 
             // Free-text / rationale
-            traderRationale: formValue.tradeRationale ?? null,
-            cdsIndexName: formValue.index ?? null,
+            TraderRationale: formValue.tradeRationale ?? '',
+            CDSIndexName: formValue.index ?? null,
 
-            // UTI
-            utiId: formValue.utiId ?? null,
-            utiPrefix: formValue.utiPrefix ?? null,
+            // Additional fields from C# model
+            BenchmarkIndex: formValue.index ?? null,
+            CountryId: formValue.CountryId ?? null,
+            BBGType: formValue.BBGType ?? null,
+            AssetQuality: formValue.AssetQuality ?? null,
+
+            // UTI and Fixed Rate fields
+            UtiId: formValue.utiId ?? null,
+            UtiPrefix: formValue.utiPrefix ?? null,
+            FixedRate: formValue.fixedRate ?? null,
+
+            // Data handling
+            EnteredById: 1068,
         } as Partial<CDSOptionModel>;
     }
 
