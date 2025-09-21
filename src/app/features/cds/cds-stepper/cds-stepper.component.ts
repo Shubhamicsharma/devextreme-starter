@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import {
     DxButtonModule,
     DxPopupModule,
-    DxScrollViewModule
+    DxScrollViewModule,
 } from 'devextreme-angular';
 import { AllocationFormComponent } from '../allocation-form/allocation-form.component';
 import { CDSOptionsComponent } from '../cdsOptions/cds-options.component';
@@ -106,7 +106,7 @@ export class CDSStepperComponent implements OnInit, OnDestroy {
                 const allocAny = this.allocationForm as any;
                 // Pass accounts list from CDS options so allocation can resolve FundId -> account name
                 try {
-                    const accounts = this.cdsOptionsForm.getAccountsList();
+                    const accounts = this.cdsOptionsForm.tradeAccounts || [];
                     if (typeof allocAny.setAccountsList === 'function') {
                         allocAny.setAccountsList(accounts);
                     } else {
@@ -253,9 +253,11 @@ export class CDSStepperComponent implements OnInit, OnDestroy {
                     // assign a 1-based sequential tradeId per allocation row
                     TradeId: idx + 1,
                     AccountId: alloc.account,
-                    TradeDate: cdsData.TradeDate ? new Date(cdsData.TradeDate) : null,
+                    TradeDate: cdsData.TradeDate ? cdsData.TradeDate : null,
                     TradeNameId: cdsData.TradeNameId ?? 0,
-                    SettlementDate: cdsData.SettlementDate ? new Date(cdsData.SettlementDate) : null,
+                    SettlementDate: cdsData.SettlementDate
+                        ? cdsData.SettlementDate
+                        : null,
                     ISINId: cdsData.ISINId ?? null,
                     CapitalAllocation: cdsData.CapitalAllocation ?? null,
                     SecurityID: cdsData.SecurityID ?? '',
@@ -271,12 +273,16 @@ export class CDSStepperComponent implements OnInit, OnDestroy {
                     CounterPartyId: cdsData.CounterPartyId ?? null,
                     StrikeRate: cdsData.StrikeRate ?? null,
                     Upfront: alloc.upfront ?? null,
-                    UpfrontDate: cdsData.UpfrontDate ? new Date(cdsData.UpfrontDate) : null,
+                    UpfrontDate: cdsData.UpfrontDate
+                        ? cdsData.UpfrontDate
+                        : null,
                     UpfrontCCY: cdsData.UpfrontCCY ?? null,
                     PayFreq: cdsData.PayFreq ?? null,
                     TradeAction: cdsData.TradeAction ?? null,
                     DayCount: cdsData.DayCount ?? null,
-                    FirstCouponDate: cdsData.FirstCouponDate ? new Date(cdsData.FirstCouponDate) : null,
+                    FirstCouponDate: cdsData.FirstCouponDate
+                        ? cdsData.FirstCouponDate
+                        : null,
                     REDCode: cdsData.REDCode ?? null,
                     AccruedInterest: cdsData.AccruedInterest ?? null,
                     UnderlyingISIN: cdsData.UnderlyingISIN ?? null,
@@ -288,9 +294,13 @@ export class CDSStepperComponent implements OnInit, OnDestroy {
                     Spread: cdsData.Spread ?? null,
                     CDSIndexName: cdsData.CDSIndexName ?? null,
                     SettlementType: cdsData.SettlementType ?? null,
-                    OptionExpiryDate: cdsData.OptionExpiryDate ? new Date(cdsData.OptionExpiryDate) : null,
+                    OptionExpiryDate: cdsData.OptionExpiryDate
+                        ? cdsData.OptionExpiryDate
+                        : null,
                     BenchmarkIndex: cdsData.BenchmarkIndex ?? null,
-                    MaturityDate: cdsData.MaturityDate ? new Date(cdsData.MaturityDate) : new Date(),
+                    MaturityDate: cdsData.MaturityDate
+                        ? cdsData.MaturityDate
+                        : new Date(),
                     CountryId: cdsData.CountryId ?? null,
                     BBGType: cdsData.BBGType ?? null,
                     AssetQuality: cdsData.AssetQuality ?? null,

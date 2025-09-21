@@ -91,6 +91,8 @@ export class CDSOptionsComponent implements OnInit {
     // Component variables
     isinList: any[] = [];
 
+    tradeAccounts: any[] = [];
+
     // Data sources for select boxes
     accountsDataSource: DataSource = new DataSource({
         store: [],
@@ -698,28 +700,41 @@ export class CDSOptionsComponent implements OnInit {
                 isinCtrl.valueChanges.subscribe((selectedIsinId: number) => {
                     console.log('Selected ISIN ID:', selectedIsinId);
                     if (selectedIsinId) {
-                        console.log('ISIN Data Source:', this.isinDataSource.store());
+                        console.log(
+                            'ISIN Data Source:',
+                            this.isinDataSource.store()
+                        );
                         // Get the selected ISIN data from the data source`
-                        const isinData = this.isinList.find((item: any) => item.Id === selectedIsinId);
+                        const isinData = this.isinList.find(
+                            (item: any) => item.Id === selectedIsinId
+                        );
                         console.log('Found ISIN data:', isinData);
                         if (isinData) {
                             // Update the form controls with ISIN data
                             const updateData = {
                                 CountryId: isinData.CountryId ?? null,
                                 BBGType: isinData.BBGType ?? null,
-                                AssetQuality: isinData.AssetQuality ?? null
+                                AssetQuality: isinData.AssetQuality ?? null,
                             };
                             console.log('Updating form with:', updateData);
-                            this.tradeForm.patchValue(updateData, { emitEvent: false });
-                            console.log('Trade form with:', this.tradeForm.getRawValue());
+                            this.tradeForm.patchValue(updateData, {
+                                emitEvent: false,
+                            });
+                            console.log(
+                                'Trade form with:',
+                                this.tradeForm.getRawValue()
+                            );
                         }
                     } else {
                         // Clear the fields if no ISIN is selected
-                        this.tradeForm.patchValue({
-                            CountryId: null,
-                            BBGType: null,
-                            AssetQuality: null
-                        }, { emitEvent: false });
+                        this.tradeForm.patchValue(
+                            {
+                                CountryId: null,
+                                BBGType: null,
+                                AssetQuality: null,
+                            },
+                            { emitEvent: false }
+                        );
                     }
                 })
             );
@@ -919,8 +934,8 @@ export class CDSOptionsComponent implements OnInit {
         this.subscription.add(
             this.httpService.getCacheLookupsData(cacheTypes).subscribe({
                 next: (response: any) => {
-                    console.log(response);
                     if (response?.Model) {
+                        this.tradeAccounts = response.Model.TradeAccounts || [];
                         this.accountsDataSource = new DataSource({
                             store: response.Model.TradeAccounts || [],
                             paginate: true,
@@ -1209,11 +1224,21 @@ export class CDSOptionsComponent implements OnInit {
 
             // Dates
             TradeDate: tradeDate,
-            SettlementDate: formValue.settlementDate ? new Date(formValue.settlementDate) : null,
-            MaturityDate: formValue.maturityDate ? new Date(formValue.maturityDate) : new Date(),
-            UpfrontDate: formValue.upfrontDate ? new Date(formValue.upfrontDate) : null,
-            FirstCouponDate: formValue.firstCoupon ? new Date(formValue.firstCoupon) : null,
-            OptionExpiryDate: formValue.optionExpiry ? new Date(formValue.optionExpiry) : null,
+            SettlementDate: formValue.settlementDate
+                ? new Date(formValue.settlementDate)
+                : null,
+            MaturityDate: formValue.maturityDate
+                ? new Date(formValue.maturityDate)
+                : new Date(),
+            UpfrontDate: formValue.upfrontDate
+                ? new Date(formValue.upfrontDate)
+                : null,
+            FirstCouponDate: formValue.firstCoupon
+                ? new Date(formValue.firstCoupon)
+                : null,
+            OptionExpiryDate: formValue.optionExpiry
+                ? new Date(formValue.optionExpiry)
+                : null,
 
             // Amounts / money
             Notional: Number(formValue.notional) ?? null,
@@ -1223,8 +1248,14 @@ export class CDSOptionsComponent implements OnInit {
             CapitalAllocation: formValue.capAllocation ?? null,
 
             // Accounts
-            TradarAccount: (formValue.brokerAccount && formValue.brokerAccount !== '') ? formValue.brokerAccount : null,
-            TradarPayAccount: (formValue.brokerPayAccount && formValue.brokerPayAccount !== '') ? formValue.brokerPayAccount : null,
+            TradarAccount:
+                formValue.brokerAccount && formValue.brokerAccount !== ''
+                    ? formValue.brokerAccount
+                    : null,
+            TradarPayAccount:
+                formValue.brokerPayAccount && formValue.brokerPayAccount !== ''
+                    ? formValue.brokerPayAccount
+                    : null,
 
             // Security / description
             SecurityID: formValue.securityId ?? '',

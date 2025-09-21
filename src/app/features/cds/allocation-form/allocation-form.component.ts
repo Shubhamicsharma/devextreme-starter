@@ -70,6 +70,7 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
     isLoadingTemplates = false;
     // Fund combinations from API
     fundCombinations: any[] = [];
+    fundSplitsTemplate: any[] = [];
     selectedFundCombinationTitle: string | null = null;
     // valuation date string formatted for API (e.g., 11Sep2025)
     valuationDate: string | null = null;
@@ -236,6 +237,8 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
                     if (response?.Success && response?.Model) {
                         this.fundCombinations =
                             response.Model.FundCombination || [];
+                        this.fundSplitsTemplate =
+                            response.Model.FundAllocation || [];
                     } else if (response?.FundCombination) {
                         // Some endpoints return the model directly
                         this.fundCombinations = response.FundCombination || [];
@@ -304,111 +307,169 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
         return this.allocationData as Partial<CDSOptionModel>[];
     }
 
+    notionalCal(notional: number, notionalPer: number): number {
+        let result = 0;
+
+        try {
+            // In TypeScript, no need to convert explicitly like Convert.ToDecimal
+            result = (notional * notionalPer) / 100;
+        } catch (error) {
+            console.error('Error at notional cal', error);
+        }
+
+        return result;
+    }
+
     // Load selected template: use selectedFundCombinationTitle to find matching FundAllocation entries
     loadTemplate(): void {
-        if (!this.selectedFundCombinationTitle) return;
+        try {
+            console.log('Loading template:', this.selectedFundCombinationTitle);
+            if (!this.selectedFundCombinationTitle) return;
 
-        // Fetch allocations that match the selected template name
-        const title = this.selectedFundCombinationTitle;
+            // Fetch allocations that match the selected template name
+            const title = this.selectedFundCombinationTitle;
 
-        // Call the fund combination API again to get allocations (or reuse cached info if present)
-        const valDate = new Date().toISOString().slice(0, 10);
-        this.isLoadingTemplates = true;
-        this.subscription.add(
-            this.httpService.getFundCombination(valDate).subscribe({
-                next: (response: any) => {
-                    this.isLoadingTemplates = false;
-                    const allocations =
-                        response?.Model?.FundAllocation ??
-                        response?.FundAllocation ??
-                        [];
+            // Call the fund combination API again to get allocations (or reuse cached info if present)
+            const valDate = new Date().toISOString().slice(0, 10);
+            // this.isLoadingTemplates = true;
 
-                    // Filter allocations where Title matches the template's Title
-                    const matched = allocations.filter(
-                        (a: any) => a.Title === title
-                    );
+            const allocations = this.fundSplitsTemplate.filter(
+                (a: any) => a.Title === title
+            );
 
-                    if (matched.length === 0) {
-                        console.warn(
-                            'No allocations found for template:',
-                            title
-                        );
-                        this.allocationData = [];
-                        return;
-                    }
+            if (allocations.length === 0) {
+                console.warn('No allocations found for template:', title);
+                this.allocationData = [];
+                this.isLoadingTemplates = false;
+                return;
+            }
 
-                    // Compute notional splits: use total notional from current incoming initialAllocationData if provided
-                    // If no incoming notional, fallback to 0
-                    const incomingNotional =
-                        this.initialAllocationData &&
-                        this.initialAllocationData.length
-                            ? this.initialAllocationData[0].notional ??
-                              this.initialAllocationData[0].Notional ??
-                              0
-                            : 0;
+            const rows = allocations.map((m: any) => {
+                const pct = Number(m.Allocation) || 0;
+                const notionalVal = this.notionalCal(
+                    this.totalNotionalFromCDS,
+                    pct
+                );
+                const upfrontVal = this.notionalCal(
+                    this.totalUpfrontFromCDS,
+                    pct
+                );
 
-                    // Build allocation rows by mapping percentage to notional amount and upfront
-                    const incomingUpfront =
-                        this.initialAllocationData &&
-                        this.initialAllocationData.length
-                            ? this.initialAllocationData[0].upfront ??
-                              this.initialAllocationData[0].Upfront ??
-                              0
-                            : 0;
+                return {
+                    account: m.FundId ?? m.Title,
+                    notionalPercent: pct,
+                    notional: +notionalVal.toFixed(2),
+                    upfront: +upfrontVal.toFixed(4),
+                };
+            });
 
-                    // First compute raw splits (rounded) then correct rounding differences
-                    const rows = matched.map((m: any) => {
-                        const pct = Number(m.Allocation) || 0;
-                        const notionalVal = +(incomingNotional * (pct / 100));
-                        const upfrontVal = +(incomingUpfront * (pct / 100));
-                        return {
-                            account: m.FundId ?? m.Title,
-                            notionalPercent: pct,
-                            notional: +notionalVal.toFixed(2),
-                            upfront: +upfrontVal.toFixed(4),
-                        };
-                    });
+            console.log('Loaded template rows Prashant:', rows);
 
-                    // Rounding correction so sums equal incoming totals
-                    const sumNotional = rows.reduce(
-                        (s: number, r: any) => s + (r.notional ?? 0),
-                        0
-                    );
-                    const notionalDiff = +(
-                        incomingNotional - sumNotional
-                    ).toFixed(2);
-                    if (Math.abs(notionalDiff) >= 0.01 && rows.length > 0) {
-                        // adjust last row's notional to absorb rounding diff
-                        rows[rows.length - 1].notional = +(
-                            rows[rows.length - 1].notional + notionalDiff
-                        ).toFixed(2);
-                    }
+            this.allocationData = rows;
+            this.isLoadingTemplates = false;
+            this.computeAllocationState();
+            this.recalculateTotals();
+        } catch (ex) {
+            console.error('Error loading template', ex);
+            this.isLoadingTemplates = false;
+        }
 
-                    const sumUpfront = rows.reduce(
-                        (s: number, r: any) => s + (r.upfront ?? 0),
-                        0
-                    );
-                    const upfrontDiff = +(incomingUpfront - sumUpfront).toFixed(
-                        4
-                    );
-                    if (Math.abs(upfrontDiff) >= 0.0001 && rows.length > 0) {
-                        rows[rows.length - 1].upfront = +(
-                            rows[rows.length - 1].upfront + upfrontDiff
-                        ).toFixed(4);
-                    }
+        // this.subscription
+        //     .add
+        //     // this.httpService.getFundCombination(valDate).subscribe({
+        //     //     next: (response: any) => {
+        //     //         this.isLoadingTemplates = false;
+        //     //         const allocations =
+        //     //             response?.Model?.FundAllocation ??
+        //     //             response?.FundAllocation ??
+        //     //             [];
 
-                    this.allocationData = rows;
-                    this.recalculateTotals();
-                },
-                error: (err: any) => {
-                    this.isLoadingTemplates = false;
-                    console.error(
-                        'Error loading allocations for template',
-                        err
-                    );
-                },
-            })
-        );
+        //     //         // Filter allocations where Title matches the template's Title
+        //     //         const matched = allocations.filter(
+        //     //             (a: any) => a.Title === title
+        //     //         );
+
+        //     //         if (matched.length === 0) {
+        //     //             console.warn(
+        //     //                 'No allocations found for template:',
+        //     //                 title
+        //     //             );
+        //     //             this.allocationData = [];
+        //     //             return;
+        //     //         }
+
+        //     //         // Compute notional splits: use total notional from current incoming initialAllocationData if provided
+        //     //         // If no incoming notional, fallback to 0
+        //     //         const incomingNotional =
+        //     //             this.initialAllocationData &&
+        //     //             this.initialAllocationData.length
+        //     //                 ? this.initialAllocationData[0].notional ??
+        //     //                   this.initialAllocationData[0].Notional ??
+        //     //                   0
+        //     //                 : 0;
+
+        //     //         // Build allocation rows by mapping percentage to notional amount and upfront
+        //     //         const incomingUpfront =
+        //     //             this.initialAllocationData &&
+        //     //             this.initialAllocationData.length
+        //     //                 ? this.initialAllocationData[0].upfront ??
+        //     //                   this.initialAllocationData[0].Upfront ??
+        //     //                   0
+        //     //                 : 0;
+
+        //     //         // First compute raw splits (rounded) then correct rounding differences
+        //     //         const rows = matched.map((m: any) => {
+        //     //             const pct = Number(m.Allocation) || 0;
+        //     //             const notionalVal = +(incomingNotional * (pct / 100));
+        //     //             const upfrontVal = +(incomingUpfront * (pct / 100));
+        //     //             return {
+        //     //                 account: m.FundId ?? m.Title,
+        //     //                 notionalPercent: pct,
+        //     //                 notional: +notionalVal.toFixed(2),
+        //     //                 upfront: +upfrontVal.toFixed(4),
+        //     //             };
+        //     //         });
+
+        //     //         // Rounding correction so sums equal incoming totals
+        //     //         const sumNotional = rows.reduce(
+        //     //             (s: number, r: any) => s + (r.notional ?? 0),
+        //     //             0
+        //     //         );
+        //     //         const notionalDiff = +(
+        //     //             incomingNotional - sumNotional
+        //     //         ).toFixed(2);
+        //     //         if (Math.abs(notionalDiff) >= 0.01 && rows.length > 0) {
+        //     //             // adjust last row's notional to absorb rounding diff
+        //     //             rows[rows.length - 1].notional = +(
+        //     //                 rows[rows.length - 1].notional + notionalDiff
+        //     //             ).toFixed(2);
+        //     //         }
+
+        //     //         const sumUpfront = rows.reduce(
+        //     //             (s: number, r: any) => s + (r.upfront ?? 0),
+        //     //             0
+        //     //         );
+        //     //         const upfrontDiff = +(incomingUpfront - sumUpfront).toFixed(
+        //     //             4
+        //     //         );
+        //     //         if (Math.abs(upfrontDiff) >= 0.0001 && rows.length > 0) {
+        //     //             rows[rows.length - 1].upfront = +(
+        //     //                 rows[rows.length - 1].upfront + upfrontDiff
+        //     //             ).toFixed(4);
+        //     //         }
+
+        //     //         this.allocationData = rows;
+        //     //         this.recalculateTotals();
+        //     //     },
+        //     //     error: (err: any) => {
+        //     //         this.isLoadingTemplates = false;
+        //     //         console.error(
+        //     //             'Error loading allocations for template',
+        //     //             err
+        //     //         );
+        //     //     },
+        //     // })
+        //     ();
     }
 
     // Navigate back to previous step
