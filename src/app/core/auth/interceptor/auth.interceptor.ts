@@ -43,7 +43,7 @@ export const authInterceptor = (
                 // .set('Authorization', 'Bearer ' + authService.securityKey)
                 .set(
                     'Authorization',
-                    'Bearer ' + 'czDrIADtpvb98R1dIiJYNWQJO1vt9GLiRdM',
+                    'Bearer ' + '5yypFYogPgWwpVcGrhLzEHueM3iXWwOkWfs',
                 )
                 .set('BlotterClientVersion', blotterClientVersion)
                 .set('Access-Control-Allow-Origin', '*'),

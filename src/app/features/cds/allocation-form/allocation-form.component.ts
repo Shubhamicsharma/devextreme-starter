@@ -36,11 +36,9 @@ import { CDSOptionModel } from '../../../core/models/cds-option.model';
     standalone: true,
     styleUrls: ['./allocation-form.component.scss'],
     imports: [
-        // Add necessary imports here
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        HttpClientModule,
         DxButtonModule,
         DxPopupModule,
         DxScrollViewModule,
@@ -68,15 +66,12 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
     templates: AllocationTemplate[] = [];
     selectedTemplate: number | null = null;
     isLoadingTemplates = false;
-    // Fund combinations from API
     fundCombinations: any[] = [];
     fundSplitsTemplate: any[] = [];
     selectedFundCombinationTitle: string | null = null;
-    // valuation date string formatted for API (e.g., 11Sep2025)
     valuationDate: string | null = null;
 
     allocationData: any[] = [
-        // fallback placeholder row (will be replaced if initialAllocationData is provided)
         {
             account: 'UCITS',
             notional: 34538.58,
@@ -87,7 +82,6 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
 
     @ViewChild('allocGrid', { static: false }) allocGrid!: DxDataGridComponent;
 
-    // internal totals and completion flag
     expectedTotalNotional = 0; // expected total (from parent initialAllocationData)
     allocationComplete = false;
 
@@ -373,103 +367,6 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
             console.error('Error loading template', ex);
             this.isLoadingTemplates = false;
         }
-
-        // this.subscription
-        //     .add
-        //     // this.httpService.getFundCombination(valDate).subscribe({
-        //     //     next: (response: any) => {
-        //     //         this.isLoadingTemplates = false;
-        //     //         const allocations =
-        //     //             response?.Model?.FundAllocation ??
-        //     //             response?.FundAllocation ??
-        //     //             [];
-
-        //     //         // Filter allocations where Title matches the template's Title
-        //     //         const matched = allocations.filter(
-        //     //             (a: any) => a.Title === title
-        //     //         );
-
-        //     //         if (matched.length === 0) {
-        //     //             console.warn(
-        //     //                 'No allocations found for template:',
-        //     //                 title
-        //     //             );
-        //     //             this.allocationData = [];
-        //     //             return;
-        //     //         }
-
-        //     //         // Compute notional splits: use total notional from current incoming initialAllocationData if provided
-        //     //         // If no incoming notional, fallback to 0
-        //     //         const incomingNotional =
-        //     //             this.initialAllocationData &&
-        //     //             this.initialAllocationData.length
-        //     //                 ? this.initialAllocationData[0].notional ??
-        //     //                   this.initialAllocationData[0].Notional ??
-        //     //                   0
-        //     //                 : 0;
-
-        //     //         // Build allocation rows by mapping percentage to notional amount and upfront
-        //     //         const incomingUpfront =
-        //     //             this.initialAllocationData &&
-        //     //             this.initialAllocationData.length
-        //     //                 ? this.initialAllocationData[0].upfront ??
-        //     //                   this.initialAllocationData[0].Upfront ??
-        //     //                   0
-        //     //                 : 0;
-
-        //     //         // First compute raw splits (rounded) then correct rounding differences
-        //     //         const rows = matched.map((m: any) => {
-        //     //             const pct = Number(m.Allocation) || 0;
-        //     //             const notionalVal = +(incomingNotional * (pct / 100));
-        //     //             const upfrontVal = +(incomingUpfront * (pct / 100));
-        //     //             return {
-        //     //                 account: m.FundId ?? m.Title,
-        //     //                 notionalPercent: pct,
-        //     //                 notional: +notionalVal.toFixed(2),
-        //     //                 upfront: +upfrontVal.toFixed(4),
-        //     //             };
-        //     //         });
-
-        //     //         // Rounding correction so sums equal incoming totals
-        //     //         const sumNotional = rows.reduce(
-        //     //             (s: number, r: any) => s + (r.notional ?? 0),
-        //     //             0
-        //     //         );
-        //     //         const notionalDiff = +(
-        //     //             incomingNotional - sumNotional
-        //     //         ).toFixed(2);
-        //     //         if (Math.abs(notionalDiff) >= 0.01 && rows.length > 0) {
-        //     //             // adjust last row's notional to absorb rounding diff
-        //     //             rows[rows.length - 1].notional = +(
-        //     //                 rows[rows.length - 1].notional + notionalDiff
-        //     //             ).toFixed(2);
-        //     //         }
-
-        //     //         const sumUpfront = rows.reduce(
-        //     //             (s: number, r: any) => s + (r.upfront ?? 0),
-        //     //             0
-        //     //         );
-        //     //         const upfrontDiff = +(incomingUpfront - sumUpfront).toFixed(
-        //     //             4
-        //     //         );
-        //     //         if (Math.abs(upfrontDiff) >= 0.0001 && rows.length > 0) {
-        //     //             rows[rows.length - 1].upfront = +(
-        //     //                 rows[rows.length - 1].upfront + upfrontDiff
-        //     //             ).toFixed(4);
-        //     //         }
-
-        //     //         this.allocationData = rows;
-        //     //         this.recalculateTotals();
-        //     //     },
-        //     //     error: (err: any) => {
-        //     //         this.isLoadingTemplates = false;
-        //     //         console.error(
-        //     //             'Error loading allocations for template',
-        //     //             err
-        //     //         );
-        //     //     },
-        //     // })
-        //     ();
     }
 
     // Navigate back to previous step
@@ -482,7 +379,6 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
         this.finishProcess.emit();
     }
 
-    // ====== New methods implementing backend logic ======
     // Add a new empty allocation row
     public addNewRow(): void {
         try {
@@ -675,7 +571,7 @@ export class AllocationFormComponent implements OnInit, OnDestroy, OnChanges {
             0
         );
     }
-
+    
     // Delete a single row by reference
     public deleteSingleRow(rowData: { data: any }): void {
         try {

@@ -81,16 +81,12 @@ export class CDSOptionsComponent implements OnInit {
 
     tradeForm: FormGroup;
     subscription: Subscription = new Subscription();
-
-    // Accordion configuration
     accordionMultiple = true; // Always allow multiple sections open
     accordionCollapsible = true;
     accordionSections: any[] = [];
     selectedAccordionItems: any[] = []; // Will be populated in ngOnInit
 
-    // Component variables
     isinList: any[] = [];
-
     tradeAccounts: any[] = [];
 
     // Data sources for select boxes
@@ -122,10 +118,6 @@ export class CDSOptionsComponent implements OnInit {
         store: [],
         paginate: false,
     });
-    // capAllocationDataSource: DataSource = new DataSource({
-    //     store: [],
-    //     paginate: false
-    // });
     tradeActionDataSource: DataSource = new DataSource({
         store: [],
         paginate: false,
@@ -168,7 +160,6 @@ export class CDSOptionsComponent implements OnInit {
             valueExpr: 'Id',
             displayExpr: 'Name',
             options: undefined,
-            // dataSource: this.accountsDataSource
         },
 
         {
@@ -254,33 +245,6 @@ export class CDSOptionsComponent implements OnInit {
             placeholder: 'Description',
             colSpan: 3,
             options: undefined,
-        },
-        {
-            name: 'CountryId',
-            label: 'Country',
-            type: 'text',
-            placeholder: 'Country',
-            colSpan: 1,
-            options: undefined,
-            disabled: true,
-        },
-        {
-            name: 'BBGType',
-            label: 'BBG Type',
-            type: 'text',
-            placeholder: 'BBG Type',
-            colSpan: 1,
-            options: undefined,
-            disabled: true,
-        },
-        {
-            name: 'AssetQuality',
-            label: 'Asset Quality',
-            type: 'text',
-            placeholder: 'Asset Quality',
-            colSpan: 1,
-            options: undefined,
-            disabled: true,
         },
     ];
 
@@ -868,21 +832,16 @@ export class CDSOptionsComponent implements OnInit {
         this.subscription.unsubscribe();
     }
 
-    // Compute width percentage for fractional colSpan values.
-    // The layout grid uses 3 columns on large screens; a colSpan of 1.5
-    // will result in 50% width (1.5 / 3 * 100).
     public getFieldWidthPercent(field: any): number | null {
         const totalColumns = 3;
         const raw = Number(field?.colSpan ?? 1);
         if (isNaN(raw)) return null;
-        // If colSpan is non-integer (fractional), return the percentage; otherwise null
         if (!Number.isInteger(raw)) {
             return (raw / totalColumns) * 100;
         }
         return null;
     }
 
-    // Return the loaded accounts as an array for parent components
     public getAccountsList(): any[] {
         try {
             // DevExtreme DataSource provides items() when data is loaded
@@ -1172,34 +1131,13 @@ export class CDSOptionsComponent implements OnInit {
             upfrontCcyField.valueExpr = 'Id';
             upfrontCcyField.displayExpr = 'Code';
         }
-
-        // const brokerAccountField = this.tradeOpFields.find(field => field.name === 'brokerAccount');
-        // if (brokerAccountField?.options) {
-        //     this.brokerAccountDataSource = this._mapAndCreateDataSource(brokerAccountField.options, (item: string) => ({
-        //         id: item,
-        //         name: item,
-        //     }));
-        //     brokerAccountField.dataSource = this.brokerAccountDataSource;
-        // }
-
-        // const brokerPayAccountField = this.tradeOpFields.find(field => field.name === 'brokerPayAccount');
-        // if (brokerPayAccountField?.options) {
-        //     this.brokerPayAccountDataSource = this._mapAndCreateDataSource(brokerPayAccountField.options, (item: string) => ({
-        //         id: item,
-        //         name: item,
-        //     }));
-        //     brokerPayAccountField.dataSource = this.brokerPayAccountDataSource;
-        // }
     }
 
-    // Method to check if the form is valid for the stepper
     isFormValid(): boolean {
         return this.tradeForm.valid;
     }
-
-    // Method to get form data for the stepper
+    
     getFormData(): Partial<CDSOptionModel> {
-        // Use getRawValue() to include disabled controls (securityId, description) which are intentionally disabled/read-only
         const formValue =
             typeof (this.tradeForm as any).getRawValue === 'function'
                 ? (this.tradeForm as any).getRawValue()
@@ -1212,17 +1150,12 @@ export class CDSOptionsComponent implements OnInit {
         if (tradeDate) {
             tradeDate.setHours(0, 0, 0, 0);
         }
-
-        // Map form fields to the backend CDSOptionModel property names
         return {
-            // Identifiers
             Id: 0,
             AccountId: formValue.account,
             ISINId: formValue.isin,
             TradeNameId: formValue.tradeName,
             CounterPartyId: formValue.counterParty,
-
-            // Dates
             TradeDate: tradeDate,
             SettlementDate: formValue.settlementDate
                 ? new Date(formValue.settlementDate)
@@ -1239,15 +1172,11 @@ export class CDSOptionsComponent implements OnInit {
             OptionExpiryDate: formValue.optionExpiry
                 ? new Date(formValue.optionExpiry)
                 : null,
-
-            // Amounts / money
             Notional: Number(formValue.notional) ?? null,
             TradePrice: Number(formValue.premium) ?? null,
             Upfront: formValue.upfront ?? null,
             AccruedInterest: formValue.accuredInterest ?? null,
             CapitalAllocation: formValue.capAllocation ?? null,
-
-            // Accounts
             TradarAccount:
                 formValue.brokerAccount && formValue.brokerAccount !== ''
                     ? formValue.brokerAccount
@@ -1256,12 +1185,8 @@ export class CDSOptionsComponent implements OnInit {
                 formValue.brokerPayAccount && formValue.brokerPayAccount !== ''
                     ? formValue.brokerPayAccount
                     : null,
-
-            // Security / description
             SecurityID: formValue.securityId ?? '',
             Description: formValue.description ?? '',
-
-            // CDS / option specifics
             StrikeRate: formValue.strikeRate ?? null,
             UpfrontCCY: formValue.upfrontCcy ?? null,
             CurrencyId: formValue.independentCcy ?? null,
@@ -1284,23 +1209,15 @@ export class CDSOptionsComponent implements OnInit {
             IndeptAmt: formValue.independentAmt ?? null,
             IndeptCCY: formValue.independentCcy ?? null,
             Spread: formValue.spread ?? null,
-
-            // Free-text / rationale
             TraderRationale: formValue.tradeRationale ?? '',
             CDSIndexName: formValue.index ?? null,
-
-            // Additional fields from C# model
             BenchmarkIndex: formValue.index ?? null,
             CountryId: formValue.CountryId ?? null,
             BBGType: formValue.BBGType ?? null,
             AssetQuality: formValue.AssetQuality ?? null,
-
-            // UTI and Fixed Rate fields
             UtiId: formValue.utiId ?? null,
             UtiPrefix: formValue.utiPrefix ?? null,
             FixedRate: formValue.fixedRate ?? null,
-
-            // Data handling
             EnteredById: 1068,
         } as Partial<CDSOptionModel>;
     }
